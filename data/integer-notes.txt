@@ -1,0 +1,12 @@
+0,  B#,  C,  Dbb
+1,  B##, C#, Db  
+2,  C##, D,  Ebb
+3,  D#,  Eb, Fbb
+4,  D##, E,  Fb
+5,  E#,  F,  Gbb
+6,  E##, F#, Gb
+7,  F##, G,  Abb
+8,  G#,      Ab
+9,  G##, A,  Bbb
+10, A#,  Bb, Cbb 
+11, A##, B,  Cb 

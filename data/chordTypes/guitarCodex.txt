@@ -1,0 +1,64 @@
+major                          | maj     | 1 3 5
+5th                            | 5       | 1 5
+major 6th                      | 6       | 1 3 5 6
+major 6th add 9th              | 6/9     | 1 3 5 6 9
+7th                            | 7       | 1 3 5 b7
+7th suspended                  | 7sus    | 1 4 5 b7
+7th augmented                  | 7+5     | 1 3 #5 b7
+7th diminished 5th             | 7-5     | 1 3 b5 b7
+7th add 6th                    | 7/6     | 1 3 5 6 b7
+7th flat 9th                   | 7-9     | 1 3 5 b7 b9
+7th augmented 9th              | 7+9     | 1 3 5 b7 #9
+7th add 13th                   | 7/13    | 1 3 5 b7 13
+9th                            | 9       | 1 3 5 b7 9
+9th flat 5th                   | 9-5     | 1 3 b5 b7 9
+9th augmented 5th              | 9+5     | 1 3 #5 b7 9
+9th added 6th                  | 9/6     | 1 3 5 6 b7 9
+//9th augmented 11th             | 9+11    | 1 3 5 b7 9 #11 | see augmented 11th (+11)
+11th                           | 11      | 1 3 5 b7 9 11
+11th flat 9th                  | 11-9    | 1 3 5 b7 b9 11
+//11th major 7th               | 11#7    | 1 3 5 7 9 11     | use maj11 instead of 11#7
+//13th                         | 13      | 1 3 5 b7 9 13    | dropped 11 
+diminished                     | dim     | 1 b3 b5
+diminished 7th                 | dim7    | 1 b3 b5 6
+minor                          | m       | 1 b3 5
+minor 5th                      | m-5     | 1 b3 b5
+minor 6th                      | m6      | 1 b3 5 6
+minor 6th add 9th              | m6/9    | 1 b3 5 6 9
+minor 7th                      | m7      | 1 b3 5 b7
+minor 7th diminished 5th       | m7-5    | 1 b3 b5 b7
+minor 7th augmented 5th        | m7+5    | 1 b3 #5 b7
+minor 7th flat 9th             | m7-9    | 1 b3 5 b7 b9
+minor major 7th                | m#7     | 1 b3 5 7
+minor major 7th diminished 5th | m#7-5   | 1 b3 b5 7
+minor major 7th augmented 5th  | m#7+5   | 1 b3 #5 7
+minor major 7th flat 9th       | m#7-9   | 1 b3 5 7 b9
+minor 9th                      | m9      | 1 b3 5 b7 9
+minor add 9th                  | madd9   | 1 b3 5 9
+minor major 9th                | m#9     | 1 b3 5 7 9
+minor 9th major 7th            | m9#7    | 1 b3 5 7 9
+minor 11th                     | m11     | 1 b3 5 b7 9 11
+minor augmented 11th           | maug11  | 1 b3 5 b7 9 #11
+//minor 13th                   | m13     | 1 b3 5 b7 9 13   | dropped 11th
+major 7th                      | maj7    | 1 3 5 7
+major 7th diminished 5th       | maj7-5  | 1 3 b5 7
+major 7th augmented 5th        | maj7+5  | 1 3 #5 7
+major 7th suspended            | maj7sus | 1 4 5 7
+major 7th flat 9th             | maj7-9  | 1 3 5 7 b9
+major 7th augmented 9th        | maj7+9  | 1 3 5 7 #9
+major 9th                      | maj9    | 1 3 5 7 9
+major 9th suspended            | maj9sus | 1 4 5 7 9
+major 11th                     | maj11   | 1 3 5 7 9 11
+//major 13th                   | maj13   | 1 3 5 7 9 13     | dropped 11
+major add 9th                  | add9    | 1 3 5 9
+major suspended 2nd            | sus2    | 1 2 5
+major suspended 4th            | sus4    | 1 4 5
+augmented 5th                  | +       | 1 3 #5
+augmented 9th                  | +9      | 1 3 5 b7 #9
+augmented 11th                 | +11     | 1 3 5 b7 9 #11
+major diminished 5th           | -5      | 1 3 b5
+flat 9th                       | -9      | 1 3 5 b7 b9
+flat 9th augmented 5th         | -9+5    | 1 3 #5 b7 b9
+flat 9th flat 5th              | -9-5    | 1 3 b5 b7 b9
+flat 9th augmented 11th        | -9+11   | 1 3 5 b7 b9 #11
+flat 13th                      | -13     | 1 3 5 b7 9 11 b13

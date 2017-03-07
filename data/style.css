@@ -1,0 +1,25 @@
+body {
+	font: normal 8pt verdana;
+}
+th, td {
+	border: 1px solid #aaa;
+	padding: 2px;
+}
+th {
+	font: bold 8pt verdana;
+}
+td {
+	font: normal 8pt verdana;
+}
+table.data {
+	border-collapse: collapse;
+}
+table.data tr th {
+	background-color: #cd5c5c;
+	white-space: nowrap;
+	text-align: left;
+}
+table.data tr.subheading {
+	background-color: #ffdab9;
+}
+		

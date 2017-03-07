@@ -1,0 +1,116 @@
+%% The structure of this file is as follows:
+%%		// a comment line
+%%		%% formatting - ignore this line completely
+%%		## a heading
+%% 		@@ a sub-heading - usually chord type (7th, 9th etc.)
+%%		-- ignore this record
+
+// Sources:
+//     1  http://en.wikipedia.org/wiki/Chord_names_and_symbols_(popular_music)
+//     2  http://en.wikipedia.org/wiki/Chord_(music)
+//
+%%------------------------------------------------------------------------------
+## name                     | symbol  | notes             | 
+%%------------------------------------------------------------------------------
+@@ Triads
+%%------------------------------------------------------------------------------
+Major                       |         | C-E-G             | 
+Minor                       | m       | C-Eb-G            | 
+Augmented                   | aug     | C-E-G#            | 
+Diminished                  | dim     | C-Eb-Gb           | 
+%%------------------------------------------------------------------------------
+@@ 7ths
+%%------------------------------------------------------------------------------
+7th                         | 7       | C-E-G-Bb          |  dominant seven
+Major 7th                   | maj7    | C-E-G-B           | 
+Minor-Major 7th             | mmaj7   | C-Eb-G-B          | 
+Minor 7th                   | m7      | C-Eb-G-Bb         | 
+Augmented-Major 7th         | maj7+5  | C-E-G#-B          |  major seven sharp five
+Augmented 7th               | 7+5     | C-E-G#-Bb         |  dominant seven sharp five
+Half-Diminished 7th         | m7-5    | C-Eb-Gb-Bb        |  minor seven flat five
+Diminished 7th              | dim7    | C-Eb-Gb-A         | 
+7th flat five               | 7-5     | C-E-Gb-Bb         |  dominant seven flat five
+%%------------------------------------------------------------------------------
+@@ 9ths
+%%------------------------------------------------------------------------------
+Major 9th                   | maj9    | C-E-G-B-D         | 
+Dominant 9th                | 9       | C-E-G-Bb-D        | 
+Minor Major 9th             | mmaj9   | C-Eb-G-B-D        | 
+Minor Dominant 9th          | m9      | C-Eb-G-Bb-D       | 
+%%------------------------------------------------------------------------------
+@@ Altered Chords
+%%------------------------------------------------------------------------------
+Dominant Flat 9th           | 7-9     | C-E-F#-Bb-Db      | 
+Dominant Sharp 9th          | 7+9     | C-E-F#-Bb-D#      | 
+Dominant Sharp 11th         | 7+11    | C-E-F#-Bb         | 
+Dominant Flat 13th          | 7-13    | C-E-Ab-Bb      | 
+%% while voicings for these chords may include the altered notes, all of theses chordscales can be played over a dominant 7th
+%%------------------------------------------------------------------------------
+@@ Added Tones
+%%------------------------------------------------------------------------------
+6th                         | 6       | C-E-G-A           | 
+Minor 6th                   | m6      | C-Eb-G-A          | 
+%%------------------------------------------------------------------------------
+
+
+
+
+
+
+%%removed
+%%------------------------------------------------------------------------------
+## name                     | symbol  | notes             | 
+%%------------------------------------------------------------------------------
+--Augmented Major 9th       | maj9+5  | C-E-G#-B-D        | 
+--Augmented Dominant 9th    | 9+5     | C-E-G#-Bb-D       | 
+--Half-Dim 9th              | m9b5    | C-Eb-Gb-Bb-D      | 
+----Half-Dim Minor 9th      |         | C-Eb-Gb-Bb-Db     | 
+----Diminished 9th          |         | C-Eb-Gb-A-D     | 
+----Diminished Minor 9th    |         | C-Eb-Gb-A-Db    | 
+%%------------------------------------------------------------------------------
+@@ 11ths
+%%------------------------------------------------------------------------------
+--Dominant 11th             | 11      | C-E-G-Bb-D-F      | 
+--Major 11th                | maj11   | C-E-G-B-D-F       | 
+--Minor-Major 11th          | mmaj11  | C-Eb-G-B-D-F      | 
+--Minor 11th                | m11     | C-Eb-G-Bb-D-F     | 
+--Augmented-Major 11th      | maj11+5 | C-E-G#-B-D-F      | 
+--Augmented 11th            | 11+5    | C-E-G#-Bb-D-F     | 
+----Half-Diminished 11th    |         | C-Eb-Gb-Bb-Db-F   | 
+----Diminished 11th         |         | C-Eb-Gb-A-Db-Fb | 
+%%------------------------------------------------------------------------------
+@@ 13ths
+%%------------------------------------------------------------------------------
+--Major 13th                | maj13   | C-E-G-B-D-F-A     | 
+--Dominant 13th             | 13      | C-E-G-Bb-D-F-A    | 
+--Minor Major 13th          | mmaj13  | C-Eb-G-B-D-F-A    | 
+--Minor Dominant 13th       | m13     | C-Eb-G-Bb-D-F-A   | 
+----Augmented Major 13th    |         | C-E-G#-B-D-F-A    | 
+----Augmented Dominant 13th |         | C-E-G#-Bb-D-F-A   | 
+----Half-Diminished 13th    |         | C-Eb-Gb-Bb-D-F-A  | 
+%%------------------------------------------------------------------------------
+@@ Altered Chords
+%%------------------------------------------------------------------------------
+%% while voicings for these chords may include the altered notes, all of theses chordscales can be played over a dominant 7th
+--Dominant Flat 9th         | 7-9     | C-E-G-Bb          | 
+--Dominant Sharp 9th        | 7+9     | C-E-G-Bb          | 
+--Dominant Sharp 11th       | 7+11    | C-E-G-Bb          | 
+--Dominant Flat 13th        | 7-13    | C-E-G-Bb          | 
+%%------------------------------------------------------------------------------
+@@ Added Tones
+%%------------------------------------------------------------------------------
+6th                         | 6       | C-E-G-A           | 
+Minor 6th                   | m6      | C-Eb-G-A          | 
+--Add 9                     | add9    | C-E-G-D           | 
+--Minor Add 9               | madd9   | C-Eb-G-D          | 
+--Add 11                    | add11   | C-E-G-F           | 
+--Minor Add 11              | madd11  | C-Eb-G-F          | 
+--6th add 9                 | 6add9   | C-E-G-A-D         | 
+%%------------------------------------------------------------------------------
+@@ Suspended Chords
+%%------------------------------------------------------------------------------
+--Sus 2                     | sus2    | C-D-G             | 
+--Sus 4                     | sus4    | C-F-G             | 
+--7Sus 4                    | 7sus4   | C-F-G-Bb          | 
+%%------------------------------------------------------------------------------
+ 

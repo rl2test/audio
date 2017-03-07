@@ -1,0 +1,71 @@
+// adapted from Aebersold FQBK-handbook.pdf
+// THE SCALE SYLLABUS
+// LEGEND: H = Half Step, W = Whole Step.; DELTA = Major 7th; + or # = raise H; b or - = lower H; O/ = Half-diminished; —3 = 3H (Minor Third)
+// CHORD/SCALE SYMBOL | SCALE NAME | WHOLE & HALF STEP CONSTRUCTION | SCALE IN KEY OF C | BASIC CHORD IN KEY OF C
+//------------------------------------------------------------------------------
+// FIVE BASIC CATEGORIES
+//------------------------------------------------------------------------------
+C | Major | W W H W W W H | C D E F G A B C | C E G B D
+C7 | Dominant 7th (Mixolydian) | W W H W W H W | C D E F G A Bb C | C E G Bb D
+C— | Minor (Dorian) | W H W W W H W | C D Eb F G A Bb C | C Eb G Bb D
+CO/ | Half Diminished (Locrian) | H W W H W W W | C Db Eb F Gb Ab Bb C | C Eb Gb Bb
+Co | Diminished (8 tone scale) | W H W H W H W H | C D Eb F Gb Ab A B C | C Eb Gb A (Bbb)
+//------------------------------------------------------------------------------
+// 1. MAJOR SCALE CHOICES
+//------------------------------------------------------------------------------
+CDELTA (Can be written C) | Major (don’t emphasize the 4th) | W W H W W W H | C D E F G A B C|  C E G B D
+C | Major Pentatonic | W W —3 W —3 | C D E G A C | C E G B
+CDELTA+4 | Lydian (major scale with +4) | W W W H W W H | C D E F# G A B C | C E G B D
+CDELTA | Bebop (Major) | W W H W H H W H | C D E F G G# A B C | C E G B D
+CDELTAb6 | Harmonic Major | W W H W H —3 H | C D E F G Ab B C | C E G B D
+CDELTA+5, +4 | Lydian Augmented | W W W W H W H | C D E F# G# A B C | C E G# B D
+C | Augmented | —3 H —3 H —3 H | C D# E G Ab B C | C E G B D
+C | 6th Mode of Harmonic Minor | —3 H W H W W H | C D# E F# G A B C | C E G B D
+C | Diminished (begin with H step) | H W H W H W H W | C Db D# E F# G A Bb C | C E G B D
+C | Blues Scale —3 | W H H —3 W | C Eb F F# G Bb C | C E G B D
+//------------------------------------------------------------------------------
+// 2. DOMINANT 7th SCALE CHOICES
+//------------------------------------------------------------------------------
+C7 | Dominant 7th | W W H W W H W | C D E F G A Bb C | C E G Bb D
+C7 | Major Pentatonic | W W —3 W —3 | C D E G A C | C E G Bb D
+C7 | Bebop (Dominant) | W W H W W H H H | C D E F G A Bb B C | C E G Bb D
+C7b9 | Spanish or Jewish scale | H —3 H W H W W | C Db E F G Ab Bb C | C E G Bb (Db)
+C7+4 | Lydian Dominant | W W W H W H W | C D E F# G A Bb C | C E G Bb D
+C7b6 | Hindu | W W H W H W W | C D E F G Ab Bb C | C E G Bb D
+C7+ (has #4 & #5) | Whole Tone (6 tone scale) | W W W W W W | C D E F# G# Bb C | C E G# Bb D
+C7b9 (also has #9 & #4) | Diminished (begin with H step) | H W H W H W H W | C Db D# E F# G A Bb C | C E G Bb Db (D#)
+C7+9 (also has b9, #4, #5) | Diminished Whole Tone | H W H W W W W | C Db D# E F# G# Bb C | C E G# Bb D# (Db)
+C7 | Blues Scale | —3 W H H —3 W | C Eb F F# G Bb C | C E G Bb D (D#)
+// DOMINANT 7th / SUSPENDED 4th
+//------------------------------------------------------------------------------
+C7 sus 4 | Dom. 7th scale but don’t emphasize the third | W W H W W H W | C D E F G A Bb C | C F G Bb D
+C7 sus 4 | Major Pentatonic built on b7 | W W —3 W —3 | Bb C D F G Bb | C F G Bb D
+C7 sus 4 | Bebop Scale | W W H W W H H H | C D E F G A Bb B C | C F G Bb D
+//------------------------------------------------------------------------------
+// 3. MINOR SCALE SCALE CHOICES*
+//------------------------------------------------------------------------------
+C— or C—7 | Minor (Dorian) | W H W W W H W | C D Eb F G A Bb C | C Eb G Bb D
+C— or C—7 | Pentatonic (Minor Pentatonic) | —3 W W —3 W | C Eb F G Bb C | C Eb G Bb D
+C— or C—7 | Bebop (Minor) | W H H H W W H W | C D Eb E F G A Bb C | C Eb G Bb D
+C—DELTA (maj. 7th) | Melodic Minor (ascending) | W H W W W W H | C D Eb F G A B C | C Eb G B D
+C— or C—6 or C— | Bebop Minor No. 2 | W H W W H H W H | C D Eb F G G# A B C | C Eb G B D
+C— or C—7 | Blues Scale | —3 W H H —3 W | C Eb F F# G Bb C | C Eb G Bb D
+C—DELTA (b6 & maj. 7th) | Harmonic Minor | W H W W H —3 H | C D Eb F G Ab B C | C Eb G B D
+C— or C—7 | Diminished (begin with W step) | W H W H W H W H | C D Eb F F# G# A B C | C Eb G B D
+C— or C—b9b6 | Phrygian | H W W W H W W | C Db Eb F G Ab Bb C | C Eb G Bb
+C— or C—b6 | Pure or Natural Minor, Aeolian | W H W W H W W | C D Eb F G Ab Bb C | C Eb G Bb D
+//------------------------------------------------------------------------------
+// 4. HALF DIMINISHED SCALE 
+//------------------------------------------------------------------------------
+CO/ | Half Diminished (Locrian) | H W W H W W W | C Db Eb F Gb Ab Bb C | C Eb Gb Bb
+CO/#2 (CO/9) | Half Diminished #2 (Locrian #2) | W H W H W W W | C D Eb F Gb Ab Bb C | C Eb Gb Bb D
+CO/ (with or without #2) | Bebop Scale | H W W H H H W W | C Db Eb F Gb G Ab Bb C | C Eb Gb Bb
+//------------------------------------------------------------------------------
+// 5. DIMINISHED SCALE CHOICES
+//------------------------------------------------------------------------------
+Co | Diminished (8 tone scale) | W H W H W H W H | C D Eb F Gb Ab A B C | C Eb Gb A
+//------------------------------------------------------------------------------
+
+
+
+

@@ -1,0 +1,443 @@
+<html>
+<head>
+	<title>Untitled</title>
+<style type='text/css'>
+	body 		{font	: normal 8pt verdana, arial, sans-serif;}
+	td	 		{font	: normal 8pt verdana, arial, sans-serif;}
+   table.data {
+		border-collapse: collapse;
+	}	table.data tr th {
+	 	background-color : #88f;
+	    border		: 1px solid #ccc;
+		padding		: 3px;
+	    font		: bold 8pt verdana, arial, sans-serif;
+	    white-space	: nowrap;
+	}
+	table.data tr td {
+		font	: normal 8pt verdana, arial, sans-serif;
+		border	: 1px solid #ccc;
+		padding	: 3px;
+	}
+	span.gray {color: #888;}
+</style>
+</head>
+<body>
+<table border='1' class='data'>
+<tr valign='top'>
+<th>integerStr</th>
+<th>symbols</th>
+<th>abcSymbol</th>
+</tr>
+<tr valign='top'>
+<td>1 2 5</td>
+<td></td>
+<td>sus2</td>
+</tr>
+<tr valign='top'>
+<td>1 3 #5</td>
+<td>#5, +</td>
+<td>aug</td>
+</tr>
+<tr valign='top'>
+<td>1 3 #5 7</td>
+<td>maj7#5</td>
+<td>maj7+5</td>
+</tr>
+<tr valign='top'>
+<td>1 3 #5 b7</td>
+<td>7#5, 7aug, 7+, 7+5+4</td>
+<td>7+5</td>
+</tr>
+<tr valign='top'>
+<td>1 3 #5 b7 #9</td>
+<td>7#5#9</td>
+<td>7+5+9</td>
+</tr>
+<tr valign='top'>
+<td>1 3 #5 b7 9</td>
+<td>9#5</td>
+<td>9+5</td>
+</tr>
+<tr valign='top'>
+<td>1 3 #5 b7 b9</td>
+<td>7#5b9</td>
+<td>7+5-9</td>
+</tr>
+<tr valign='top'>
+<td>1 3 5</td>
+<td></td>
+<td>maj</td>
+</tr>
+<tr valign='top'>
+<td>1 3 5 6</td>
+<td></td>
+<td>6</td>
+</tr>
+<tr valign='top'>
+<td>1 3 5 6 9</td>
+<td>6/9</td>
+<td>6add9</td>
+</tr>
+<tr valign='top'>
+<td>1 3 5 6 b7</td>
+<td>7/6</td>
+<td>7add6</td>
+</tr>
+<tr valign='top'>
+<td>1 3 5 6 b7 9</td>
+<td>9/6</td>
+<td>9add6</td>
+</tr>
+<tr valign='top'>
+<td>1 3 5 7</td>
+<td></td>
+<td>maj7</td>
+</tr>
+<tr valign='top'>
+<td>1 3 5 7 #11</td>
+<td>maj7#11, maj7+4, , maj7#4</td>
+<td>maj7+11</td>
+</tr>
+<tr valign='top'>
+<td>1 3 5 7 #9</td>
+<td>maj7#9</td>
+<td>maj7+9</td>
+</tr>
+<tr valign='top'>
+<td>1 3 5 7 13</td>
+<td></td>
+<td>maj7add13</td>
+</tr>
+<tr valign='top'>
+<td>1 3 5 7 9</td>
+<td></td>
+<td>maj9</td>
+</tr>
+<tr valign='top'>
+<td>1 3 5 7 9 #11</td>
+<td>maj9#11</td>
+<td>maj9+11</td>
+</tr>
+<tr valign='top'>
+<td>1 3 5 7 9 #11 13</td>
+<td>maj13#11</td>
+<td>maj13+11</td>
+</tr>
+<tr valign='top'>
+<td>1 3 5 7 9 11</td>
+<td></td>
+<td>maj11</td>
+</tr>
+<tr valign='top'>
+<td>1 3 5 7 9 13</td>
+<td></td>
+<td>maj13</td>
+</tr>
+<tr valign='top'>
+<td>1 3 5 7 b9</td>
+<td>maj7b9</td>
+<td>maj7-9</td>
+</tr>
+<tr valign='top'>
+<td>1 3 5 9</td>
+<td></td>
+<td>add9</td>
+</tr>
+<tr valign='top'>
+<td>1 3 5 b7</td>
+<td></td>
+<td>7</td>
+</tr>
+<tr valign='top'>
+<td>1 3 5 b7 #11</td>
+<td>7#11, 7+4, 7#4</td>
+<td>7+11</td>
+</tr>
+<tr valign='top'>
+<td>1 3 5 b7 #9</td>
+<td>7#9, 7alt, 7b+9(+4+5)</td>
+<td>7+9</td>
+</tr>
+<tr valign='top'>
+<td>1 3 5 b7 #9 #11</td>
+<td>7#9#11</td>
+<td>7+9+11</td>
+</tr>
+<tr valign='top'>
+<td>1 3 5 b7 11</td>
+<td>7/11</td>
+<td>7add11</td>
+</tr>
+<tr valign='top'>
+<td>1 3 5 b7 13</td>
+<td>7/13</td>
+<td>7add13</td>
+</tr>
+<tr valign='top'>
+<td>1 3 5 b7 9</td>
+<td></td>
+<td>9</td>
+</tr>
+<tr valign='top'>
+<td>1 3 5 b7 9 #11</td>
+<td>9#11</td>
+<td>9+11</td>
+</tr>
+<tr valign='top'>
+<td>1 3 5 b7 9 #11 13</td>
+<td>13#11</td>
+<td>13+11</td>
+</tr>
+<tr valign='top'>
+<td>1 3 5 b7 9 11</td>
+<td></td>
+<td>11</td>
+</tr>
+<tr valign='top'>
+<td>1 3 5 b7 9 11 b13</td>
+<td>11b13</td>
+<td>11-13</td>
+</tr>
+<tr valign='top'>
+<td>1 3 5 b7 9 13</td>
+<td></td>
+<td>13</td>
+</tr>
+<tr valign='top'>
+<td>1 3 5 b7 b9</td>
+<td>7b9</td>
+<td>7-9</td>
+</tr>
+<tr valign='top'>
+<td>1 3 5 b7 b9 #11</td>
+<td>7b9#11, 7-9+4</td>
+<td>7-9+11</td>
+</tr>
+<tr valign='top'>
+<td>1 3 5 b7 b9 11</td>
+<td>11b9</td>
+<td>11-9</td>
+</tr>
+<tr valign='top'>
+<td>1 3 5 b7 b9 13</td>
+<td>13b9</td>
+<td>13-9</td>
+</tr>
+<tr valign='top'>
+<td>1 3 5 b7 b9 b13</td>
+<td>7b9b13, 7b13</td>
+<td>7-9-13</td>
+</tr>
+<tr valign='top'>
+<td>1 3 b5</td>
+<td>majb5</td>
+<td>maj-5</td>
+</tr>
+<tr valign='top'>
+<td>1 3 b5 7</td>
+<td>maj7b5</td>
+<td>maj7-5</td>
+</tr>
+<tr valign='top'>
+<td>1 3 b5 b7</td>
+<td>7b5</td>
+<td>7-5</td>
+</tr>
+<tr valign='top'>
+<td>1 3 b5 b7 #9</td>
+<td>7b5#9</td>
+<td>7-5+9</td>
+</tr>
+<tr valign='top'>
+<td>1 3 b5 b7 9</td>
+<td>9b5</td>
+<td>9-5</td>
+</tr>
+<tr valign='top'>
+<td>1 3 b5 b7 9 13</td>
+<td>13b5</td>
+<td>13-5</td>
+</tr>
+<tr valign='top'>
+<td>1 3 b5 b7 b9</td>
+<td>7b5b9</td>
+<td>7-5-9</td>
+</tr>
+<tr valign='top'>
+<td>1 4 5</td>
+<td>sus4</td>
+<td>sus</td>
+</tr>
+<tr valign='top'>
+<td>1 4 5 7</td>
+<td></td>
+<td>maj7sus</td>
+</tr>
+<tr valign='top'>
+<td>1 4 5 7 9</td>
+<td></td>
+<td>maj9sus</td>
+</tr>
+<tr valign='top'>
+<td>1 4 5 b7</td>
+<td>7sus4</td>
+<td>7sus</td>
+</tr>
+<tr valign='top'>
+<td>1 4 5 b7 b9</td>
+<td>7sus4b9</td>
+<td>7sus-9</td>
+</tr>
+<tr valign='top'>
+<td>1 4 5 b7 9</td>
+<td>9sus4</td>
+<td>9sus</td>
+</tr>
+<tr valign='top'>
+<td>1 4 5 b7 9 13</td>
+<td>13sus4</td>
+<td>13sus</td>
+</tr>
+<tr valign='top'>
+<td>1 4 5 b7 b9 13</td>
+<td>13sus4b9</td>
+<td>13sus-9</td>
+</tr>
+<tr valign='top'>
+<td>1 5</td>
+<td></td>
+<td>5</td>
+</tr>
+<tr valign='top'>
+<td>1 b3 #5 7</td>
+<td>mmaj7#5, m#7#5, m#7+5</td>
+<td>mmaj7+5</td>
+</tr>
+<tr valign='top'>
+<td>1 b3 #5 b7</td>
+<td>m7#5</td>
+<td>m7+5</td>
+</tr>
+<tr valign='top'>
+<td>1 b3 #5 b7 9</td>
+<td>m9#5</td>
+<td>m9+5</td>
+</tr>
+<tr valign='top'>
+<td>1 b3 5</td>
+<td></td>
+<td>m</td>
+</tr>
+<tr valign='top'>
+<td>1 b3 5 6</td>
+<td></td>
+<td>m6</td>
+</tr>
+<tr valign='top'>
+<td>1 b3 5 6 9</td>
+<td>m6/9</td>
+<td>m6add9</td>
+</tr>
+<tr valign='top'>
+<td>1 b3 5 7</td>
+<td>m#7</td>
+<td>mmaj7</td>
+</tr>
+<tr valign='top'>
+<td>1 b3 5 7 9</td>
+<td>m9#7, m9maj7</td>
+<td>mmaj9</td>
+</tr>
+<tr valign='top'>
+<td>1 b3 5 7 b9</td>
+<td>m#7b9, m#7-9</td>
+<td>mmmaj7-9</td>
+</tr>
+<tr valign='top'>
+<td>1 b3 5 9</td>
+<td></td>
+<td>madd9</td>
+</tr>
+<tr valign='top'>
+<td>1 b3 5 b7</td>
+<td></td>
+<td>m7</td>
+</tr>
+<tr valign='top'>
+<td>1 b3 5 b7 #9</td>
+<td>m7#9</td>
+<td>m7+9</td>
+</tr>
+<tr valign='top'>
+<td>1 b3 5 b7 11</td>
+<td>m7/11</td>
+<td>m7add11</td>
+</tr>
+<tr valign='top'>
+<td>1 b3 5 b7 13</td>
+<td>m7/13</td>
+<td>m7add13</td>
+</tr>
+<tr valign='top'>
+<td>1 b3 5 b7 9</td>
+<td></td>
+<td>m9</td>
+</tr>
+<tr valign='top'>
+<td>1 b3 5 b7 9 #11</td>
+<td>m9#11</td>
+<td>m9+11</td>
+</tr>
+<tr valign='top'>
+<td>1 b3 5 b7 9 11</td>
+<td></td>
+<td>m11</td>
+</tr>
+<tr valign='top'>
+<td>1 b3 5 b7 9 11 13</td>
+<td></td>
+<td>m13</td>
+</tr>
+<tr valign='top'>
+<td>1 b3 5 b7 b9</td>
+<td>m7b9</td>
+<td>m7-9</td>
+</tr>
+<tr valign='top'>
+<td>1 b3 b5</td>
+<td>mb5, m-5</td>
+<td>dim</td>
+</tr>
+<tr valign='top'>
+<td>1 b3 b5 6</td>
+<td></td>
+<td>dim7</td>
+</tr>
+<tr valign='top'>
+<td>1 b3 b5 6 7</td>
+<td>dim7/maj7</td>
+<td>dim7addmaj7</td>
+</tr>
+<tr valign='top'>
+<td>1 b3 b5 7</td>
+<td>m#7b5, m#7-5</td>
+<td>mmaj7-5</td>
+</tr>
+<tr valign='top'>
+<td>1 b3 b5 b7</td>
+<td>m7b5</td>
+<td>m7-5</td>
+</tr>
+<tr valign='top'>
+<td>1 b3 b5 b7 9</td>
+<td>m9b5</td>
+<td>m9-5</td>
+</tr>
+<tr valign='top'>
+<td>1 b3 b5 b7 9 11</td>
+<td>m11b5</td>
+<td>m11-5</td>
+</tr>
+</table>
+</body>
+</html>

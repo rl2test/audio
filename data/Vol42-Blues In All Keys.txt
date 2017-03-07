@@ -1,0 +1,43 @@
+//S: C:/rob/music/jazz/pdf/scannedBooks/Aebersold/Vol 42 - Blues In All Keys.pdf
+//      | 1   | 2   | 3   | 4         | 5   | 6      | 7            | 8             | 9    | 10  | 11        | 12        |
+//------|-----|-----|-----|-----------|-----|--------|--------------|---------------|------|-----|-----------|-----------|
+01a. Bb | Bb7 | Eb7	| Bb7 | Fm7,  Bb7 | Eb7 | Eb7    | Bb7          | Ddim7,  G7+9  | Cm7  | F7  | Dm7,  G7  | Cm7,  F7  | Kenny'll Make It
+01c. Bb | Bb7 | Eb7	| Bb7 | Fm7,  Bb7 | Eb7 | Edim7  | Bbmaj7, Cm7  | Dm7,    Dbm7  | Cm7  | F7  | Dm7,  G7  | Cm7,  F7  | Kenny'll Make It
+//      |     |     |     |           |     |        |              |               |      |     |           |           |
+02a. B  | B7  | E7	| B7  | F#m7, B7  | E7  | E7     | B7           | Ebdim7, Ab7+9 | C#m7 | F#7 | Ebm7, Ab7 | C#m7, F#7 | Wiggle Waggle
+02c. B  | B7  | E7	| B7  | F#m7, B7  | E7  | Fdim7  | Bmaj7,  C#m7 | Ebm7,   Dm7   | C#m7 | F#7 | Ebm7, Ab7 | C#m7, F#7 | Wiggle Waggle
+//      |     |     |     |           |     |        |              |               |      |     |           |           |
+03a. C  | C7  | F7	| C7  | Gm7,  C7  | F7  | F7     | C7           | Edim7,  A7+9  | Dm7  | G7  | Em7,  A7  | Dm7,  G7  | Now Hear This
+03c. C  | C7  | F7	| C7  | Gm7,  C7  | F7  | F#dim7 | Cmaj7,  Dm7  | Em7,    Ebm7  | Dm7  | G7  | Em7,  A7  | Dm7,  G7  | Now Hear This
+//      |     |     |     |           |     |        |              |               |      |     |           |           |
+04a. Db | Db7 | Gb7	| Db7 | Abm7, Db7 | Gb7 | Gb7    | Db7          | Fdim7,  Bb7+9 | Ebm7 | Ab7 | Fm7,  Bb7 | Ebm7, Ab7 | Repetition Blues
+04c. Db | Db7 | Gb7	| Db7 | Abm7, Db7 | Gb7 | Gdim7  | Dbmaj7, Ebm7 | Fm7,    Em7   | Ebm7 | Ab7 | Fm7,  Bb7 | Ebm7, Ab7 | Repetition Blues
+//      |     |     |     |           |     |        |              |               |      |     |           |           |
+05a. D  | D7  | G7	| D7  | Am7,  D7  | G7  | G7     | D7           | F#dim7, B7+9  | Em7  | A7  | F#m7, B7  | Em7,  A7  | The Bird
+05c. D  | D7  | G7	| D7  | Am7,  D7  | G7  | Abdim7 | Dmaj7,  Am7  | F#m7,   Fm7   | Em7  | A7  | F#m7, B7  | Em7,  A7  | The Bird
+//      |     |     |     |           |     |        |              |               |      |     |           |           |
+06a. Eb | Eb7 | Ab7	| Eb7 | Bbm7, Eb7 | Ab7 | Ab7    | Eb7          | Gdim7,  C7+9  | Fm7  | Bb7 | Gm7,  C7  | Fm7,  Bb7 | Dr. Jay
+06c. Eb | Eb7 | Ab7	| Eb7 | Bbm7, Eb7 | Ab7 | Adim7  | Ebmaj7, Fm7  | Gm7,    F#m7  | Fm7  | Bb7 | Gm7,  C7  | Fm7,  Bb7 | Dr. Jay
+//      |     |     |     |           |     |        |              |               |      |     |           |           |
+07a. E  | E7  | A7	| E7  | Bm7,  E7  | A7  | A7     | E7           | Abdim7, Db7+9 | F#m7 | B7  | Abm7, Db7 | F#m7, B7  | Big Apple
+07c. E  | E7  | A7	| E7  | Bm7,  E7  | A7  | Bbdim7 | Emaj7,  F#m7 | Abm7,   Gm7   | F#m7 | B7  | Abm7, Db7 | F#m7, B7  | Big Apple
+//      |     |     |     |           |     |        |              |               |      |     |           |           |
+08a. F  | F7  | Bb7	| F7  | Cm7,  F7  | Bb7 | Bb7    | F7           | Adim7,  D7+9  | Gm7  | C7  | Am7,  D7  | Gm7,  C7  | A Little Of This
+08b. F  | F7  | Bb7	| F7  | Cm7,  F7  | Bb7 | Bdim7  | Fmaj7,  Gm7  | Am7,    Abm7  | Gm7  | C7  | Am7,  D7  | Gm7,  C7  | A Little Of This
+//      |     |     |     |           |     |        |              |               |      |     |           |           |
+09a. F# | F#7 | B7	| F#7 | C#m7, F#7 | B7  | B7     | F#7          | Bbdim7, Eb7+9 | Abm7 | Db7 | Bbm7, Eb7 | Abm7, Db7 | Downtown Carmi
+09c. F# | F#7 | B7	| F#7 | C#m7, F#7 | B7  | Cdim7  | F#maj7, Abm7 | Bbm7,   Am7   | Abm7 | Db7 | Bbm7, Eb7 | Abm7, Db7 | Downtown Carmi
+//      |     |     |     |           |     |        |              |               |      |     |           |           |
+10a. G  | G7  | C7	| G7  | Dm7,  E7  | C7  | C7     | G7           | Bdim7,  E7+9  | Am7  | D7  | Bm7,  E7  | Am7,  D7  | The Camel
+10c. G  | G7  | C7	| G7  | Dm7,  E7  | C7  | C#dim7 | Gmaj7,  Am7  | Bm7,    Bbm7  | Am7  | D7  | Bm7,  E7  | Am7,  D7  | The Camel
+//      |     |     |     |           |     |        |              |               |      |     |           |           |
+11a. Ab | Ab7 | Db7	| Ab7 | Ebm7, Ab7 | Db7 | Db7    | Ab7          | Cdim7,  F7+9  | Bbm7 | Eb7 | Cm7,  F7  | Bbm7, Eb7 | Shuffle Duty
+11c. Ab | Ab7 | Db7	| Ab7 | Ebm7, Ab7 | Db7 | Ddim7  | Abmaj7, Bbm7 | Cm7,    Bm7   | Bbm7 | Eb7 | Cm7,  F7  | Bbm7, Eb7 | Shuffle Duty
+//      |     |     |     |           |     |        |              |               |      |     |           |           |
+12a. A  | A7  | D7	| A7  | Em7,  A7  | D7  | D7     | A7           | C#dim7, F#7+9 | Bm7  | E7  | C#m7, F#7 | Bm7,  E7  | Triple-itis
+12c. A  | A7  | D7	| A7  | Em7,  A7  | D7  | Ebdim7 | Amaj7,  Bm7  | C#m7,   Cm7   | Bm7  | E7  | C#m7, F#7 | Bm7,  E7  | Triple-itis
+//------|-----|-----|-----|-----------|-----|--------|--------------|---------------|------|-----|-----------|-----------|
+//      | ~~~ | ~~~ | ~~~ | ~~~~~~~~~ | ~~~ |        |              |               | ~~~~ | ~~~ | ~~~~~~~~~ | ~~~~~~~~~ |
+//------|-----|-----|-----|-----------|-----|--------|--------------|---------------|------|-----|-----------|-----------|
+//
+// ~~~ indicates that the 'a' and 'c' sections are identical for those measures

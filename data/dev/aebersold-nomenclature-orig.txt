@@ -1,0 +1,16 @@
+MAJOR (Ionian) (WWHWWWH) C D E F G A B C C C? Cmaj, Cma, Cma7, Cmaj7, CM, CM7, Cmaj9, Cmaj13
+* DOMINANT SEVENTH (Mixolydian) (WWHWWHW) 5th Mode of Major: C D E F G A B? C C7 C9, C11, C13
+* MINOR SEVENTH (Dorian) (WHWWWHW) 2nd Mode of Major: C D E? F G A B? C C— C—7, Cmi, Cmi7, Cm7, Cmin, Cmin7, Cm9, Cm11, Cm13
+LYDIAN (Major Scale with ß4) (WWWHWWH) 4th Mode of Major: C D E Fß G A B C C?+4 Cmaj+4, CM+4, C?+11, C??5, Cmaj?5
+* HALF-DIMINISHED (Locrian) (HWWHWWW) 7th Mode of Major: C D? E? F G? A? B? C CØ Cmi7(?5), C—7?5
+HALF-DIMINISHED #2 (Locrian #2) (WHWHWWW) 6th Mode of Melodic Minor: C D E? F G? A? B? C CØß2 CØ+2, CØ9
+DIMINISHED (WHWHWHWH) C D E? F G? A? A B C C° Cdim, C°7, Cdim7, C°9
+LYDIAN DOMINANT (Dom. 7th with ß4) (WWWHWHW) 4th Mode of Melodic Minor: C D E Fß G A B? C C7+4 C7+11, C7?5, C9+11, C13+11
+WHOLE-TONE (WWWWWWW) C D E F# G# Bb C +4 C7+ C7aug, C7+5, C7+5
+DOMINANT SEVENTH (Using a Dim. Scale) (HWHWHWHW) C D? E? E Fß G A B? C +9 +9 C7?9 C7?9+4, C13?9+11
+DIMINISHED WHOLE-TONE (Altered Scale) (HWHWWWW) 7th Mode of Melodic Minor: C D? E? E Fß Gß B? C +9+5 +9?13 C7+9 C7alt, C7?9+4, C7?9+11
+LYDIAN AUGMENTED (Major with ß4 & ß5) (WWWWHWH) 3rd Mode of Melodic Minor: C D E Fß Gß A B C +5 C?+4 C?+5
+MELODIC MINOR (Ascending Only) (WHWWWWH) C D E? F G A B C C—? Cmin(maj7), Cmi?, C—? (Melodic), Cm6
+HARMONIC MINOR (WHWWH—3H) C D E? F G A? B C C—? Cmi?, C—? (Har), C—??6
+SUSPENDED 4th (W—3WWHW) or (WWHWWHW) C D F G A B? C or C D E F G A B? C G— G—7, C7sus4, C7sus, C4, C11 C C
+* BLUES SCALE (Used mostly with dominant and minor chords) (—3WHH—3W) (1, ?3, 4, ß4, 5, ?7, 1) C E? F Fß G B? C

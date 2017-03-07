@@ -1,0 +1,906 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0051)http://www.harmony-central.com/MIDI/Doc/table3.html -->
+<HTML><HEAD><TITLE>Table 3: Status Bytes 176-191; Control and Mode Changes (per channel)</TITLE>
+<META content="text/html; charset=windows-1252" http-equiv=Content-Type>
+<META content="MSHTML 5.00.2614.3500" name=GENERATOR></HEAD>
+<BODY bgColor=#ffffff link=#0000ff vLink=#871f78>
+<CENTER><A 
+href="http://ds1.harmony-central.com/cgi-bin/accipiter/adclick.exe/CID=0000013425cb0adf00000000/SITE=HC/AREA=MIDI.DOC" 
+target=_top><IMG alt="audioMIDI.com - For All Your Computer Music Needs" 
+border=0 height=60 
+src="Table 3 Status Bytes 176-191; Control and Mode Changes (per channel)_files/blue-animated-468x60.gif" 
+width=468></A></CENTER>
+<CENTER>
+<H1>Table 3: Status Bytes 176-191; Control and Mode Changes (per 
+channel)</H1>(adapted from "MIDI by the Numbers" by D. Valenti-Electronic 
+Musician 2/88)<BR>Updated 1995 By the MIDI Manufacturers Association
+<P>WARNING: The details of this implementation could dramatically affect 
+compatibility with other products. It is recommended that you consult the 
+official MMA detailed specification for any additional information.</CENTER>
+<P>
+<TABLE border=3 width="100%">
+  <TBODY>
+  <TR align=middle>
+    <TD colSpan=3><B>2nd Byte Value</B></TD>
+    <TD rowSpan=2 width="55%"><B>Function</B></TD>
+    <TD colSpan=2 width="25%"><B>3rd Byte</B></TD></TR>
+  <TR align=middle>
+    <TD>Binary</TD>
+    <TD>Hex</TD>
+    <TD>Dec</TD>
+    <TD>Value</TD>
+    <TD>Use</TD></TR>
+  <TR align=middle>
+    <TD>00000000</TD>
+    <TD>00</TD>
+    <TD>0</TD>
+    <TD>Bank Select </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>00000001</TD>
+    <TD>01</TD>
+    <TD>1</TD>
+    <TD>Modulation wheel </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>00000010</TD>
+    <TD>02</TD>
+    <TD>2</TD>
+    <TD>Breath control </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>00000011</TD>
+    <TD>03</TD>
+    <TD>3</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>00000100</TD>
+    <TD>04</TD>
+    <TD>4</TD>
+    <TD>Foot controller </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>00000101</TD>
+    <TD>05</TD>
+    <TD>5</TD>
+    <TD>Portamento time </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>00000110</TD>
+    <TD>06</TD>
+    <TD>6</TD>
+    <TD>Data Entry </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>00000111</TD>
+    <TD>07</TD>
+    <TD>7</TD>
+    <TD>Channel Volume (formerly Main Volume) </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>00001000</TD>
+    <TD>08</TD>
+    <TD>8</TD>
+    <TD>Balance </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>00001001</TD>
+    <TD>09</TD>
+    <TD>9</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>00001010</TD>
+    <TD>0A</TD>
+    <TD>10</TD>
+    <TD>Pan </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>00001011</TD>
+    <TD>0B</TD>
+    <TD>11</TD>
+    <TD>Expression Controller </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>00001100</TD>
+    <TD>0C</TD>
+    <TD>12</TD>
+    <TD>Effect control 1 </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>00001101</TD>
+    <TD>0D</TD>
+    <TD>13</TD>
+    <TD>Effect control 2 </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>00001110</TD>
+    <TD>0E</TD>
+    <TD>14</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>00001111</TD>
+    <TD>0F</TD>
+    <TD>15</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>00010000</TD>
+    <TD>10</TD>
+    <TD>16</TD>
+    <TD>General Purpose Controller #1 </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>00010001</TD>
+    <TD>11</TD>
+    <TD>17</TD>
+    <TD>General Purpose Controller #2 </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>00010010</TD>
+    <TD>12</TD>
+    <TD>18</TD>
+    <TD>General Purpose Controller #3 </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>00010011</TD>
+    <TD>13</TD>
+    <TD>19</TD>
+    <TD>General Purpose Controller #4 </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>00010100</TD>
+    <TD>14</TD>
+    <TD>20</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>00010101</TD>
+    <TD>15</TD>
+    <TD>21</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>00010110</TD>
+    <TD>16</TD>
+    <TD>22</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>00010111</TD>
+    <TD>17</TD>
+    <TD>23</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>00011000</TD>
+    <TD>18</TD>
+    <TD>24</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>00011001</TD>
+    <TD>19</TD>
+    <TD>25</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>00011010</TD>
+    <TD>1A</TD>
+    <TD>26</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>00011011</TD>
+    <TD>1B</TD>
+    <TD>27</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>00011100</TD>
+    <TD>1C</TD>
+    <TD>28</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>00011101</TD>
+    <TD>1D</TD>
+    <TD>29</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>00011110</TD>
+    <TD>1E</TD>
+    <TD>30</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>00011111</TD>
+    <TD>1F</TD>
+    <TD>31</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>00100000</TD>
+    <TD>20</TD>
+    <TD>32</TD>
+    <TD>Bank Select </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>00100001</TD>
+    <TD>21</TD>
+    <TD>33</TD>
+    <TD>Modulation wheel </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>00100010</TD>
+    <TD>22</TD>
+    <TD>34</TD>
+    <TD>Breath control </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>00100011</TD>
+    <TD>23</TD>
+    <TD>35</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>00100100</TD>
+    <TD>24</TD>
+    <TD>36</TD>
+    <TD>Foot controller </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>00100101</TD>
+    <TD>25</TD>
+    <TD>37</TD>
+    <TD>Portamento time </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>00100110</TD>
+    <TD>26</TD>
+    <TD>38</TD>
+    <TD>Data entry </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>00100111</TD>
+    <TD>27</TD>
+    <TD>39</TD>
+    <TD>Channel Volume (formerly Main Volume) </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>00101000</TD>
+    <TD>28</TD>
+    <TD>40</TD>
+    <TD>Balance </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>00101001</TD>
+    <TD>29</TD>
+    <TD>41</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>00101010</TD>
+    <TD>2A</TD>
+    <TD>42</TD>
+    <TD>Pan </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>00101011</TD>
+    <TD>2B</TD>
+    <TD>43</TD>
+    <TD>Expression Controller </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>00101100</TD>
+    <TD>2C</TD>
+    <TD>44</TD>
+    <TD>Effect control 1 </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>00101101</TD>
+    <TD>2D</TD>
+    <TD>45</TD>
+    <TD>Effect control 2 </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>00101110</TD>
+    <TD>2E</TD>
+    <TD>46</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>00101111</TD>
+    <TD>2F</TD>
+    <TD>47</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>00110000</TD>
+    <TD>30</TD>
+    <TD>48</TD>
+    <TD>General Purpose Controller #1 </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>00110001</TD>
+    <TD>31</TD>
+    <TD>49</TD>
+    <TD>General Purpose Controller #2 </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>00110010</TD>
+    <TD>32</TD>
+    <TD>50</TD>
+    <TD>General Purpose Controller #3 </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>00110011</TD>
+    <TD>33</TD>
+    <TD>51</TD>
+    <TD>General Purpose Controller #4 </TD>
+    <TD>0-127 </TD>
+    <TD>LSB </TD></TR>
+  <TR align=middle>
+    <TD>00110100</TD>
+    <TD>34</TD>
+    <TD>52</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>00110101</TD>
+    <TD>35</TD>
+    <TD>53</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>00110110</TD>
+    <TD>36</TD>
+    <TD>54</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>00110111</TD>
+    <TD>37</TD>
+    <TD>55</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>00111000</TD>
+    <TD>38</TD>
+    <TD>56</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>00111001</TD>
+    <TD>39</TD>
+    <TD>57</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>00111010</TD>
+    <TD>3A</TD>
+    <TD>58</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>LSB </TD></TR>
+  <TR align=middle>
+    <TD>00111011</TD>
+    <TD>3B</TD>
+    <TD>59</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>00111100</TD>
+    <TD>3C</TD>
+    <TD>60</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>00111101</TD>
+    <TD>3D</TD>
+    <TD>61</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>00111110</TD>
+    <TD>3E</TD>
+    <TD>62</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>00111111</TD>
+    <TD>3F</TD>
+    <TD>63</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>01000000</TD>
+    <TD>40</TD>
+    <TD>64</TD>
+    <TD>Damper pedal on/off (Sustain) </TD>
+    <TD>&lt;63=off</TD>
+    <TD>&gt;64=on</TD></TR>
+  <TR align=middle>
+    <TD>01000001</TD>
+    <TD>41</TD>
+    <TD>65</TD>
+    <TD>Portamento on/off </TD>
+    <TD>&lt;63=off</TD>
+    <TD>&gt;64=on</TD></TR>
+  <TR align=middle>
+    <TD>01000010</TD>
+    <TD>42</TD>
+    <TD>66</TD>
+    <TD>Sustenuto on/off </TD>
+    <TD>&lt;63=off</TD>
+    <TD>&gt;64=on</TD></TR>
+  <TR align=middle>
+    <TD>01000011</TD>
+    <TD>43</TD>
+    <TD>67</TD>
+    <TD>Soft pedal on/off </TD>
+    <TD>&lt;63=off</TD>
+    <TD>&gt;64=on</TD></TR>
+  <TR align=middle>
+    <TD>01000100</TD>
+    <TD>44</TD>
+    <TD>68</TD>
+    <TD>Legato Footswitch </TD>
+    <TD>&lt;63=off</TD>
+    <TD>&gt;64=on</TD></TR>
+  <TR align=middle>
+    <TD>01000101</TD>
+    <TD>45</TD>
+    <TD>69</TD>
+    <TD>Hold 2 </TD>
+    <TD>&lt;63=off</TD>
+    <TD>&gt;64=on</TD></TR>
+  <TR align=middle>
+    <TD>01000110</TD>
+    <TD>46</TD>
+    <TD>70</TD>
+    <TD>Sound Controller 1 (Sound Variation) </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>01000111</TD>
+    <TD>47</TD>
+    <TD>71</TD>
+    <TD>Sound Controller 2 (Timbre) </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>01001000</TD>
+    <TD>48</TD>
+    <TD>72</TD>
+    <TD>Sound Controller 3 (Release Time) </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>01001001</TD>
+    <TD>49</TD>
+    <TD>73</TD>
+    <TD>Sound Controller 4 (Attack Time) </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>01001010</TD>
+    <TD>4A</TD>
+    <TD>74</TD>
+    <TD>Sound Controller 5 (Brightness) </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>01001011</TD>
+    <TD>4B</TD>
+    <TD>75</TD>
+    <TD>Sound Controller 6 </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>01001100</TD>
+    <TD>4C</TD>
+    <TD>76</TD>
+    <TD>Sound Controller 7 </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>01001101</TD>
+    <TD>4D</TD>
+    <TD>77</TD>
+    <TD>Sound Controller 8 </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>01001110</TD>
+    <TD>4E</TD>
+    <TD>78</TD>
+    <TD>Sound Controller 9 </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>01001111</TD>
+    <TD>4F</TD>
+    <TD>79</TD>
+    <TD>Sound Controller 10 </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>01010000</TD>
+    <TD>50</TD>
+    <TD>80</TD>
+    <TD>General Purpose Controller #5 </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>01010001</TD>
+    <TD>51</TD>
+    <TD>81</TD>
+    <TD>General Purpose Controller #6 </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>01010010</TD>
+    <TD>52</TD>
+    <TD>82</TD>
+    <TD>General Purpose Controller #7 </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>01010011</TD>
+    <TD>53</TD>
+    <TD>83</TD>
+    <TD>General Purpose Controller #8 </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>01010100</TD>
+    <TD>54</TD>
+    <TD>84</TD>
+    <TD>Portamento Control </TD>
+    <TD>0-127 </TD>
+    <TD>Source Note</TD></TR>
+  <TR align=middle>
+    <TD>01010101</TD>
+    <TD>55</TD>
+    <TD>85</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>01010110</TD>
+    <TD>56</TD>
+    <TD>86</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>01010111</TD>
+    <TD>57</TD>
+    <TD>87</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>01011000</TD>
+    <TD>58</TD>
+    <TD>88</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>01011001</TD>
+    <TD>59</TD>
+    <TD>89</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>01011010</TD>
+    <TD>5A</TD>
+    <TD>90</TD>
+    <TD>Undefined </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>01011011</TD>
+    <TD>5B</TD>
+    <TD>91</TD>
+    <TD>Effects 1 Depth </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>01011100</TD>
+    <TD>5C</TD>
+    <TD>92</TD>
+    <TD>Effects 2 Depth </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>01011101</TD>
+    <TD>5D</TD>
+    <TD>93</TD>
+    <TD>Effects 3 Depth </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>01011110</TD>
+    <TD>5E</TD>
+    <TD>94</TD>
+    <TD>Effects 4 Depth </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>01011111</TD>
+    <TD>5F</TD>
+    <TD>95</TD>
+    <TD>Effects 5 Depth </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>01100000</TD>
+    <TD>60</TD>
+    <TD>96</TD>
+    <TD>Data entry +1 </TD>
+    <TD colSpan=2>N/A</TD></TR>
+  <TR align=middle>
+    <TD>01100001</TD>
+    <TD>61</TD>
+    <TD>97</TD>
+    <TD>Data entry -1 </TD>
+    <TD colSpan=2>N/A</TD></TR>
+  <TR align=middle>
+    <TD>01100010</TD>
+    <TD>62</TD>
+    <TD>98</TD>
+    <TD>Non-Registered Parameter Number LSB </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>01100011</TD>
+    <TD>63</TD>
+    <TD>99</TD>
+    <TD>Non-Registered Parameter Number MSB </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>01100100</TD>
+    <TD>64</TD>
+    <TD>100</TD>
+    <TD>Registered Parameter Number LSB </TD>
+    <TD>0-127 </TD>
+    <TD>LSB</TD></TR>
+  <TR align=middle>
+    <TD>01100101</TD>
+    <TD>65</TD>
+    <TD>101</TD>
+    <TD>Registered Parameter Number MSB </TD>
+    <TD>0-127 </TD>
+    <TD>MSB</TD></TR>
+  <TR align=middle>
+    <TD>01100110</TD>
+    <TD>66</TD>
+    <TD>102</TD>
+    <TD>Undefined </TD>
+    <TD colSpan=2>?</TD></TR>
+  <TR align=middle>
+    <TD>01100111</TD>
+    <TD>67</TD>
+    <TD>103</TD>
+    <TD>Undefined </TD>
+    <TD colSpan=2>?</TD></TR>
+  <TR align=middle>
+    <TD>01101000</TD>
+    <TD>68</TD>
+    <TD>104</TD>
+    <TD>Undefined </TD>
+    <TD colSpan=2>?</TD></TR>
+  <TR align=middle>
+    <TD>01101001</TD>
+    <TD>69</TD>
+    <TD>105</TD>
+    <TD>Undefined </TD>
+    <TD colSpan=2>?</TD></TR>
+  <TR align=middle>
+    <TD>01101010</TD>
+    <TD>6A</TD>
+    <TD>106</TD>
+    <TD>Undefined </TD>
+    <TD colSpan=2>?</TD></TR>
+  <TR align=middle>
+    <TD>01101011</TD>
+    <TD>6B</TD>
+    <TD>107</TD>
+    <TD>Undefined </TD>
+    <TD colSpan=2>?</TD></TR>
+  <TR align=middle>
+    <TD>01101100</TD>
+    <TD>6C</TD>
+    <TD>108</TD>
+    <TD>Undefined </TD>
+    <TD colSpan=2>?</TD></TR>
+  <TR align=middle>
+    <TD>01101101</TD>
+    <TD>6D</TD>
+    <TD>109</TD>
+    <TD>Undefined </TD>
+    <TD colSpan=2>?</TD></TR>
+  <TR align=middle>
+    <TD>01101110</TD>
+    <TD>6E</TD>
+    <TD>110</TD>
+    <TD>Undefined </TD>
+    <TD colSpan=2>?</TD></TR>
+  <TR align=middle>
+    <TD>01101111</TD>
+    <TD>6F</TD>
+    <TD>111</TD>
+    <TD>Undefined </TD>
+    <TD colSpan=2>?</TD></TR>
+  <TR align=middle>
+    <TD>01110000</TD>
+    <TD>70</TD>
+    <TD>112</TD>
+    <TD>Undefined </TD>
+    <TD colSpan=2>?</TD></TR>
+  <TR align=middle>
+    <TD>01110001</TD>
+    <TD>71</TD>
+    <TD>113</TD>
+    <TD>Undefined </TD>
+    <TD colSpan=2>?</TD></TR>
+  <TR align=middle>
+    <TD>01110010</TD>
+    <TD>72</TD>
+    <TD>114</TD>
+    <TD>Undefined </TD>
+    <TD colSpan=2>?</TD></TR>
+  <TR align=middle>
+    <TD>01110011</TD>
+    <TD>73</TD>
+    <TD>115</TD>
+    <TD>Undefined </TD>
+    <TD colSpan=2>?</TD></TR>
+  <TR align=middle>
+    <TD>01110100</TD>
+    <TD>74</TD>
+    <TD>116</TD>
+    <TD>Undefined </TD>
+    <TD colSpan=2>?</TD></TR>
+  <TR align=middle>
+    <TD>01110101</TD>
+    <TD>75</TD>
+    <TD>117</TD>
+    <TD>Undefined </TD>
+    <TD colSpan=2>?</TD></TR>
+  <TR align=middle>
+    <TD>01110110</TD>
+    <TD>76</TD>
+    <TD>118</TD>
+    <TD>Undefined </TD>
+    <TD colSpan=2>?</TD></TR>
+  <TR align=middle>
+    <TD>01110111</TD>
+    <TD>77</TD>
+    <TD>119</TD>
+    <TD>Undefined </TD>
+    <TD colSpan=2>?</TD></TR>
+  <TR align=middle>
+    <TD>01111000</TD>
+    <TD>78</TD>
+    <TD>120</TD>
+    <TD>All Sound Off </TD>
+    <TD colSpan=2>0</TD></TR>
+  <TR align=middle>
+    <TD>01111001</TD>
+    <TD>79</TD>
+    <TD>121</TD>
+    <TD>Reset All Controllers </TD>
+    <TD colSpan=2>0</TD></TR>
+  <TR align=middle>
+    <TD>01111010</TD>
+    <TD>7A</TD>
+    <TD>122</TD>
+    <TD>Local control on/off </TD>
+    <TD colSpan=2>0=off 127=on </TD></TR>
+  <TR align=middle>
+    <TD>01111011</TD>
+    <TD>7B</TD>
+    <TD>123</TD>
+    <TD>All notes off </TD>
+    <TD colSpan=2>0</TD></TR>
+  <TR align=middle>
+    <TD>01111100</TD>
+    <TD>7C</TD>
+    <TD>124</TD>
+    <TD>Omni mode off (+ all notes off) </TD>
+    <TD colSpan=2>0</TD></TR>
+  <TR align=middle>
+    <TD>01111101</TD>
+    <TD>7D</TD>
+    <TD>125</TD>
+    <TD>Omni mode on (+ all notes off) </TD>
+    <TD colSpan=2>0</TD></TR>
+  <TR align=middle>
+    <TD>01111110</TD>
+    <TD>7E</TD>
+    <TD>126</TD>
+    <TD>Poly mode on/off (+ all notes off) </TD>
+    <TD colSpan=2>**</TD></TR>
+  <TR align=middle>
+    <TD>01111111</TD>
+    <TD>7F</TD>
+    <TD>127</TD>
+    <TD>Poly mode on (incl mono=off +all notes off) </TD>
+    <TD colSpan=2>0</TD></TR></TBODY></TABLE>
+<P><B>**Note:</B> This equals the number of channels, or zero if the number of 
+channels equals the number of voices in the receiver.
+<P>The MIDI Manufacturers Association approves of electronic distribution of 
+this document via this and other sites, as long as it is not modified in any 
+way.
+<P>HTML coding by Scott Lehman </P></BODY></HTML>

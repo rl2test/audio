@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0051)http://www.harmony-central.com/MIDI/Doc/table4.html -->
+<HTML><HEAD><TITLE>Table 4: MIDI 1.0 Specification Message Summary</TITLE>
+<META content="text/html; charset=windows-1252" http-equiv=Content-Type>
+<META content="MSHTML 5.00.2614.3500" name=GENERATOR></HEAD>
+<BODY bgColor=#ffffff link=#0000ff vLink=#871f78>
+<CENTER><IFRAME frameBorder=0 height=60 marginHeight=0 marginWidth=0 noResize 
+scrolling=no 
+src="Table 4 MIDI 1_0 Specification Message Summary_files/sprinks-468x60-1-iframe.html" 
+width=468>
+
+<SCRIPT SRC="http://a1028.g.akamai.net/6/1028/968/444516c765e1c0/sprfetch.about.com/cgi/sprinks/sprinksA.js?site=harmcntrl&id=chan02&type=1&pid=1"></SCRIPT>
+<NOSCRIPT>
+
+</NOSCRIPT>
+</IFRAME></CENTER>
+<CENTER>
+<H1>Table 4: MIDI 1.0 Specification Message Summary</H1>Updated 1995 By the MIDI 
+Manufacturers Association
+<P>WARNING: The details of this implementation could dramatically affect 
+compatibility with other products. It is recommended that you consult the 
+official MMA detailed specification for any additional information. </CENTER>
+<P>
+<TABLE border=3 width="100%">
+  <TBODY>
+  <TR align=middle>
+    <TD width="20%"><B>Status<BR>D7----D0</B></TD>
+    <TD width="20%"><B>Data Byte(s)<BR>D7----D0</B></TD>
+    <TD width="60%"><B>Description</B></TD></TR>
+  <TR align=middle>
+    <TD colSpan=3><B>Channel Voice Messages</B></TD></TR>
+  <TR align=middle vAlign=top>
+    <TD>1000cccc</TD>
+    <TD>0nnnnnnn<BR>0vvvvvvv</TD>
+    <TD>Note Off event.<BR>This message is sent when a note is released 
+      (ended).<BR>(nnnnnnn) is the note number.<BR>(vvvvvvv) is the 
+  velocity.</TD></TR>
+  <TR align=middle vAlign=top>
+    <TD>1001cccc</TD>
+    <TD>0nnnnnnn<BR>0vvvvvvv</TD>
+    <TD>Note On event.<BR>This message is sent when a note is depressed 
+      (start).<BR>(nnnnnnn) is the note number.</TD></TR>
+  <TR align=middle vAlign=top>
+    <TD>1010cccc</TD>
+    <TD>0nnnnnnn<BR>0vvvvvvv </TD>
+    <TD>Polyphonic Key Pressure (Aftertouch).<BR>This message is sent when the 
+      pressure (velocity) of a previously triggered note changes.<BR>(nnnnnnn) 
+      is the note number.<BR>(vvvvvvv) is the new velocity.</TD></TR>
+  <TR align=middle vAlign=top>
+    <TD>1011cccc</TD>
+    <TD>0nnnnnnn<BR>0vvvvvvv</TD>
+    <TD>Control Change.<BR>This message is sent when a controller value 
+      changes. Controllers include devices such as pedals and levers. Certain 
+      controller numbers are reserved for specific purposes. See Channel Mode 
+      Messages.<BR>(ccccccc) is the controller number.<BR>(vvvvvvv) is the new 
+      value.</TD></TR>
+  <TR align=middle vAlign=top>
+    <TD>1100cccc</TD>
+    <TD>0ppppppp</TD>
+    <TD>Program Change.<BR>This message sent when the patch number changes. 
+      (ppppppp) is the new program number.</TD></TR>
+  <TR align=middle vAlign=top>
+    <TD>1101nnnn</TD>
+    <TD>0ccccccc</TD>
+    <TD>Channel Pressure (After-touch).<BR>This message is sent when the 
+      channel pressure changes. Some velocity-sensing keyboards do not support 
+      polyphonic after-touch. Use this message to send the single greatest 
+      velocity (of all the current depressed keys).<BR>(ccccccc) is the channel 
+      number.</TD></TR>
+  <TR align=middle vAlign=top>
+    <TD>1110nnnn </TD>
+    <TD>0lllllll<BR>0mmmmmmm</TD>
+    <TD>Pitch Wheel Change.<BR>This message is sent to indicate a change in 
+      the pitch wheel. The pitch wheel is measured by a fourteen bit value. 
+      Center (no pitch change) is 2000H. Sensitivity is a function of the 
+      transmitter.<BR>(llllll) are the least significant 7 bits.<BR>(mmmmmm) are 
+      the most significant 7 bits.</TD></TR>
+  <TR>
+    <TD align=middle colSpan=3><B>Channel Mode Messages (See also Control 
+      Change, above)</B></TD></TR>
+  <TR align=middle vAlign=top>
+    <TD>1011nnnn</TD>
+    <TD>0ccccccc<BR>0vvvvvvv</TD>
+    <TD>Channel Mode Messages.<BR>This the same code as the Control Change 
+      (above), but implements Mode control by using reserved controller numbers. 
+      The numbers are:
+      <P>Local Control.<BR>When Local Control is Off, all devices on a given 
+      channel will respond only to data received over MIDI. Played data, etc. 
+      will be ignored. Local Control On restores the functions of the normal 
+      controllers.<BR>c = 122, v = 0: Local Control Off<BR>c = 122, v = 127: 
+      Local Control On
+      <P>All Notes Off.<BR>When an All Notes Off is received, all oscillators 
+      will turn off.<BR>c = 123, v = 0: All Notes Off<BR>(See text for 
+      description of actual mode commands.)<BR>c = 124, v = 0: Omni Mode 
+      Off<BR><BR>c = 125, v = 0: Omni Mode On<BR>c = 126, v = M: Mono Mode On 
+      (Poly Off) where M is the number of channels<BR>(Omni Off) or 0 (Omni 
+      On)<BR>c = 127, v = 0: Poly Mode On (Mono Off)<BR>(Note: These four 
+      messages also cause All Notes Off) </P>
+  <TR>
+    <TD align=middle colSpan=3><B>System Common Messages</B></TD></TR>
+  <TR align=middle vAlign=top>
+    <TD>11110000</TD>
+    <TD>0iiiiiii<BR>0ddddddd<BR>..<BR>..<BR>0ddddddd<BR>11110111 </TD>
+    <TD>System Exclusive.<BR>This message makes up for all that MIDI doesn't 
+      support. (iiiiiii) is a seven bit Manufacturer's I.D. code. If the 
+      synthesizer recognizes the I.D. code as its own, it will listen to the 
+      rest of the message (ddddddd). Otherwise, the message will be ignored. 
+      System Exclusive is used to send bulk dumps such as patch parameters and 
+      other non-spec data. (Note: Real-Time messages ONLY may be interleaved 
+      with a System Exclusive.)</TD></TR>
+  <TR align=middle vAlign=top>
+    <TD>11110001</TD>
+    <TD></TD>
+    <TD>Undefined.</TD></TR>
+  <TR align=middle vAlign=top>
+    <TD>11110010 </TD>
+    <TD>0lllllll<BR>0mmmmmmm</TD>
+    <TD>Song Position Pointer.<BR>This is an internal 14 bit register that 
+      holds the number of MIDI beats (1 beat= six MIDI clocks) since the start 
+      of the song. l is the LSB, m the MSB.</TD></TR>
+  <TR align=middle vAlign=top>
+    <TD>11110011</TD>
+    <TD>0sssssss</TD>
+    <TD>Song Select.<BR>The Song Select specifies which sequence or song is to 
+      be played.</TD></TR>
+  <TR align=middle vAlign=top>
+    <TD>11110100</TD>
+    <TD></TD>
+    <TD>Undefined.</TD></TR>
+  <TR align=middle vAlign=top>
+    <TD>11110101</TD>
+    <TD></TD>
+    <TD>Undefined.</TD></TR>
+  <TR align=middle vAlign=top>
+    <TD>11110110</TD>
+    <TD></TD>
+    <TD>Tune Request.<BR>Upon receiving a Tune Request, all analog 
+      synthesizers should tune their oscillators.</TD></TR>
+  <TR align=middle vAlign=top>
+    <TD>11110111</TD>
+    <TD></TD>
+    <TD>End of Exclusive<BR>Used to terminate a System Exclusive dump (see 
+      above).</TD></TR>
+  <TR>
+    <TD align=middle colSpan=3><B>System Real-Time Messages</B></TD></TR>
+  <TR align=middle vAlign=top>
+    <TD>11111000</TD>
+    <TD></TD>
+    <TD>Timing Clock.<BR>Sent 24 times per quarter note when synchronization 
+      is required (see text).</TD></TR>
+  <TR align=middle vAlign=top>
+    <TD>11111001</TD>
+    <TD></TD>
+    <TD>Undefined.</TD></TR>
+  <TR align=middle vAlign=top>
+    <TD>11111010</TD>
+    <TD></TD>
+    <TD>Start.<BR>Start the current sequence playing. (This message will be 
+      followed with Timing Clocks).</TD></TR>
+  <TR align=middle vAlign=top>
+    <TD>11111011</TD>
+    <TD></TD>
+    <TD>Continue.<BR>Continue at the point the sequence was Stopped.</TD></TR>
+  <TR align=middle vAlign=top>
+    <TD>11111100</TD>
+    <TD></TD>
+    <TD>Stop.<BR>Stop the current sequence.</TD></TR>
+  <TR align=middle vAlign=top>
+    <TD>11111101</TD>
+    <TD></TD>
+    <TD>Undefined.</TD></TR>
+  <TR align=middle vAlign=top>
+    <TD>11111110</TD>
+    <TD></TD>
+    <TD>Active Sensing. Use of this message is optional. When initially sent, 
+      the receiver will expect to receive another Active Sensing message each 
+      300ms (max), or it will be assume that the connection has been terminated. 
+      At termination, the receiver will turn off all voices and return to normal 
+      (non-active sensing) operation.</TD></TR>
+  <TR align=middle vAlign=top>
+    <TD>11111111</TD>
+    <TD></TD>
+    <TD>Reset.<BR>Reset all receivers in the system to power-up status. This 
+      should be used sparingly, preferably under manual control. In particular, 
+      it should not be sent on power-up.</TD></TR></TBODY></TABLE>
+<P>The MIDI Manufacturers Association approves of electronic distribution of 
+this document via this and other sites, as long as it is not modified in any 
+way.
+<P>HTML coding by Scott Lehman </P></BODY></HTML>

@@ -1,0 +1,26 @@
+F | Emi, A7 | Dmi, G7 | Cmi, F7 | Bb7 | Bbmi | Ami | Abmi | Gmi | C7 | Ami, D7 | Gmi, C7 | Aebersold - FQBK-handbook - D
+F#m7, B7 | Em7, A7 | Dm7, G7 | Cm7, F7 | Bbmaj7 | Bbm7, Eb7 | Abmaj7 | Abm7, Db7 | Gbmaj7 | Gm7, C7 | Am7, D7 | Gm7, C7 | Aebersold - FQBK-handbook - 16
+F7 | Bb7 | F7 | Cm, F7 | Bb7 | Bb7 | F7 | Am7b5, D7 | Gm | C7 | F7, D7 | Gm, C7 | Aebersold - Vol 42 - Blues In All Keys - 05
+F7 | Bb7 | F7 | Cm, F7 | Bb7 | Bb7 | F7 | Am7b5, D7+9 | Gm | C7 | Am, D7 | Gm, C7 | Aebersold - Vol 42 - Blues In All Keys - 06
+F7 | Bb7 | F7 | Cm, F7 | Bb7 | Bdim7 | Fmaj7, Gm | Am,Abm | Gm | C7 | Am, D7 | Gm, C7 | Aebersold - Vol 42 - Blues In All Keys - 07
+F7 | Bb7 | F7 | Cm7, F7 | Bb7 | Bm7, E7 | F7, E7 | Eb7, D7 | Gm7 | C7, Bb7 | Am7, D7 | Gm7, C7 | Aebersold - FQBK-handbook - 09
+F7 | Bb7 | F7 | Cm7, F7 | Bb7 | Eb7 | Am7 | D7 | Gm7 | C7 | Am7, D7 | Gm7, C7 | Aebersold - FQBK-handbook - 08
+F7 | Bb7 | F7 | Cm7, F7 | Bb7 | Eb7 | F7, Am7 | D7 | Gm7 | C7 | Am7, D7 | Gm7, C7 | Aebersold - FQBK-handbook - 07
+F7 | Bb7 | F7 | Cmi, F7 | Bb7 | Bb7 | F7 | D7 | Gm9 | C7 | F7 | Gmi, C7 | Aebersold - FQBK-handbook - A
+F7 | Bb7 | F7 | Cmi, F7 | Bb7 | Bdim7 | F7 | Ami7, D7 | Gm | C7 | Ami7, D7 | Gmi, C7 | Aebersold - FQBK-handbook - B
+F7 | Bb7 | F7 | Cmi, F7 | Bb7 | Bdim7 | F7 | Ami7, D7 | Gm, C7 | Dbmi, Gb7 | F7, D7 | G7, C7 | Aebersold - FQBK-handbook - C
+F7 | Bb7 | F7 | F7 | Bb7 | Bb7 | F7 | D7 | G7 | C7 | F7 | C7 | Aebersold - FQBK-handbook - 04
+F7 | Bb7 | F7 | F7 | Bb7 | Bb7 | F7 | D7 | Gm | C7 | F7 | C7 | Aebersold - Vol 42 - Blues In All Keys - 04
+F7 | Bb7 | F7 | F7 | Bb7 | Bb7 | F7 | D7 | Gm7 | C7 | F7 | Gm7, C7 | Aebersold - FQBK-handbook - 05
+F7 | Bb7 | F7 | F7 | Bb7 | Bb7 | F7 | F7 | G7 | C7 | F7 | C7 | Aebersold - FQBK-handbook - 03
+F7 | Bb7 | F7 | F7 | Bb7 | Bb7 | F7 | F7 | Gm | C7 | F7 | C7 | Aebersold - Vol 42 - Blues In All Keys - 03
+F7 | Bb7 | F7 | F7 | Bb7 | Eb7 | F7 | D7 | Db7 | C7 | F7 | Db7, C7 | Aebersold - FQBK-handbook - 06
+F7 | F7 | F7 | F7 | Bb7 | Bb7 | F7 | F7 | C7 | Bb7 | F7 | C7 | Aebersold - FQBK-handbook - 02
+F7 | F7 | F7 | F7 | Bb7 | Bb7 | F7 | F7 | C7 | C7 | F7 | F7 | Aebersold - FQBK-handbook - 01
+Fmaj7 | Bbmaj7 | Am7, Gm7 | Gbm7, Cb7 | Bbmaj7 | Bbm7 | Am7 | Abm7 | Gm7 | Gb7 | Fmaj7, Abm7 | Gm7, Gb | Aebersold - FQBK-handbook - 12
+Fmaj7 | Bbmaj7 | Am7, Gm7 | Gbm7, Cb7 | Bbmaj7 | Bbm7, Eb7 | Abmaj7 | Abm7, Db7 | Gbmaj7 | Gm7, C7 | Am7, D7 | Dbm7, Gb | Aebersold - FQBK-handbook - 13
+Fmaj7 | Em7, A7 | Dm7, G7 | Cm7, F7 | Bb7 | Bdim7 | Am7, D7 | Abm7, Db7 | Gm7, C7 | Dbm7, Gb7 | F7, D7 | Gm7, C7 | Aebersold - FQBK-handbook - 10
+Fmaj7 | Em7, A7 | Dm7, G7 | Cm7, F7 | Bbmaj7 | Bbm7, Eb7 | Am7 | Abm7, Db7 | Gm7 | C7 | Am7, D7 | Gm7, C7 | Aebersold - FQBK-handbook - 14
+Fmaj7 | Em7, A7 | Dm7, G7 | Gbm7, Cb7 | Bbmaj7 | Bm7, E7 | Am7 | Abm7, Db7 | Gm7 | C7, Bb7 | Am7, D7 | Gm7, C7 | Aebersold - FQBK-handbook - 15
+Fmaj7 | Em7, Ebm7 | Dm7, Dbm7 | Cm7, Cb7 | Bbmaj7 | Bbm7 | Am7 | Abm7 | Gm7 | C7 | Am7, Aom7 | Gm7, Gb | Aebersold - FQBK-handbook - 11
+Fmaj7 | F#m7, B7 | Emaj7, Ebmaj7 | Dbmaj7, Bmaj7 | Bbmaj7 | Bm7, E7 | Amaj7 | Am7, D7 | Gmaj7 | Gbmaj7 | Fmaj7, Abmaj7 | Gmaj7, Gb | Aebersold - FQBK-handbook - 17

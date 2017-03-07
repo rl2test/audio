@@ -1,0 +1,45 @@
+// This file is deprecated - use chordscale-types.txt
+
+name                     | abcSymbol    | writenSymbols          | chordIntervalStr       | midiOmitStr  | scaleAddStr         | midi | comment                    
+------------------------- -------------- ------------------------ ------------------------ -------------- --------------------- ------ ----------------------
+Major Triad              |              |                        | 1  3  5                |              |                     |      | [1] I
+Minor Triad              | m            | C-                     | 1 b3  5                |              |                     |      | [1] II
+Augmented Triad          | aug          | C+                     | 1  3 #5                |              |                     |      | [1] III
+Diminished Triad         | dim          | Co                     | 1 b3 b5                |              |                     |      | [1] IV
+Major 6th                | 6            |                        | 1  3  5  6             |              | 7 9                 |      | [1] V
+Minor 6th                | m6           |                        | 1 b3  5  6             |              | 7 9 11              |      | [1] VI The 11 (4) can be added to the scale because the 3 is flattened
+Major 7th                | maj7         |                        | 1  3  5  7             |              | 9                   |      | [1] VII
+Dominant 7th             | 7            |                        | 1  3  5 b7             |              | b9 9 #9 #11 b13 13  |      | [1] VIII
+Minor 7th                | m7           | C-7 [4]                | 1 b3  5 b7             |              | 9 11                |      | [1] IX The 11 (4) can be added to the scale because the 3 is flattened
+Minor 7th (b5)           | m7b5         | Cm7(b5), Co/[3]        | 1 b3 b5 b7             |              | 9 11 b13            | Y    | [1] X, Half Diminished
+Minor (major 7th)        | mmaj7        | Cm(maj7)               | 1 b3  5  7             |              |                     | Y    | [1] XI
+Diminished 7th           | dim7         | Co7 [4]                | 1 b3 b5  6             |              | 9 11 7 b13          |      | [1] XII, Fully Diminished
+Augmented 7th            | aug7         | C+7 [4], C7aug, C7+    | 1  3 #5 b7             |              | b9 9 #9 #11 b13 13  |      | [1] XIII
+Suspended 4th            | 7sus4        | C7(sus4)               | 1  4  5 b7             |              | 9                   | Y    | [1] XIV, 3 is omitted
+Major 9th                | maj9         |                        | 1  3  5  7  9          |              |                     | Y    | [1] XV
+Dominant 9th             | 9            |                        | 1  3  5 b7  9          |              | b9 #9 #11 b13 13    | Y    | [1] XVI
+Minor 9th                | m9           |                        | 1 b3  5 b7  9          |              | 9 11                | Y    | [1] XVII
+Minor 11th               | m11          |                        | 1 b3  5 b7  11         |              | 9                   | Y    | [1] XVIII
+Dominant 7th, #11th      | 7+11         | C7#11, Cdom7#11        | 1  3  5 b7 #11         |              | b9 9 #9 b13 13      | Y    | [1] XIX
+Dominant 13th, #11th     | 13+11        | C13#11                 | 1  3  5 b7  9  #11 13  | 5 #11        | b9 9 #9 #11 b13 13  | Y    | [1] XX
+
+
+Ninth,  #11th            | 9+11         | C9#11, Cdom9#11        | 1  3  5 b7  9  #11     | 5            | b9 9 #9 b13 13      | Y    | [2]
+Thirteenth               | 13           |                        | 1  3  5 b7  9   13     | 5            | b9 9 #9 #11 b13 13  | Y    | [2] The 11 (4) is omitted
+Thirteenth, flat ninth   | 13b9         |                        | 1  3  5 b7 b9   13     | 5            | 9 #9 #11 b13 13     | Y    | [2] The 11 (4) is omitted
+Dominant 7th, flat 5th   | 7b5          | C7-5, Cdom7b5          | 1  3 b5 b7             |              | b9 9 #9 b13 13      | Y    | [2]
+Ninth, flat fifth        | 9b5          | C9-5, Cdom9b5          | 1  3 b5 b7  9          |              | b9 #9 #11 b13 13    | Y    | [2]
+Dominant 7th, b9th       | 7b9          | C7-9, Cdom7b9          | 1  3  5 b7 b9          |              | b9 9 #9 #11 b13 13  | Y    | [2] 
+Dominant 7th, #9th       | 7+9          | C7#9, C7+9, Cdom7#9    | 1  3  5 b7 #9          |              | b9 9 #9 #11 b13 13  | Y    | [2] 
+Ninth, suspended 4th     | 9sus4        | C9(sus4)               | 1  4  5 b7  9          |              |                     | Y    | [2] 3 is omitted, same as 7sus4
+Eleventh                 | 11           |                        | 1  3  5 b7  9   11     | 5            | b9 9 #9 #11 b13 13  | Y    | [2]
+Major 7th, #11th         | maj7+11      | Cmaj7(#11)             | 1  3  5  7 #11         |              | 9                   | Y    | [5] The 4 (11) of C maj is a half note above E, the 3, so the 4 (F) is an avoid. The 4 can be raised half a tone: F becomes F# and the basic scale is now C Lydian.
+Thirteenth, sus 4th      | 13sus4       |                        | 1  4  5 b7  9   13     | 5            |                     | Y    | [2]
+
+// Notes
+// [1] 'A Beginner's Approach To Jazz Improvisation' - Roman numerals denote the chord numbering used in that book.
+// [2] http://www.chord-c.com/guitar-chord/A/major/
+// [3] o/ o with slash-tru
+// [4] sometimes the 7 is omitted for C-7, Co7, C+7 - in jazz the 7 is implied
+// [5] TheJazzGuitarChordsEBook.pdf
+    

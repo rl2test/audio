@@ -1,0 +1,24 @@
+# source: Coursera - Introduction To Improvisation - L02_the_10_scales.pdf
+# note: 'Symetrical Diminished' is shortened to 'Diminished'
+#
+# the 7 modal scales
+# 
+Lydian		| lyd    | C, D,  E,  F#, G,  A,  B
+Ionian		| ion    | C, D,  E,  F,  G,  A,  B
+Mixolydian	| mix    | C, D,  E,  F,  G,  A,  Bb
+Dorian		| dor    | C, D,  Eb, F,  G,  A,  Bb
+Aeolian		| aeo    | C, D,  Eb, F,  G,  Ab, Bb
+Phrygian	| phr    | C, Db, Eb, F,  G,  Ab, Bb
+Locrian		| loc    | C, Db, Eb, F,  Gb, Ab, Bb
+#
+#
+# the 3 dom 7 scales
+#
+Lydianb7	| lydb7  | C, D,  E,  F#, G,  A,  Bb
+Altered		| alt    | C, Db, Eb, E,  F#, Ab, Bb
+Diminished	| dim    | C, Db, Eb, E,  F#, G,  A, Bb
+#
+#
+# in addition to the 7 modal scales and the 3 dom7 scales
+#
+MelodicMinor| melmin | C, D, Eb, F, G, A, B

@@ -1,0 +1,6 @@
+<html>
+<title>$title</title>
+<header>
+	<link rel="stylesheet" type="text/css" href="$styleSheet">
+</header>
+<body>

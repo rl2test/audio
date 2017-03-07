@@ -1,0 +1,4524 @@
+	    /*
+	    // separator ///////////////////////////////////////////////////////////
+	    JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
+	    separator.setBounds(x, y, GuiController.w, SEPARATOR_HEIGHT);
+	    add(separator);
+	    y += separator.getHeight();
+	    */
+
+
+//toNote = checkRange(toNote);
+/*
+public String checkRange(String note) {
+	if (intValues.get(note) < MIN_NOTE_VAL) {
+		note = raiseOctave(note);
+	} else if (intValues.get(note) > MAX_NOTE_VAL){
+		note = lowerOctave(note);
+	}
+	return note;
+}
+*/
+
+
+/*
+private static String toDebug(List<String> list) {
+	String ret =  "";
+	for (String s: list) {
+		ret += s + TAB;
+	}
+	return ret;
+}
+*/
+
+//public Map<String, String> chordTranspositionMap	= new HashMap<String, String>();
+//public Map<String, String> abcTranspositionMap		= new HashMap<String, String>();
+
+//log.debug(from + " -> " + to);
+//chordTranspositionMap.clear();
+//abcTranspositionMap.clear();
+/*
+if (chordTranspositionMap.containsKey(root)) {
+	transposedRoot = chordTranspositionMap.get(root); 
+} else {
+	// add to transpositionMap 
+	chordTranspositionMap.put(root, transposedRoot);
+}
+if (abcTranspositionMap.containsKey(note)) {
+	transposedNote = abcTranspositionMap.get(note); 
+} else {
+	// add to transpositionMap 
+	abcTranspositionMap.put(note, transposedNote);
+}
+*/
+//int alphaInterval = toAlphaIndex - fromAlphaIndex;
+//log.debug("alphaInterval=" + alphaInterval);
+
+/*
+i = 0;
+for (List<String> list: abcNotes) {
+	if (i % 12 == 0) {
+		log.debug(DIVIDER_40);
+	}
+	String notes =  "";
+	for (String s: list) {
+		notes += s + TAB;
+	}
+	log.debug(notes);
+
+	i++;
+}
+*/
+
+//public Key fromKey									= null;
+//public Key toKey									= null;
+//fromKey = AbcMaps.keys.get(from);
+//toKey = AbcMaps.keys.get(to);
+//log.debug(fromKey);
+//log.debug(toKey);			
+//Position position = fromKey.getPosition(abcRoot);
+//String transposedAbcRoot = toKey.getAbcNote(position).replace("'", "").replace(",", "").toUpperCase(); // replace octave markers, uppercase
+//transposedRoot = AbcUtil.abcToStandardNotation(transposedAbcRoot);
+
+// interim method to be deprecated
+//Position position = fromKey.getPosition(note);
+//transposedNote = toKey.getAbcNote(position);
+
+/*
+for (int i = 0; i < 12; i++) {
+	List<String> fromNotes = AbcMaps.intervalToNotesAbc.get(i);
+	int toIndex = (i + interval) % 12;
+	if (toIndex < 0) {
+		toIndex += 12;
+	}
+	List<String> toNotes = AbcMaps.intervalToNotesAbc.get(toIndex);
+	log.debug(i + " " + fromNotes + " -> " + toIndex + " " + toNotes);
+}
+*/
+
+
+/** transpose down an octave */
+/*
+public void transposeDownOctave() {
+	intValue = intValue - 12;
+	List<String> notes = AbcMaps.intervalToNotesAbc.get(intValue);
+	for (String note: notes) {
+		if (Main.getAlphaValue(note).equals(alphaValue)) {
+			absValue = note;
+			break;
+		}
+	}
+	unalteredValue	= Main.unalter(absValue);
+	// the display value does not need to be recalculated within the context of the bar - just transpose it as is
+	log.debug("displayValue=" + displayValue);
+	boolean naturalized = false;
+	if (displayValue.startsWith(EQUALS)) {
+		displayValue = Main.unalter(displayValue);
+		naturalized = true;
+	}
+	int displayIntValue = AbcMaps.noteToIntervalAbc.get(displayValue) - 12;
+	notes = AbcMaps.intervalToNotesAbc.get(displayIntValue);
+	for (String note: notes) {
+		if (Main.getAlphaValue(note).equals(alphaValue)) {
+			displayValue = note;
+			if (naturalized) {
+				displayValue = EQUALS + displayValue;
+			}
+			break;
+		}
+	}
+	log.debug("displayValue=" + displayValue);
+}
+*/
+
+//public int intValue				= 0;
+//intValue = AbcMaps.noteToIntervalAbc.get(absValue);
+
+/**
+ * Transpose a list of abc phrases, cycling thru all keys, writing each phrase to a single abc file
+ * TODO implement for revised structure 
+ */
+/*
+public void cyclePhrase() {
+
+	String[] abcs = {
+		//"\"G7\"dfed gfed|\"C\"c4z4|",
+		//"\"G7\"DFAF B_AGF|\"C\"E4z4|",
+		//"\"C\"Bc2B- B_BA_A|\"Dm\"G_GFE \"G7\"_E^CD=C |\"C\"B,8-|B,8|",
+	};
+	String[] titles = {
+		//"\"G7\"dfed gfed|\"C\"c4z4|",
+		//"\"G7\"DFAF B_AGF|\"C\"E4z4|",
+		"001-32a-Chromaticism",
+	};
+	String transposeFrom = "C"; // default
+	
+	String X = "1"; 
+	String T = ""; 
+	String S = "";
+	String M = "4/4"; 
+	String L = "1/8"; 
+	String Q = "1/4=120"; 
+	String K = transposeFrom; 
+	Header header = new Header(X, T, S, M, L, Q, K);
+	String chordsHeader = "@4|90-180|5" + NL + "!K: C" + NL;
+	
+	int count = 0;
+	for (String abc: abcs) {
+		String filename = titles[count];
+		header.T = filename;
+
+		//C|Dm,G7|C||
+		StringBuffer chordsBuffer = new StringBuffer(chordsHeader);	
+		
+		
+		// split into an array of bars	
+		List<Bar> bars = getBars(transposeFrom, abc);
+		
+		int barCount = 1;
+		StringBuffer sb = new StringBuffer(header.toAbc());
+		
+		// transpose for each key
+		for (String transposeTo: keys) {
+			Transposer transposer = new Transposer(transposeFrom, transposeTo);
+			
+			for (Bar bar: bars) {
+				String chords = "";	
+				List<Token> transposedTokens = new ArrayList<Token>();
+				for (Token token: bar.tokens) {
+					if (token.type == Token.CHORD) {
+						String chord = transposer.transposeChord(token.value);
+						//log.debug("chord=" + chord);
+						transposedTokens.add(new Token(chord, Token.CHORD));
+						chords += chord + COMMA + SPACE;
+					} else if (token.type == Token.NOTE) {
+						Token newToken = new Token();
+						newToken.setValue(transposer.transposeAbcNote(token.value));
+						transposedTokens.add(newToken);
+					} else {
+						transposedTokens.add(new Token(token.value));
+					}
+				}				
+				Bar transposedBar = new Bar(transposeFrom, transposedTokens); // note: key is set to 'default "C"' instead of 'key' because there is no key signature in this context
+				//log.debug(transposedBar.toAbcDeoptimized());
+				transposedBar.optimize();
+				//log.debug(transposedBar.toAbcOptimized());
+					
+				sb.append(transposedBar.toAbcOptimized());
+					if (barCount % BARS_PER_LINE == 0) {
+					sb.append(NL);
+				}
+				barCount++;
+				if (chords.length() > 2) {
+					chords = chords.substring(0, chords.length() - 2);	
+				}
+				log.debug("chords=" + chords);
+				chordsBuffer.append(chords + PIPE);
+			}
+			chordsBuffer.append(NL);
+			
+		}
+		Util.writeToFile(new File(ABC_DIR, filename + ".abc"), sb.toString());
+		Util.writeToFile(new File(CHORDS_DIR, filename + ".chords"), chordsBuffer.toString());
+	}
+}
+*/
+
+//new AbcTransposer().cyclePhrase();
+
+/* IN PROGRESS
+public void scalePattern() {
+	// a 1 -1 1 3 	
+	// a 1 1L 1 3
+	// a 1L 1 3 1
+	// a (1 1L 1)3 (3 3L 3)3
+	// d 1L 1 -1 -3
+	//G, - d'
+}
+*/
+
+/*
+Properties p = System.getProperties();
+Enumeration pKeys = p.keys();
+while (pKeys.hasMoreElements()) {
+    String pKey = (String) pKeys.nextElement();
+    String value = (String) p.get(pKey);
+    System.out.println(pKey + "=" + value);
+}
+log.debug(System.getProperty("os.version"));
+*/
+
+/*
+java.runtime.name=Java(TM) SE Runtime Environment
+sun.boot.library.path=/Library/Java/JavaVirtualMachines/jdk1.7.0_25.jdk/Contents/Home/jre/lib
+java.vm.version=23.25-b01
+gopherProxySet=false
+java.vm.vendor=Oracle Corporation
+java.vendor.url=http://java.oracle.com/
+path.separator=:
+java.vm.name=Java HotSpot(TM) 64-Bit Server VM
+file.encoding.pkg=sun.io
+user.country=US
+sun.java.launcher=SUN_STANDARD
+sun.os.patch.level=unknown
+java.vm.specification.name=Java Virtual Machine Specification
+user.dir=/Users/rlowe/rob/apps/audio
+java.runtime.version=1.7.0_25-b15
+java.awt.graphicsenv=sun.awt.CGraphicsEnvironment
+java.endorsed.dirs=/Library/Java/JavaVirtualMachines/jdk1.7.0_25.jdk/Contents/Home/jre/lib/endorsed
+os.arch=x86_64
+java.io.tmpdir=/var/folders/0s/r9hj5gl919s9gtnxwlb71cc80000gs/T/
+line.separator=
+
+java.vm.specification.vendor=Oracle Corporation
+os.name=Mac OS X
+sun.jnu.encoding=US-ASCII
+java.library.path=/Users/rlowe/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.
+java.specification.name=Java Platform API Specification
+java.class.version=51.0
+sun.management.compiler=HotSpot 64-Bit Tiered Compilers
+os.version=10.8.4
+http.nonProxyHosts=local|*.local|169.254/16|*.169.254/16
+user.home=/Users/rlowe
+user.timezone=
+java.awt.printerjob=sun.lwawt.macosx.CPrinterJob
+file.encoding=UTF-8
+java.specification.version=1.7
+java.class.path=/Users/rlowe/rob/apps/audio/bin:/Users/rlowe/rob/apps/lib/commons-io-2.0.jar:/Users/rlowe/rob/apps/lib/log4j.jar
+user.name=rlowe
+java.vm.specification.version=1.7
+sun.java.command=audio.abc.AbcTransposer
+java.home=/Library/Java/JavaVirtualMachines/jdk1.7.0_25.jdk/Contents/Home/jre
+sun.arch.data.model=64
+user.language=en
+java.specification.vendor=Oracle Corporation
+awt.toolkit=sun.lwawt.macosx.LWCToolkit
+java.vm.info=mixed mode
+java.version=1.7.0_25
+java.ext.dirs=/Users/rlowe/Library/Java/Extensions:/Library/Java/JavaVirtualMachines/jdk1.7.0_25.jdk/Contents/Home/jre/lib/ext:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java
+sun.boot.class.path=/Library/Java/JavaVirtualMachines/jdk1.7.0_25.jdk/Contents/Home/jre/lib/resources.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_25.jdk/Contents/Home/jre/lib/rt.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_25.jdk/Contents/Home/jre/lib/sunrsasign.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_25.jdk/Contents/Home/jre/lib/jsse.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_25.jdk/Contents/Home/jre/lib/jce.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_25.jdk/Contents/Home/jre/lib/charsets.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_25.jdk/Contents/Home/jre/lib/jfr.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_25.jdk/Contents/Home/jre/lib/JObjC.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_25.jdk/Contents/Home/jre/classes
+java.vendor=Oracle Corporation
+file.separator=/
+java.vendor.url.bug=http://bugreport.sun.com/bugreport/
+sun.io.unicode.encoding=UnicodeBig
+sun.cpu.endian=little
+socksNonProxyHosts=local|*.local|169.254/16|*.169.254/16
+ftp.nonProxyHosts=local|*.local|169.254/16|*.169.254/16
+sun.cpu.isalist= 
+ */
+
+
+
+/*
+// convert all note values to their absolute values, so ^cc=c -> ^c^c
+public void deoptimize(Bar bar) {
+	// the absolute note-value needs to be passed to the transposer - if the note has previously been sharpened or flattened within the same bar,
+	// then the sharpened or flattened value needs to be passed.
+	//String debug = bar.toAbc() + " -> ";
+	List<String> prevNotes = new ArrayList<String>(); // list of absolute note values in this bar
+	for (Token token: bar.tokens) {
+		if (token.type == Token.NOTE) {
+			if (prevNotes.size() > 0) {
+				String note = token.value;
+				if (Util.abcIsAltered(note)) { // ^_=
+					token.value = note.replace("=", "");
+				} else { // natural
+					for (int i = prevNotes.size() - 1; i >= 0; i--) {
+						String prevNote = prevNotes.get(i);
+						String prevNoteUnaltered = Util.abcUnalter(prevNote); 
+						if (prevNoteUnaltered.equals(note)) {
+							if (Util.abcIsAltered(prevNote)) {
+								token.value = prevNote;
+							}	
+							break;
+						}
+					}
+				}
+			}
+			prevNotes.add(token.value);
+		}
+	}
+	//debug += bar.toAbc();
+	//log.debug("deoptimize: " + debug);
+}
+
+// note that the bar to optimize will not contain any expicitly naturalized notes, that is no '=' qualifiers
+public void optimize(Bar bar) {
+	//String debug = bar.toAbc() + " -> ";
+	List<String> prevNotes = new ArrayList<String>(); // list of absolute note values in this bar
+	for (Token token: bar.tokens) {
+		if (token.type == Token.NOTE) {
+			String note = token.value;
+			if (prevNotes.size() > 0) {
+				if (Util.abcIsAltered(note)) {
+					for (int i = prevNotes.size() - 1; i >= 0; i--) {
+						String prevNote = prevNotes.get(i);
+						if (Util.abcUnalter(prevNote).equals(Util.abcUnalter(note))) {
+							if (note.equals(prevNote)) {
+								token.value = Util.abcUnalter(note);
+							}
+							break;
+						}
+					}						
+					prevNotes.add(note);
+				} else { // natural
+					for (int i = prevNotes.size() - 1; i >= 0; i--) {
+						String prevNote = prevNotes.get(i);
+						if (Util.abcUnalter(prevNote).equals(note)) {
+							if (Util.abcIsAltered(prevNote)) {
+								token.value = EQUALS + note;
+							}
+							break;
+						}
+					}
+				}					
+			}
+			prevNotes.add(note);
+		}
+	}
+	//debug += bar.toAbc();
+	//log.debug("optimize: " + debug);
+}	
+*/
+			/*
+			if (Maps.chordTypes.containsKey(chordStr)) {
+				ChordType chordType =  Maps.chordTypes.get(chordStr);
+				return chordType.intervalsStr;
+			} else {
+				throw new Exception("error: no chordType found for " + chordStr); 
+			}
+			*/
+--------------------------------------------------------------------------------
+		// the abc chord string
+		String abcChordStr 	= "";
+		// the abc scale string
+		String abcScaleStr 	= "";
+			if (degree.chordTone) {
+				if (display.equals("chords") || display.equals("all")) {
+					abcChordStr += abcNote + "2 ";
+				}
+			}
+	/** Boolean indicating that this is a chord tone. */
+	public boolean chordTone 		= false; 
+		if (note.startsWith("*")) {
+			chordTone = true;
+			note = note.substring(1);
+		}
+	    /*
+	    // abc button listener
+	    abcChordsButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String genre		= (String) genreBox.getSelectedItem();
+				String folderName	= (String) folderBox.getSelectedItem();
+				String tuneName		= (String) tuneBox.getSelectedItem();
+
+				new ChordsToAbcScales().run(new File(MUSIC_DIR, genre + CHORDS_FOLDER + FS + folderName + FS + tuneName + EXT_CHORDS), "chords");
+			}
+		});
+	    
+	    // abc button listener
+	    abcScalesButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String genre		= (String) genreBox.getSelectedItem();
+				String folderName	= (String) folderBox.getSelectedItem();
+				String tuneName		= (String) tuneBox.getSelectedItem();
+
+				new ChordsToAbcScales().run(new File(MUSIC_DIR, genre + CHORDS_FOLDER + FS + folderName + FS + tuneName + EXT_CHORDS), "scales");
+			}
+		});	    
+	    */
+	    
+//	    // the beat panel
+//	    beatPanel.setBounds(x, y, (10 * 32 + 1), ROW_HEIGHT);
+//	    add(beatPanel);
+//	    x += beatPanel.getWidth() + SP;
+	    
+
+--------------------------------------------------------------------------------
+//	static {
+//		jazzFolderNames 	= getFolderNames(JAZZ);
+//		klezmerFolderNames 	= getFolderNames(KLEZMER);
+//	}
+	
+
+--------------------------------------------------------------------------------
+//	public static final String JAZZ						= "Jazz";
+//	public static final String KLEZMER					= "Klezmer";
+
+	//public static final File JAZZ_CHORDS_DIR			= new File(MUSIC_DIR, "jazz/chords");
+	/** List of genre names. */
+	private static String[] genreNames				= {JAZZ, KLEZMER};
+//	/** The unselected combo box name */
+	//private static final String UNSELECTED_NAME		= "----";
+	//	/** List of Jazz folderNames. */
+//	private static String[] jazzFolderNames			= null;
+//	/** List of Klezmer folderNames. */
+//	private static String[] klezmerFolderNames		= null;
+	    // get the default list of tunes
+	    String[] tuneNames = {UNSELECTED_NAME};
+		        	//if (tuneName.equals(UNSELECTED)) {
+	        	//	textArea.setText("");	
+	        	//} else {
+	        		setTextArea(genreName, folderName, tuneName);	
+	        	//}
+		//private static final String UNSELECTED			= "----";  
+	/** The unselected string. */
+	//tuneNames[i++] = UNSELECTED;
+	//folderNames[i++] = UNSELECTED;
+		        	//String[] folderNames = (genre.equals(JAZZ)) ? jazzFolderNames : klezmerFolderNames;v
+		        	
+		File dir = new File(MUSIC_DIR, genreName + CHORDS_FOLDER);
+		File[] files = dir.listFiles(new ExtensionFilter(EXT_CHORDS));
+		
+		String[] tuneNames = new String[files.length + 1];
+		
+		int i = 0;
+		for (File file: files) {
+			tuneNames[i++] = file.getName().replace(EXT_CHORDS, "");
+		}
+
+		tuneBox.setModel(new DefaultComboBoxModel<String>(tuneNames));
+		        	
+		        	
+		        	 
+--------------------------------------------------------------------------------
+//	/* Values derived from file. */
+//	public String chordIntervalsStr    	= "";
+//	public String symbols				= "";
+//	public String abcSymbol				= "";
+//	public String notes					= "";
+//	
+//	/* Derived values. */
+//	/** The intervals in this chordtype. */
+//	public List<Interval> intervals		= new ArrayList<Interval>();
+//	
+//	/** 
+//	 * List of all possible chordIntervals found in the CHORD_TYPES_FILE. Used
+//	 * to optimize the CHORD_INTERVALS definition in the constants file. 
+//	 */
+//	public static List<String> allChordIntervals = new ArrayList<String>();
+//	
+//	/**
+//	 * The constructor using a CHORD_TYPES_FILE definition.
+//	 * 
+//	 * @param line
+//	 */
+//	public ChordType (String line) {
+//		/*
+//		%% ------------------|---------------------------------|-------------|-----------------------|------
+//		## chordIntervals    | symbols                         | abcSymbol   | scaleType             | notes
+//		%% ------------------|---------------------------------|-------------|-----------------------|------
+//		   1 2 5             |                                 | sus2        |                       |
+//		   1 3 #5            | #5, +                           | aug         | WHOLE-TONE            |
+//		   1 3 #5 7          | maj7#5                          | maj7+5      | LYDIAN AUGMENTED      |
+//		*/
+//		
+//		//log.debug(line);
+//		String[] arr = line.split(PIPE_DELIM, -1);
+//
+//		int i = 0;
+//		chordIntervalsStr	= arr[i++].trim();
+//		symbols				= arr[i++].trim();
+//		abcSymbol			= arr[i++].trim();
+//		notes				= arr[i++].trim();
+//		
+//		setIntervals();
+//		
+//		//log.debug(this);
+//	}	
+//
+//	/**
+//	 * Set the list of interval objects for the chordType.
+//	 */
+//	public void setIntervals() {
+//		// get the chord intervals
+//		List<String> chordIntervals = Util.getList(chordIntervalsStr);
+//		for (String chordInterval: chordIntervals) {
+//			Interval interval = new Interval(chordInterval);
+//			intervals.add(interval);
+//			
+//			if (!allChordIntervals.contains(chordInterval)) {
+//				allChordIntervals.add(chordInterval);
+//			}
+//		}
+//	}
+//
+//	/* (non-Javadoc)
+//	 * @see java.lang.Object#toString()
+//	 */
+//	public String toString() {
+//		StringBuffer sb = new StringBuffer(NL);
+//
+//		sb.append("chordIntervalsStr=" + chordIntervalsStr + ", ");
+//		sb.append("symbols=" + symbols + ", ");
+//		sb.append("abcSymbol=" + abcSymbol + ", ");
+//		sb.append("notes= " + notes + ", ");
+//		sb.append("intervals=" + NL);		
+//		for (Interval interval: intervals) {
+//			sb.append(interval + ", ");
+//		}
+//
+//		return sb.toString();
+//	}
+
+
+//		String chordIntervals = Maps.chordTypes.get(type).chordIntervalsStr;
+//		String[] intervals	= chordIntervals.split(SPACE); 
+//
+//		chordValues = new int[intervals.length];
+//		int i = 0;
+//		for (String interval: intervals) {
+//			int relChordInterval = Maps.chordIntervalToChordInterger.get(interval);
+//			chordValues[i++] = rootValue + OCTAVE + relChordInterval;
+//			//if (interval.contains("5")) {
+//			if (interval.equals("5")) {
+//				// only set fifthValue for perfect fifth 
+//				fifthValue = rootValue + relChordInterval;
+//			}
+//		}
+//
+//		string = "[Chord] " + name + ", " + root + ", " + type + ", " + rootValue + ", " + fifthValue + "; chordValues: ";
+//
+//		for (int chordValue: chordValues) {
+//			// TODO translate to absolute note value 60 -> C
+//			string += chordValue + " "; 
+//		}
+
+
+		// check for maj
+		if (type.equals("")) {
+			////type = "maj";
+		}
+
+	/** Comparator used to order a list of Interval objects. */
+	public static final Comparator<Interval> INTERVAL_COMPARATOR 
+														= new Comparator<Interval>() {
+		public int compare(Interval i1,  Interval i2) {
+			return i1.relInterval - i2.relInterval;
+		}
+	};
+	
+		/* Populated at initialization using arrays in the Constants. */
+	/** Map of chord intervals to chord integers, eg "b5" -> 6, used to build chords. */
+	public static Map<String, Integer> chordIntervalToChordInterger		= new HashMap<String, Integer>();
+
+			// init chordIntervalToRelInterval
+		for (int i = 0, n = CHORD_INTERVALS.length; i < n; i++) {
+			chordIntervalToChordInterger.put(CHORD_INTERVALS[i], CHORD_INTEGERS[i]);
+		}
+	
+	
+	/** 
+	 * List of intervals in chord notation format, eg. 'b5', up to and including 
+	 * the 13th. This list should correspond all possible chord notations used  
+	 * in the CHORD_TYPES_FILE. 
+	 * 
+	 * 1,2,b3,3,4,b5,5,#5,6,b7,7,b9,9,#9,11,#11,b13,13
+	 */
+	public static final String[] CHORD_INTERVALS 		= {
+			"1", 					//  1
+			"2", 					//  2
+			"b3",  "3", 			//  3
+			"4",					//  4
+			"b5",  "5",  "#5", 		//  5
+			"6",		 			//  6
+			"bb7", "b7", "7", 		//  7
+			"b9",  "9",  "#9", 		//  9
+			"11",  "#11", 			// 11
+			"b13", "13"				// 13
+	};
+	/** Zero-based list of integers corresponding to the CHORD_INTERVALS. */
+	public static final int[] CHORD_INTEGERS 		= { 
+			0,    					//  1
+			2,    					//  2
+			3,      4,   			//  3
+			5,			   			//  4
+			6,      7,    8,    	//  5
+			9,			   			//  6
+			9,     10,   11,  		// 	7
+			13,    14,   15,   		//  9
+			17,    18,    			// 11
+			20,    21				// 13
+	};
+
+import static audio.Constants.CHORD_INTERVALS;
+import static audio.Constants.CHORD_INTEGERS;
+
+
+//    /**
+//	 * 
+//	 */
+//	private void initChordTypes() {
+//		List<String> lines = Util.getLines(CHORD_TYPES_FILE);
+//		
+//		for (String line: lines) {
+//			if (	line.length() > 0 && 
+//					!line.startsWith("//") &&
+//					!line.startsWith("%%") &&
+//					!line.startsWith("##")) {
+//				/*
+//				%% ------------------|---------------------------------|-------------|-----------------------|------
+//				## chordIntervals    | symbols                         | abcSymbol   | scaleType             | notes
+//				%% ------------------|---------------------------------|-------------|-----------------------|------
+//				   1 2 5             |                                 | sus2        |                       |
+//				   1 3 #5            | #5, +                           | aug         | WHOLE-TONE            |
+//				   1 3 #5 7          | maj7#5                          | maj7+5      | LYDIAN AUGMENTED      |
+//				*/
+//				
+//				ChordType chordType = new ChordType(line);
+//				chordTypes.put(chordType.abcSymbol, chordType);
+//				
+//				if (!"".equals(chordType.symbols)) {
+//					//log.debug("line=" + line + ", chordType.symbols=" + chordType.symbols);
+//					List<String> symbols = Util.getList(chordType.symbols, ",");
+//					for (String symbol: symbols) {
+//						//log.debug("symbol=" + symbol);
+//						if (chordTypes.containsKey(symbol)) {
+//							log.error("duplicate key in line=" + line + ": symbol=" + symbol);
+//						} else {
+//							chordTypes.put(symbol, chordType);
+//						}
+//					}
+//				}
+//			}
+//		}
+//		log.debug("chordTypes.size()          = " + chordTypes.size());
+//		log.debug("allChordIntervals          = " + Util.listToString(ChordType.allChordIntervals));
+//		log.debug("allChordIntervals.size()   = " + ChordType.allChordIntervals.size());
+//		log.debug("CHORD_INTERVALS.length     = " + Constants.CHORD_INTERVALS.length);
+//		log.debug("REL_CHORD_INTERVALS.length = " + Constants.CHORD_INTEGERS.length);
+//	}	
+--------------------------------------------------------------------------------
+	/** 
+	 * Array of interval objects representing the chord scale.
+	 */
+	public String[] scaleIntervals;
+
+--------------------------------------------------------------------------------
+		// init noteToInterval, intervalToNotes
+//		for (int i = 0, n = NOTES.length; i < n; i++) {
+//			String note 	= NOTES[i];
+//			int interval	= INTERVALS[i];
+//
+//			noteToInterval.put(note, interval);
+//			
+//			if (!intervalToNotes.containsKey(interval)) {
+//				intervalToNotes.put(interval, new ArrayList<String>());
+//			}
+//			intervalToNotes.get(interval).add(note);
+//		}
+		
+		//	/** 
+//	 * A list of all possible notes within an octave, beginning with 'C'.
+//	 */
+//	public static final String[] NOTES 					= {
+//			"B#",  "C",  "Dbb",	//  0 
+//			"B##", "C#", "Db",	//  1  
+//			"C##", "D",  "Ebb",	//  2
+//			"D#",  "Eb", "Fbb",	//  3
+//			"D##", "E",  "Fb",	//  4
+//			"E#",  "F",  "Gbb",	//  5
+//			"E##", "F#", "Gb",	//  6
+//			"F##", "G",  "Abb",	//  7
+//			"G#",        "Ab",	//  8
+//			"G##", "A",  "Bbb",	//  9
+//			"A#",  "Bb", "Cbb",	// 10 
+//			"A##", "B",  "Cb"	// 11 
+//	};
+//	
+//	/** 
+//	 * A list of relative intervals corresponding to the NOTES array.
+//	 */
+//	public static final int[] INTERVALS 				= {
+//			0,0,0,
+//			1,1,1,
+//			2,2,2,
+//			3,3,3,
+//			4,4,4,
+//			5,5,5,
+//			6,6,6,
+//			7,7,7,
+//			8,  8,
+//			9,9,9,
+//			10,10,10,
+//			11,11,11
+//	};
+--------------------------------------------------------------------------------
+		/*
+		for (int i = 0, n = PITCHES.length; i < n; i++) {
+			String pitch 		= PITCHES[i].replace(" ", "");
+			String[] pitchArr	= pitch.split(",");
+			
+			// populate intervalToPitchesMap
+			relIntervalToNoteMap.put(i, pitchArr);
+
+			// populate pitchToIntervalMap
+			for (String pitchItem: pitchArr) {
+				//log.debug(pitchItem + "->" + i);
+				noteToRelIntervalMap.put(pitchItem, i);
+			} 
+		}
+		*/
+		
+			/** Example: 'C' -> 36, Db -> 37 */
+	//public static Map<String, Integer> notesToAbsIntervals 			= new HashMap<String, Integer>();
+					//notesToAbsIntervals.put(note, OCT_2 + relNoteInterval);
+					
+					    	// init notesToIntervalsMap
+//		for (int i = 0, n = NOTES.length; i < n; i++) {
+//			String note 		= NOTES[i];
+//			int relNoteInterval	= REL_INTERVALS[i];
+//
+//			notesToIntervals.put(note, relNoteInterval);
+//
+//		}
+		//log.debug("init notesToIntervalsMap completed.");
+	/** Example: 'C' -> 0, Db -> 1 */
+	//public static Map<String, Integer> notesToIntervals 			= new HashMap<String, Integer>();
+					
+--------------------------------------------------------------------------------
+	/** Map of cNotes to intervals, eg maps Db -> b2 */
+	public static Map<String, String> cNotesToIntervals 			= new HashMap<String, String>();
+			cNotesToIntervals.put   (cNote, interval);
+--------------------------------------------------------------------------------
+	/** 
+	 * Conventional notation of unmodified notes, corresponding to the white keys, using  
+	 * the upper/lowercase abc convention to specify the upper/lower octave. All chordscales
+	 * can be described within this 2-octave range. 
+	 */
+	public static final String[] ALPHAS					= 
+			{"C", "D", "E", "F", "G", "A", "B", "c", "d", "e", "f", "g", "a", "b"};
+
+	// TODO at some point it may be necessary to add an octave parameter to make 
+	//      this class more generic 
+	/** 
+	 * Array of Strings representing the conventional notation aliases for each 
+	 * individual pitch within a 2-octave range, using the abc convention of 
+	 * lowercase for the upper octave.
+	 */
+	public static final Pitch[] PITCHES 				= {
+			// lower octave
+			new Pitch("B#  C  Dbb"),
+			new Pitch("B## C# Db "),
+			new Pitch("C## D  Ebb"),
+			new Pitch("D#  Eb Fbb"),
+			new Pitch("D## E  Fb "),
+			new Pitch("E#  F  Gbb"),
+			new Pitch("E## F# Gb "),
+			new Pitch("F## G  Abb"),
+			new Pitch("G#     Ab "),
+			new Pitch("G## A  Bbb"),
+			new Pitch("A#  Bb cbb"),
+			new Pitch("A## B  cb "),
+			// upper octave
+			new Pitch("B#  c  dbb"),
+			new Pitch("B## c# db "),
+			new Pitch("c## d  ebb"),
+			new Pitch("d#  eb fbb"),
+			new Pitch("d## e  fb "),
+			new Pitch("e#  f  gbb"),
+			new Pitch("e## f# gb "),
+			new Pitch("f## g  abb"),
+			new Pitch("g#  ab    "),
+			new Pitch("g## a  bbb"),
+			new Pitch("a#  bb cbb"),
+			new Pitch("a## b  cb "),
+	};
+	
+	import audio.chords.Pitch;
+	
+		/* 
+	 * Integer used to denote whether a note is a part of the chord or the scale 
+	 * in a chordscale context.
+	 */
+	public static final int CHORD						= 0;
+	public static final int SCALE						= 1;
+	
+		/** The type of the interval, eg CHORD|SCALE. The default is CHORD. */
+	public int type						= CHORD;
+			sb.append("type=" 					+ type + CSV);
+			
+			interval.type = CHORD;			
+
+	
+	
+
+--------------------------------------------------------------------------------
+	/** Soundbank path. */
+	//C:/jdk1.6/jre/lib/audio/soundbank.gm
+	//C:/MyEclipse/Common/binary/com.sun.java.jdk.win32.x86_64_1.6.0.013/jre/lib/audio/soundbank.gm
+	//C:/MyEclipse/MyEclipse 10/Uninstaller/jre/lib/audio/soundbank.gm
+	public static String SOUNDBANK 				= "C:/jdk1.6/jre/lib/audio/soundbank.gm";
+
+--------------------------------------------------------------------------------
+	    /*
+		Soundbank sb = null;
+		File file = new File(SOUNDBANK);
+	    try {
+			sb = MidiSystem.getSoundbank(file);
+			System.out.println(sb.getDescription());
+			System.out.println(sb.getName());			
+			System.out.println(sb.getVendor());
+			System.out.println(sb.getVersion());
+	    } catch(Exception ex) {
+			ex.printStackTrace();
+			return;
+		}
+		if (sb != null) {
+			instruments = sb.getInstruments();
+		} else {System.out.println("couldn't get soundbank");}		
+	    */
+
+--------------------------------------------------------------------------------
+	public String scaleTypeStr			= "";
+	public ScaleType scaleType			= null;
+	public String scaleTypeShortName	= "";
+		scaleTypeStr		= arr[i++].trim();
+		if (!"".equals(scaleTypeStr)) {
+			scaleType = Mapstore.scaleTypes.get(scaleTypeStr);
+			scaleTypeShortName = scaleType.shortName;	
+		}
+		
+		sb.append("scaleTypeStr= " + scaleTypeStr + ", ");
+		if (scaleType != null) {
+			sb.append("scaleType= " + scaleType + ", ");
+		}
+		sb.append("scaleTypeShortName=" + scaleTypeShortName + ", ");
+
+	/*
+		// get the scale intervals to add when constructing the chord scale
+		list = Util.getList(scaleIntervals);
+		for (String s: list) {
+			Interval interval = new Interval(s);
+
+			// only add scaleIntervals that are not present in the chordInterval list
+			if (!normalizedIntervals.contains(interval.normalizedInterval)) {
+				interval.type = SCALE;
+				intervals.add(interval);
+			} else {
+				log.error(abcSymbol + " contains duplicate intervals: chordIntervals=" + chordIntervals + ", scaleIntervals=" + scaleIntervals);
+			} 
+		}		
+
+		Collections.sort(intervals, INTERVAL_COMPARATOR); 
+		
+		if (verify) {
+			if (!"".equals(aebersoldScaleName)) {
+
+				String normalizedIntervalsStr = "";
+				for (Interval interval: intervals) {
+					normalizedIntervalsStr += interval.normalizedInterval + " "; 
+				}
+				//normalizedIntervalsStr = normalizedIntervalsStr.substring(0, normalizedIntervalsStr.length() - 1);
+				normalizedIntervalsStr += "8"; 
+						
+				ScaleType scaleType = ChordsUtil.scaleTypes.get(aebersoldScaleName);
+				
+				if (!scaleType.intervals.equals(normalizedIntervalsStr)) {
+					log.error(abcSymbol + " contains invalid interval definitions: normalizedIntervalsStr=" + 
+							normalizedIntervalsStr + ", scaleType.intervals=" + scaleType.intervals + 
+							" - " + scaleType.name);
+				}
+			}
+		} 
+	 */
+	
+	/** Map of the scaleTypes, using name as the key */
+	public static Map<String, ScaleType> scaleTypes				= new HashMap<String, ScaleType>();
+
+	/**
+	 * 
+	 */
+	private void initScaleTypes() {
+		// init scaleTypes map using name as the key
+		List<String> lines = Util.getLines(SCALE_TYPES_FILE);
+		
+		for (String line: lines) {
+			/*
+			// derived from Jazz Handbook.pdf - p15 - Nomenclature
+			%%--------------------|----------------|---------------------|-------------|-----------------------------|-----------------------|-----------------------|------------|-------------
+			##name                | shortName      | desc                | whIntervals | mode                        | intervals             |cScale                 | symbol     | otherSymbols                                                 |
+			%%--------------------|----------------|---------------------|-------------|-----------------------------|-----------------------|-----------------------|------------|-------------
+			MAJOR                 | MAJ            | Ionian              | WWHWWWH     |                             | 1 2 3 4 5 6 7 8       | C D E F G A B C       | C          | Cdelta, Cmaj, C, Cmaj7, Cmaj9, Cmaj13
+			DOMINANT SEVENTH      | DOM 7TH        | Mixolydian          | WWHWWHW     | 5th Mode of Major           | 1 2 3 4 5 6 b7 8      | C D E F G A Bb C      | C7         | C9, C11, C13
+			MINOR SEVENTH         | MIN 7TH        | Dorian              | WHWWWHW     | 2nd Mode of Major           | 1 2 b3 4 5 6 b7 8     | C D Eb F G A Bb C     | Cm         | C-7, Cm7, Cm9, Cm11, Cm13
+			*/
+			
+			if (	line.length() > 0 && 
+					!line.startsWith("//") &&
+					!line.startsWith("%%") &&
+					!line.startsWith("##")) {
+				ScaleType scaleType = new ScaleType(line);
+				scaleTypes.put(scaleType.name, scaleType);
+			}
+		}
+		log.debug("scaleTypes.size()=" + scaleTypes.size());
+	}
+
+		// note:  the order of the following 2 calls is important - 
+		//        initChordTypes references scaleTypes
+		
+		// init scaleTypes
+		initScaleTypes();
+		log.debug("initScaleTypes() completed.");
+		
+	/** The scale-types definition file. */
+	public static final File SCALE_TYPES_FILE	= new File(DATA_DIR, "scale-types" + EXT_TXT);
+	
+--------------------------------------------------------------------------------
+		        	/** Boolean indicating that a tune has been updated in the gui. */
+		        	//public boolean tuneUpdated						= false; 
+		        	
+		        	//int n = 1;
+		        	//if (tuneUpdated) {
+		        	//	log.warn("tuneUpdated=" + tuneUpdated);
+		        		//default icon, custom title
+					//	n = JOptionPane.showConfirmDialog(
+					//	    null,
+					//	    "The current tune has been updated - save changes?",
+					//	    "Warning",
+					//	    JOptionPane.YES_NO_OPTION);
+		        	//}
+					//if (n == 1) {
+						// ok to load new tune
+
+		    	    //}
+--------------------------------------------------------------------------------
+	    JLabel chordLabel = new JLabel("Chord:");
+	    chordLabel.setBounds(x, y, WIDTH_3, ROW_HEIGHT);
+	    add(chordLabel);
+	    x += chordLabel.getWidth() + SP;
+
+		// update chord label
+	    updateChordLabel.setBounds(x, y, WIDTH_2, ROW_HEIGHT);
+	    updateChordLabel.setBackground(BG_COLOR_MED);
+	    updateChordLabel.setOpaque(true);
+	    add(updateChordLabel);
+	    x += updateChordLabel.getWidth() + SP;
+		
+	/** The update chord label, which gets updated in real time. */
+	public JLabel updateChordLabel 					= new JLabel("");
+	/* (non-Javadoc)
+	 * @see audio.chords.gui.ChordPanel#updateChord(java.lang.String)
+	 */
+	public void updateChord(String chord) {
+		updateChordLabel.setText(chord);
+	}
+--------------------------------------------------------------------------------
+//    	private final int numSymbols			= SYMBOLS.length;
+//    	private final int numNumbers1			= NUMBERS_1.length;
+//    	private final int numNumbers2			= NUMBERS_2.length;
+        
+        /*
+        log.debug("numNotes=" + numNotes);
+        log.debug("numChords=" + numChords);
+        log.debug("numSymbols=" + numSymbols);
+        log.debug("numNumbers1=" + numNumbers1);
+        log.debug("numNumbers2=" + numNumbers2);
+        */
+//    	x = xOffset;
+//    	y = nVert * CELL_V + yOffset;
+//    	g.drawString("S1 " + S1, x, y);
+//    	y += CELL_V;
+//    	g.drawString("S2 [NL]", x, y);
+//    	y += CELL_V;
+//    	g.drawString("S3 [SPACE]", x, y);
+        
+        	/*
+        	g.setColor(Color.white);        	
+        	for (int i = 0; i < numNotes; i++) {
+        		x1 = 0;
+        		x2 = numChords * WIDTH_1 + 1;
+        		y1 = i * WIDTH_1;
+        		y2 = y1;
+        		g.drawLine(x1, y1, x2, y2);
+        		for (int j = 0; j < numChords; j++) {
+            		x1 = j * WIDTH_1;
+            		x2 = (j + 1) * WIDTH_1;
+        			y2 = (i + 1) * WIDTH_1;
+        			g.drawLine(x1, y1, x2, y2);
+        		}
+        	}
+
+            g.setColor(COLOR_DARK);        	
+        	for (int i = 0; i < numNotes; i++) {
+        		x1 = 0;
+        		x2 = numChords * WIDTH_1 + 1;
+        		y1 = i * WIDTH_1 + 1;
+        		y2 = y1;
+        		g.drawLine(x1, y1, x2, y2);
+//        		for (int j = 0; j < numChords; j++) {
+//            		x1 = j * WIDTH_1;
+//            		x2 = (j + 1) * WIDTH_1;
+//        			y2 = (i + 1) * WIDTH_1;
+//        			g.drawLine(x1, y1, x2, y2);
+//        		}
+        	}
+			*/
+--------------------------------------------------------------------------------
+	    // test button
+	    final JButton testButton = new JButton("Test");
+	    testButton.setBounds(x, y, WIDTH_4, ROW_HEIGHT);
+	    add(testButton);
+	    x += testButton.getWidth() + SP;
+	    
+	    // test button listener
+	    testButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String text 		= textArea.getText();
+				
+				int pos = textArea.getCaretPosition();
+				
+				String newText = text.substring(0, pos) + "moreText" + text.substring(pos); 
+				
+				textArea.setText(newText);
+			}
+		});
+--------------------------------------------------------------------------------
+	/**
+	 * @param key
+	 * @return 
+	 */
+//	public static Chord getChord(String key) {
+//		if (!chordMap.containsKey(key)) {
+//			chordMap.put(key, new Chord(key));
+//		}
+//		return chordMap.get(key);
+//	}
+	
+	/**
+	 * @param chordName
+	 * @return 
+	 */
+//	public static String getAbcChordName(String chordName) {
+//		Chord chord = getChord(chordName);
+//		
+//		ChordType chordType = chordTypes.get(chord.type); 
+//
+//		return chord.note + chordType.abcSymbol;
+//	}
+	
+--------------------------------------------------------------------------------
+					/*
+					//String[] arr = line.split("");
+					//log.debug("arr.length=" + arr.length);
+					//int i = 0;
+					if (count == 1) { // c - chord
+						//log.debug(count + ": line=" + line);
+						//for (String s: arr) {
+						for (int i = 0; i < beatsPerBar; i++) {
+							String s = line.substring(i, i + 1);
+							//log.debug("s=" + s);
+							//log.debug("pattern.beats.length=" + pattern.beats.length);
+							pattern.beats[i].c = (s.equals("-")) ? 0 : Integer.parseInt(s);
+							//log.debug("ok");
+						}
+					} else if (count == 2) { // f - fifth
+						//log.debug(count + ": line=" + line);
+						for (int i = 0; i < beatsPerBar; i++) {
+							String s = line.substring(i, i + 1);
+							pattern.beats[i].f = (s.equals("-")) ? 0 : Integer.parseInt(s);
+						}
+					} else { // count == 3, r - root
+						//log.debug(count + ": line=" + line);
+						for (int i = 0; i < beatsPerBar; i++) {
+							String s = line.substring(i, i + 1);
+							pattern.beats[i].r = (s.equals("-")) ? 0 : Integer.parseInt(s);
+						}
+						count = -1; // to reset to 0
+					}
+					*/
+--------------------------------------------------------------------------------
+	//public List<Chord> chords		= new ArrayList<Chord>();
+	//setChords(barStrs);
+	
+	//log.debug(Patterns.patterns.get("000"));
+	//log.debug(Patterns.patterns.get("0000"));
+
+	/**
+	 * @return the complete and expanded list of chords for this tune.
+	 */
+	/*
+	public void setChords(String[] barStrs) {
+		Chord lastChord = null;
+		
+		for (String barStr: barStrs) {
+			log.debug("barStr=" + barStr);
+			// accepted formats (spaces removed prior to parsing): 
+			// | |				-> expanded to previous chord
+			// | C |			-> expanded to beatsPerBar, e.g. | C, C, C, C |
+			// | C, F |			-> expanded to beatsPerBar, e.g. | C, C, F, F |
+			// | C, F, Em, G |	-> as written, assuming 4/4
+
+			String[] chordNames = barStr.split(",");
+			int numChords = chordNames.length;
+			// note: numChords will be at least 1, even if bar is ''
+			log.debug("numChords=" + numChords);
+
+			for (String chordName: chordNames) {
+				if (chordName.length() > 0) {
+					// add to mapstore
+					if (!Mapstore.chords.containsKey(chordName)) {
+						Mapstore.chords.put(chordName, new Chord(chordName));	
+					}
+				}
+			}
+
+			if (numChords == 1) {
+				for (int j = 0; j < beatsPerBar; j++) {
+					String chordName = chordNames[0];
+					if (chordName.equals("")) {
+						chords.add(lastChord);						
+					} else {
+						chords.add(Mapstore.chords.get(chordName));	
+					}
+				}						
+			} else if (numChords == 2) {
+				for (int j = 0; j < 2; j++) {
+					for (int k = 0; k < 2; k++) {
+						chords.add(Mapstore.chords.get(chordNames[j]));
+					}	
+				}
+			} else if (numChords == beatsPerBar) {
+				for (int j = 0; j < beatsPerBar; j++) {
+					chords.add(Mapstore.chords.get(chordNames[j]));
+				}						
+			} else {
+				log.error("invalid numChords=" + numChords);
+			}
+			
+			lastChord = chords.get(chords.size() - 1);
+		}
+	}
+	*/
+--------------------------------------------------------------------------------
+	// this implementation uses a chord array
+	/* (non-Javadoc)
+	 * @see java.lang.Thread#run()
+	 */
+	/*
+	public void run() {
+		try {
+			// channel definitions
+			final int CHANNEL_BASS 	= 0;
+			final int CHANNEL_CHORD = 1;
+			int program;
+			
+			//bass
+			//program = (genre.equals(JAZZ)) 
+			//		? ACOUSTIC_BASS 
+			//		: ELECTRIC_BASS_PICK;
+			program = ACOUSTIC_BASS;
+			MidiChannel bass1 = GuiController.midiChannels[CHANNEL_BASS];
+			bass1.controlChange(10, V0);
+			bass1.programChange(program);
+
+			//chord
+			//program = (genre.equals(JAZZ)) 
+			//		? ELECTRIC_PIANO_1 
+			//		: BRIGHT_ACOUSTIC;
+			program = ELECTRIC_PIANO_1;
+			MidiChannel bass2 = GuiController.midiChannels[CHANNEL_CHORD];
+			bass2.controlChange(10, V4);
+			bass2.programChange(program);	
+
+			Tune tune = new Tune(genre, text);
+			log.debug(tune);
+			
+			int tempo = 0;
+			
+			// increment feature
+			boolean doIncrement = false;
+			
+			if (usingDefaults) {
+				// override defaults with tune values (which may also be defaults)
+				beatsPerBar	= tune.beatsPerBar;
+				beginTempo	= tune.beginTempo;
+				endTempo 	= tune.endTempo;
+				increment 	= tune.increment;
+			}
+
+			if (endTempo > beginTempo) {
+				doIncrement = true;
+			}
+			
+			tempo = beginTempo;
+			chordPanel.updateTempo("" + tempo);
+			
+			log.debug("usingDefaults=" + usingDefaults);
+			log.debug("beginTempo=" + beginTempo);
+			log.debug("endTempo=" + endTempo);
+			log.debug("increment=" + increment);
+			log.debug("doIncrement=" + doIncrement);
+			log.debug("tempo=" + tempo);
+			
+			// set the initial pulse length
+			int pulseLen = (int) (1000d * 60d / tempo);
+			
+			log.debug("pulseLen=" + pulseLen);
+			
+			Chord chord = null;
+			Chord lastChord = null;		
+			Chord nextChord = null;
+			List<Chord> chords = tune.chords;
+
+			int numChords = chords.size();
+			log.debug("numChords=" + numChords);
+			
+			int pulseCount = 1;
+
+			while(runFlag){
+				// handle note off events
+				endNotes.clear(); 
+				for (Note note: notes) {
+					note.len--;
+					if (note.len == 0) {
+						endNote(note);
+						endNotes.add(note);
+					}
+				}
+				for (Note note: endNotes) {
+					notes.remove(note);
+				}
+				
+				// break out of loop
+				if (!runFlag) {
+					break;
+				}
+
+				// otherwise continue
+				chord = chords.get(pulseCount - 1);
+				nextChord = (pulseCount == numChords) ? null : chords.get(pulseCount);
+				
+				chordPanel.updateChord("" + chord.name);
+				
+				if (beatsPerBar == 4) {
+					int mod = pulseCount % 4;
+					
+					// beat    1 2 3 4 
+					// % 4     1 2 3 0 
+					int bassDuration = (chord == nextChord) ? 2 : 1;
+					
+					if (mod == 1) { 												// beat 1
+						beginNote(new Note(CHANNEL_BASS, chord.rootValue, bassDuration, V8));
+						if (chord != nextChord) {
+							// only play the chord on beat 1 if the next chord is different
+							for (int c: chord.chordValues) {
+								beginNote(new Note(CHANNEL_CHORD, c, 1, V4));	
+							}
+						}
+					} else {
+						if (mod == 2 || mod == 0) { 								// beat 2, 4 (off-beats)
+							if (chord != lastChord) {
+								// only play a bass note on 2,4 if the chord has changed
+								beginNote(new Note(CHANNEL_BASS, chord.rootValue, 1, V8));
+							}
+						} else { 													// mod == 3, beat 3
+							if (lastChord == chord && chord.fifthValue > 0) {
+								// in some cases fifthValue may not be set
+								beginNote(new Note(CHANNEL_BASS, chord.fifthValue, bassDuration, V6));
+							} else {
+								beginNote(new Note(CHANNEL_BASS, chord.rootValue, bassDuration, V8));
+							}
+						}
+						// always play the chord on beats 2,3,4
+						for (int c: chord.chordValues) {
+							beginNote(new Note(CHANNEL_CHORD, c, 1, V4));	
+						}
+					} 
+				} else if (beatsPerBar == 3) {
+					// bar     1     2            
+					// chord   C     C   F       
+					// beat    1 2 3 1 2 3 
+					// polyad    | |   | |  
+					// fifth   
+					// root    .     .   .        
+					// % 3     0 1 2 0 1 2 
+
+					int mod = pulseCount % 3;
+					if (mod == 1) { 											// beat 1
+						beginNote(new Note(CHANNEL_BASS, chord.rootValue, 3, V8));
+					} else if (mod == 2 || mod == 0) { 							// beat 2, 3 (off-beats)
+						if (lastChord == chord) {
+							for (int c: chord.chordValues) {
+								beginNote(new Note(CHANNEL_CHORD, c, 1, V4));	
+							}
+						} else {
+							// if there is a chord change mid-bar then play bass+chord
+							beginNote(new Note(CHANNEL_BASS, chord.fifthValue, 2, V4));
+							for (int c: chord.chordValues) {
+								beginNote(new Note(CHANNEL_CHORD, c, 1, V4));
+							}
+						}
+					}
+				} else {
+					throw new Exception("unhandled tune.beatsPerBar=" + tune.beatsPerBar);
+				}	
+				
+				// sleep till the next pulse
+				sleep(pulseLen);
+
+				pulseCount++;
+				if ((pulseCount) > chords.size()) {
+					// reached the end of the chords array, so reset pulseCount to 1
+					pulseCount = 1;
+
+					// check for doIncrement 
+					if (doIncrement) {
+						// increase tempo
+						if (tempo < endTempo && (tempo + increment) <= endTempo) {
+							tempo += increment;
+							chordPanel.updateTempo("" + tempo);
+							pulseLen = (int) (1000d * 60d / tempo);	
+						}
+					}
+				}
+				lastChord = chord;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			chordPanel.stop("Exception thrown in ChordPlayer.run(): " + e.toString());
+		}
+	}
+	*/
+--------------------------------------------------------------------------------
+/**
+ * @param part
+ * @param sequence
+ */
+//private void addPart(Part part, String sequence) throws Exception {
+//	// the first part may not have been implicitly declared
+//	if (part.name.equals("")) {
+//		part.name = "A";
+//	} 
+//	
+//	part.init(sequence);
+//	
+//	parts.add(part);
+//}
+
+
+/**
+ * @return expanded chordSequence (including repeated parts) for the entire tune.
+ */
+//public String getChordSequence() {
+//	StringBuffer sb = new StringBuffer();
+//	for (Part part: parts) {
+//		sb.append(part.chordSequence);
+//		if (part.repeat) {
+//			sb.append(part.chordSequence);
+//		}
+//	}
+//	return sb.toString();
+//}
+
+/**
+ * @return
+ */
+//public String[] getBars() {
+//	return getBars(getChordSequence());
+//}
+
+/**
+ * @return
+ */
+//public String[] getBars(String chordSequence) {
+//	int len = chordSequence.length();
+//	if (len > 0) {
+//		if (chordSequence.substring(len - 1, len).equals(PIPE)) {
+//			// trim final pipe
+//			chordSequence = chordSequence.substring(0, len - 1);
+//		} 
+//		return chordSequence.split(PIPE_DELIM, - 1);
+//	}
+//	return new String[0];
+//}
+
+// TODO
+///**
+// * Save tune as <title>.abc file.
+// * 
+// * TODO remove repeated chord symbols.
+// */
+//public void saveAsAbc() {
+//	File abcDir = new File(MUSIC_DIR, genre.toLowerCase() + CHORDS_TO_ABC_DIR);
+//	File file = new File(abcDir, title + EXT_ABC);
+//
+//	if (!file.exists()) {
+//		StringBuffer sb = new StringBuffer();
+//		
+//		sb.append("X:1" + NL);
+//		for (String line: textLines) {
+//			if (line.startsWith("%") || line.substring(1, 2).equals(":"))  {
+//				sb.append(line);
+//			} else {
+//				line = line.replace(SPACE, "");
+//				String[] bars = line.split(PIPE_DELIM);
+//				for (String bar: bars) {
+//					if (!"".equals(bar)) {
+//						log.debug("bar=" + bar);
+//						String[] chordNames = bar.split(",");
+//						for(String chordName: chordNames) {
+//							sb.append("\"" + ChordsUtil.getAbcChordName(chordName) + "\" ");
+//						}
+//						sb.append("| ");
+//					}
+//				}
+//			}
+//			sb.append(NL);
+//		}
+//		Util.writeToFile(file, sb.toString());
+//	} else {
+//		log.debug(file.getName() + " exists");
+//	}
+//}
+
+
+
+/**
+ * Called from ChordscaleWriter.writeChordscales().
+ * 
+ * @param file
+ */
+//public Tune(File file) throws Exception {
+//	this("", file);
+//}
+
+/**
+ * Called from ChordPlayer.run(), and from this class.
+ * 
+ * @param genre
+ * @param file
+ */
+//public Tune(String genre, File file) throws Exception {
+//	this(genre, Util.getText(file));
+//}
+
+--------------------------------------------------------------------------------
+//	this.sequence = sequence; // store the unparsed sequence
+//
+//	// set the 'repeat' property
+//	if (sequence.contains("[") && sequence.contains("]")) {
+//		int pos = sequence.lastIndexOf(COLON);
+//		numRepeats = Integer.parseInt(sequence.substring(pos + 1, pos + 2));
+//		repeat = true;
+//	} 
+//	
+//	// normalize the sequence
+//	sequence = normalize(sequence);
+//	
+//	int len = sequence.length();
+//	if (len > 0) {
+//
+//		String[] barStrs = sequence.split(PIPE_DELIM, - 1);
+//
+//		for (String barStr: barStrs) {
+//			//if (!Mapstore.bars.containsKey(barStr)) { 
+//			//	Mapstore.bars.put(barStr, new Bar(barStr));
+//			//}
+//			bars.add(new Bar(barStr));
+//		}
+//	}
+
+
+--------------------------------------------------------------------------------
+//Integer[] transposeSemitones 	= {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}; // TODO transpose by key
+
+// TODO add transpose 1-11
+//	    JLabel transposeLabel = new JLabel("Transpose:");
+//	    metronomeNumBeatsLabel.setBounds(x, y, w + 20, h);
+//	    add(metronomeNumBeatsLabel);
+//	    x += w + 20 + SP;
+//	    final JComboBox metronomeNumBeatsComboBox = new JComboBox(metronomeNumBeats);
+//	    metronomeNumBeatsComboBox.setBounds(x, y, w, h);
+//	    add(metronomeNumBeatsComboBox);
+//	    x += w + SP;
+
+// TODO
+// saveToAbc button
+//	    final JButton saveToAbcButton = new JButton("SaveToAbc");
+//	    saveToAbcButton.setBounds(x, y, BUTTON_WIDTH, ROW_HEIGHT);
+//	    add(saveToAbcButton);
+//	    x += saveToAbcButton.getWidth() + SP;
+
+// chordscales button
+//	    final JButton chordscalesButton = new JButton("Chordscales");
+//	    chordscalesButton.setBounds(x, y, WIDTH_5, ROW_HEIGHT);
+//	    add(chordscalesButton);
+//	    x += chordscalesButton.getWidth() + SP;
+
+/*
+// this is for a text field
+textField.addActionListener(new ActionListener() {
+	// the actionPerformed method handles action events from the text field:
+	public void actionPerformed(ActionEvent e) {
+	    String text = textField.getText();
+	    log.debug(text);
+	}
+});
+*/
+
+// TODO
+//	    saveToAbcButton.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				String genre	= (String) genreBox.getSelectedItem();
+//				String folderName	= (String) folderBox.getSelectedItem();
+//				String tuneName		= (String) tuneBox.getSelectedItem();
+//  
+//			    File tuneFile = getTuneFile(genre, folderName, tuneName);
+//			    new Tune(genre, tuneFile).saveAsAbc();
+//			}
+//		});
+
+/*
+// refresh button listener
+chordscalesButton.addActionListener(new ActionListener() {
+	public void actionPerformed(ActionEvent e) {
+		String genre		= (String) genreBox.getSelectedItem();
+		String folderName	= (String) folderBox.getSelectedItem();
+		String tuneName		= (String) tuneBox.getSelectedItem();
+
+		if (!"".equals(tuneName)) {
+			File tuneFile = getTuneFile(genre, folderName, tuneName);
+		    try {
+				new ChordscaleWriter().writeChordscales(tuneFile, OUTPUT_TO_INDIVIDUAL_ABC_FILES);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+		} else {
+			// TODO create status bar w/message
+		}
+	}
+});
+*/
+
+/**
+ * @param genreName
+ * @param folderName
+ * @return the list of tunes in the folder specified by the parameters
+ */
+//private String[] getTuneNames(String genreName, String folderName) {
+//	File dir = new File(MUSIC_DIR, genreName + FS + folderName);
+//	File[] files = dir.listFiles(new ExtensionFilter(EXT_CHORDS));
+//	
+//	String[] tuneNames = new String[files.length];
+//	
+//	int i = 0;
+//	for (File file: files) {
+//		tuneNames[i++] = file.getName().replace(EXT_CHORDS, "");
+//	}
+//
+//	return tuneNames;
+//}	
+
+//File genreDir = getGenreDir(genreName);
+//
+//return (folderName.equals(unselectedName))
+//		? getNamesTunes(genreDir)
+//		: getNamesTunes(new File(genreDir, folderName));
+
+
+/**
+ * @return
+ */
+//private String[] getTunesNames(File dir) {
+//	File[] files = dir.listFiles(new ExtensionFilter(EXT_CHORDS));
+//	
+//	String[] tunes = new String[files.length];
+//	
+//	int i = 0;
+//	for (File file: files) {
+//		tunes[i++] = file.getName().replace(EXT_CHORDS, "");
+//	}
+//
+//	return tunes;
+//}	
+
+/*
+// get current values
+int beginTempo		= (Integer) beginTempoBox.getSelectedItem();
+int endTempo 		= (Integer) endTempoBox.getSelectedItem();
+int increment 		= (Integer) incrementBox.getSelectedItem();
+
+String genre		= (String) genreBox.getSelectedItem();
+String folderName	= (String) folderBox.getSelectedItem();
+String tuneName		= (String) tuneBox.getSelectedItem();
+
+File tuneFile = getTuneFile(genre, folderName, tuneName);
+
+playButton.setEnabled(false);
+stopButton.setEnabled(true);
+
+chordPlayer = new ChordPlayer(
+			beginTempo,
+			endTempo,
+			increment,
+			genre,
+			tuneFile,
+			chordFilePanel);
+chordPlayer.start();
+*/
+//File genreDir = getGenreDir(genre);
+//
+//String[] tunes = (folderName.equals(unselectedName))
+//		? getNamesTunes(genreDir)
+//		: getNamesTunes(new File(genreDir, folderName));
+//tuneBox.setModel(new DefaultComboBoxModel(getTuneNames(genreName, folderName)));	
+
+
+
+--------------------------------------------------------------------------------
+//int BASS_ROOT	= 2;
+//int BASS_FIFTH	= 1;
+//int BASS_NONE	= 0;
+
+// couldn't get this to work - TODO retry now that bar bug is fixed
+/*
+while (runFlag) {
+	for (Part part: tune.parts) {
+		log.debug("part.name=" + part.name);
+		log.debug("part.numRepeats=" + part.numRepeats);
+		if (!runFlag) {
+			break;
+		}
+		
+		for (int i = 0; i <= part.numRepeats; i++) {
+			if (!runFlag) {
+				break;
+			}
+			
+			for (Bar bar: part.bars) {
+				if (!runFlag) {
+					break;
+				}
+
+				log.debug(bar);
+				// accepted formats (spaces removed prior to parsing): 
+				// | |				-> expanded to previous chord
+				// | C |			-> expanded to beatsPerBar, e.g. | C, C, C, C |
+				// | C, F |			-> expanded to beatsPerBar, e.g. | C, C, F, F |
+				// | C, F, Em, G 	-> as written, assuming 4/4
+				
+				if (bar.numChords == 0) {
+					for (int j = 0; j < beatsPerBar; j++) {
+						if (!runFlag) {
+							break;
+						}
+
+						playChord(lastChord, j + 1);
+					}						
+				} else if (bar.numChords == 1) {
+					for (int j = 0; j < beatsPerBar; j++) {
+						if (!runFlag) {
+							break;
+						}
+
+						playChord(bar.chords.get(0), j + 1);
+					}						
+				} else if (bar.numChords == 2) {
+					for (int j = 0; j < 2; j++) {
+						if (!runFlag) {
+							break;
+						}
+
+						for (int k = 0; k < 2; k++) {
+							if (!runFlag) {
+								break;
+							}
+
+							playChord(bar.chords.get(j), j * 2 + k + 1);
+						}	
+					}
+				} else if (bar.numChords == beatsPerBar) {
+					for (int j = 0; j < beatsPerBar; j++) {
+						playChord(bar.chords.get(j), j + 1);
+					}						
+				} else {
+					log.error("invalid bar.numChords=" + bar.numChords);
+				}
+			}
+		}	
+	}
+	
+	// check for doIncrement 
+	if (doIncrement) {
+		// increase tempo
+		if (tempo < endTempo && (tempo + increment) <= endTempo) {
+			tempo += increment;
+			pulseLen = (int) (1000d * 60d / tempo);	
+			chordPanel.chordTempoLabel.setText("" + tempo);
+		}
+	}
+}
+*/
+
+/*
+private void playChord(Chord chord, int beat) {
+	for (int c: chord.chordValues) {
+		log.debug(chord);
+		beginNote(new Note(0, c, 1, V4));	
+	}
+	// sleep till the next pulse
+	try {
+		sleep(pulseLen);
+	} catch (InterruptedException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+
+	lastChord = chord;
+}
+*/
+
+
+
+//						List<Chord> chord[] chordNames = bar.split(",");
+//						int len = chordNames.length;
+//						if (len == 1) {
+//							// the bar contains no chord or a single chord
+//							
+//							String chordName = chordNames[0]; 
+//							if (chordName.length() > 0) {
+//								chord = ChordsUtil.getChord(chordName);	
+//							} // otherwise previous cord will be used, assuming it is not null
+//		
+//							// the chord will be repeated for the whole bar
+//							if (chord != null) {
+//								for (int i = 0; i < beatsPerBar; i++) {
+//									chords.add(chord);
+//								}						
+//							}
+//						} else if (len == beatsPerBar) {
+//							// the bar contains one chord per beat
+//							for(String chordName: chordNames) {
+//								log.debug("chordName=" + chordName);
+//								chord = ChordsUtil.getChord(chordName);
+//								chords.add(chord);
+//							}
+//						} else if (len == 2 && beatsPerBar == 4) {
+//							// add 2 chords per for each barChord
+//							for(String chordName: chordNames) {
+//								chord = ChordsUtil.getChord(chordName);
+//								chords.add(chord);
+//								chords.add(chord);
+//							}
+//						} else {
+//							throw new Exception("len, beatsPerBar exception: len=" + len + ", beatsPerBar=" + beatsPerBar);
+//						}
+
+// TODO combine constructors so as to only receive text param
+
+/**
+ * Called from playButton.
+ * 
+ * @param beginTempo
+ * @param endTempo
+ * @param increment
+ * @param genre
+ * @param tuneFile
+ * @param chordFilePanel
+ */
+//public ChordPlayer(
+//		int beginTempo,
+//		int endTempo,
+//		int increment,
+//		String genre,
+//		File tuneFile,
+//		ChordPanel chordPanel) {
+//	this.beginTempo		= beginTempo;
+//	this.endTempo 		= endTempo;
+//	this.increment 		= increment;
+//	this.genre			= genre;
+//	this.tuneFile		= tuneFile;
+//	this.chordPanel 	= chordPanel;
+//}
+
+// TODO move to player
+/**
+ * @param genre
+ * @param folderName
+ * @param tuneName
+ * @return the file specified by the three parameters
+ */
+//private File getTuneFile(String genre, String folderName, String tuneName) {
+//	File genreDir = getGenreDir(genre);
+//	
+//    File folderDir = (folderName.equals(UNSELECTED_NAME))
+//			? genreDir
+//			: new File(genreDir, folderName);
+//
+//    return new File(folderDir, tuneName + EXT_CHORDS);
+//}
+
+/*
+Tune tune = null;
+if (tuneFile != null) {
+	tune = new Tune(genre, tuneFile);
+} else if (text != null) {
+	tune = new Tune(genre, text);
+}
+*/
+
+
+
+
+--------------------------------------------------------------------------------
+		/*
+		this.genre = genre;
+		
+		Part part 				= new Part(); // the default part
+		String sequence 		= "";
+		List<String> lines 		= Util.getLines(file);
+		
+		for (String line: lines) {
+			line = line.trim();
+			
+			if (line.startsWith("%"))  {
+				// comment - this will be added to the textLines array
+			} else if (line.substring(0, 2).equals("P:"))  {
+				if (!sequence.equals("")) {
+					addPart(part, sequence);
+
+					part = new Part(); // the next part
+					sequence = "";						
+				}
+				// start of a new part
+				part.name = line.substring(2);
+			} else if (line.substring(1, 2).equals(":"))  {
+				info.add(line);
+			} else {
+				sequence += line;
+			}
+			
+			textLines.add(line);
+		}
+
+		if (!sequence.equals("")) {
+			addPart(part, sequence);
+		}
+		
+		beatsPerBar = Integer.parseInt(info.get(INFO_METER).substring(0, 1));
+		
+		//log.debug(this);
+		*/
+			////chordPanel.tunePanel.tune = tune;
+			////chordPanel.tunePanel.repaint();
+		/*
+		tunePanel.setBounds(
+				x, 
+				y, 
+				GuiController.w, 
+				GuiController.h - METRONOME_PANEL_HEIGHT - y - ROW_HEIGHT);
+		tunePanel.init();
+	    add(tunePanel);
+		*/
+		
+	private void drawBi(BufferedImage bi) {
+        Graphics2D g2d =  bi.createGraphics(); 
+        g2d.setRenderingHint(
+	       		RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+	    g2d.setRenderingHint(
+	    	 	RenderingHints.KEY_RENDERING,
+	    	 	RenderingHints.VALUE_RENDER_QUALITY);
+	    g2d.setRenderingHint(
+	    	 	RenderingHints.KEY_TEXT_ANTIALIASING,
+	    	 	RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
+        g2d.setColor(Color.white);
+    	g2d.fillRect(0, 0, bi.getWidth(), bi.getHeight());
+	    
+	    g2d.setColor(Color.black);
+        g2d.setFont(new Font("Courier", Font.PLAIN,  12));
+        
+    	g2d.drawRect(0, 0, bi.getWidth() - 1, bi.getHeight() - 1);
+        
+        int i = 1;
+        for (String textLine: textLines) {
+        	g2d.drawString(textLine, 5, 15 * i++);	
+        }
+        
+        int y = (textLines.size() + 1) * 15;
+        
+//        for (int n = 0; n < 5; n++) {
+//        	g2d.drawLine(0, y, bi.getWidth(), y);
+//        	y += 6;
+//        }
+        
+        y = (textLines.size() + 1) * 15;
+//        for (int n = 0; n < 5; n++) {
+//        	if (n % 2 == 0) {
+//            	g2d.drawOval(n * 10, y + n * 3, 8, 6);
+//            	//g.drawOval(n * 10 + 1, y + n * 3, 7, 6);
+//        	} else {
+//            	g2d.drawOval(n * 10, y + n * 3, 8, 6);
+//            	g2d.fillOval(n * 10, y + n * 3, 8, 6);
+//        	}
+//        }
+        
+        g2d.dispose();
+	}
+	
+	/**
+	 * @return array of textLines for displaying in gui tunePanel
+	 */
+//	public List<String> getTextLines() {
+//		if (textLines.size() == 0) {
+//			// TODO
+////			String info = "";
+////			for (String infoField: infoFields) {
+////				info += infoField + ", ";
+////			}
+////			textLines.add(info);
+//			
+//			for (Part part: parts) {
+//				textLines.add("P:" + part.name);
+//				
+//				String[] bars = getBars(part.chordSequence);
+//				int numBars = bars.length;
+//				
+//				String row = "";
+//				int barCount = 0;
+//				for (String bar: bars) {
+//					barCount++;
+//					if (barCount == numBars) {
+//						if (part.repeat) {
+//							row += bar + BARLINE_REPEAT;	
+//						} else {
+//							row += bar + BARLINE_DOUBLE;
+//						}
+//						
+//					} else {
+//						row += bar + BARLINE;	
+//					}
+//					
+//					if (barCount > 1 && barCount % 8 == 0) {
+//						textLines.add(row);
+//						row = "";
+//					}
+//				}
+//				if (!"".equals(row)) {
+//					// Pick up any remaining bars if chordSequence does not have a 
+//					// multiple of eight bars.
+//					textLines.add(row);
+//				}
+//			}
+//		}
+//		
+//		return textLines;
+//	}
+	
+		public String getText() {
+		StringBuffer sb = new StringBuffer();
+		for (String line: textLines) {
+			sb.append(line + NL);
+		}
+		return sb.toString();
+	}
+	
+		/* TODO deprecate this field? */
+	public List<String> textLines 			= new ArrayList<String>();
+	
+				textLines.add(line);
+	
+--------------------------------------------------------------------------------
+import java.awt.image.BufferedImage;
+
+			////Tune tune = new Tune(genre, tuneFile, chordPanel.tunePanel.bi);
+			////Tune tune = new Tune(genre, tuneFile, null);
+		if (bi != null) {
+			drawBi(bi);	
+		}
+		
+
+--------------------------------------------------------------------------------
+	/** The tune panel. */
+	public TunePanel tunePanel 						= new TunePanel();
+
+--------------------------------------------------------------------------------
+	/**
+	 * @param chordSequence
+	 * @return
+	 */
+//	public static String[] getBars(String chordSequence) {
+//		chordSequence = Util.stripSpaces(chordSequence);
+//		if (chordSequence.endsWith(PIPE)) {
+//			chordSequence = chordSequence.substring(0, chordSequence.length() - 1);
+//		}
+//		return chordSequence.split(PIPE_DELIM, - 1);
+//	}
+--------------------------------------------------------------------------------
+String[] chordNames = bar.split(",");
+						int len = chordNames.length;
+						if (len == 1) {
+							// the bar contains no chord or a single chord
+							
+							String chordName = chordNames[0]; 
+							if (chordName.length() > 0) {
+								chord = ChordsUtil.getChord(chordName);	
+							} // otherwise previous cord will be used, assuming it is not null
+		
+							// the chord will be repeated for the whole bar
+							if (chord != null) {
+								for (int i = 0; i < beatsPerBar; i++) {
+									chords.add(chord);
+								}						
+							}
+						} else if (len == beatsPerBar) {
+							// the bar contains one chord per beat
+							for(String chordName: chordNames) {
+								log.debug("chordName=" + chordName);
+								chord = ChordsUtil.getChord(chordName);
+								chords.add(chord);
+							}
+						} else if (len == 2 && beatsPerBar == 4) {
+							// add 2 chords per for each barChord
+							for(String chordName: chordNames) {
+								chord = ChordsUtil.getChord(chordName);
+								chords.add(chord);
+								chords.add(chord);
+							}
+						} else {
+							throw new Exception("len, beatsPerBar exception: len=" + len + ", beatsPerBar=" + beatsPerBar);
+						}
+--------------------------------------------------------------------------------
+		sb.append("meter=" + meter + NL);
+		sb.append("tempo=" + tempo + NL);
+
+		for (String infoField: infoFields) {
+			sb.append(infoField + NL);
+		}
+
+		sb.append("chordSequence=" + getChordSequence() + NL);
+
+//	public String title 					= "";		// default
+//	public String meter 					= "4/4";	// default
+//	public String tempo 					= "60"; 	// default
+//	// TODO create info object
+//	/** Info fields derived from tune file. */
+//	public List<String> infoFields 			= new ArrayList<String>();
+
+		//if (sequence.substring(len - 1, len).equals(PIPE)) {
+		//	sequence = sequence.substring(0, len - 1);
+		//} 
+
+--------------------------------------------------------------------------------
+//    	if (!"".equals(statusMsg)) {
+//		log.debug("drawing statusMsg=" + statusMsg);
+//    	g2d.drawString(statusMsg, 0, 15);
+//    	statusMsg = "";
+//	} else {
+
+        //    	}
+--------------------------------------------------------------------------------
+	public ChordPlayer(
+			String genre,
+			File tuneFile) {
+		this.genre			= genre;
+		this.tuneFile		= tuneFile;
+	}	
+
+
+--------------------------------------------------------------------------------
+		//this.setSize(GC_WIDTH, GC_HEIGHT);
+				//frame.setSize(GC_WIDTH, GC_HEIGHT);
+				
+					/** GuiController width. */
+	public static final int GC_WIDTH				= 900;
+	/** GuiController height. */
+	public static final int GC_HEIGHT				= 900;
+	
+		    //metronomePanel.setBounds(0, y, GC_WIDTH, METRONOME_PANEL_HEIGHT);
+	    //chordPanel.setBounds(0, y, GC_WIDTH, PLAYER_PANEL_HEIGHT);	
+	    
+	    	//public static Dimension frameDimension 		= null;
+	//public static Insets insets 				= null;
+	    	public static final int CHORD_PANEL_HEIGHT		= 120;	    
+--------------------------------------------------------------------------------
+//			// TODO deprecate this field?
+//			/** Unparsed text lines from tune file. */
+//			public List<String> textLines 			= new ArrayList<String>();
+			
+			
+			//textLines.add(line);
+--------------------------------------------------------------------------------
+		//private final File htmlOutputFile			= new File(DATA_DIR, "scaleSyllabus.html");
+		/*
+		StringBuffer html = new StringBuffer();
+		
+		html.append("<html>" + NL);
+		html.append("<head>" + NL);
+		html.append("	<title>Untitled</title>" + NL);
+		html.append("<style type='text/css'>" + NL);
+		html.append("	body 		{font	: normal 8pt verdana, arial, sans-serif;}" + NL);
+		html.append("	td	 		{font	: normal 8pt verdana, arial, sans-serif;}" + NL);
+		html.append("   table.data {" + NL);
+		html.append("		border-collapse: collapse;" + NL);
+		html.append("	}");
+		html.append("	table.data tr th {" + NL);
+		html.append("	 	background-color : #88f;" + NL);
+		html.append("	    border		: 1px solid #ccc;" + NL);
+		html.append("		padding		: 3px;" + NL);
+		html.append("	    font		: bold 8pt verdana, arial, sans-serif;" + NL);
+		html.append("	    white-space	: nowrap;" + NL);
+		html.append("	}" + NL);
+		html.append("	table.data tr td {" + NL);
+		html.append("		font	: normal 8pt verdana, arial, sans-serif;" + NL);
+		html.append("		border	: 1px solid #ccc;" + NL);
+		html.append("		padding	: 3px;" + NL);
+		html.append("	}" + NL);
+		count = 0;
+		for (File file: files) {
+			html.append("	span." + getCss(file) + " {color: #" + colors[count++] + ";}" + NL);
+		}
+		html.append("	span.gray {color: #888;}" + NL);
+		html.append("</style>" + NL);
+		html.append("</head>" + NL);
+		html.append("<body>" + NL);
+		
+		for (File file: files) {
+			html.append("<span class='" + getCss(file) + "'>" + file.getName() + "</span>" + BR + NL);
+		}
+		
+		html.append("<table border='1' class='data'>" + NL);
+		html.append("<tr valign='top'>" + NL);
+		html.append("<th></td>" + NL);
+		html.append("<th>intervalStr</th>" + NL);
+		html.append("<th>abcSymbol</th>" + NL);
+		html.append("<th>symbols</th>" + NL);
+		html.append("<th>descs</th>" + NL);
+		html.append("</tr>" + NL);
+		count = 1;
+		for (String intervalStr: intervalStrs) {
+			ChordType chordType = chordTypes.get(intervalStr);
+			//String abcSymbol = intervalStrToAbcSymbolMap.get(intervalStr);
+			//html.append(chordType.toHtml(count, abcSymbol));
+			html.append(chordType.toHtml(count, ""));
+			count++;
+		}
+		html.append("</table>" + NL);
+
+		for (File file: files) {
+			html.append("<span class='" + getCss(file) + "'>" + file.getName() + "</span>" + BR + NL);
+		}
+		
+		html.append("</body>" + NL);
+		html.append("</html>" + NL);
+
+		Util.writeToFile(htmlFile, html.toString(), false, false);
+		*/
+--------------------------------------------------------------------------------
+		//if (chordSequence.contains("[") && chordSequence.contains(":2]")) {
+		//	part.repeat = true;
+		//} 
+
+		// remove outer repeats
+		//chordSequence = chordSequence.replace("[", "").replace(":2]", "");
+		
+
+--------------------------------------------------------------------------------
+	static {
+//		System.out.println("ChordscaleWriter in static");
+//		// init aebersoldNomenclatures map using name as the key
+//		List<String> lines = Util.getLines(AEBERSOLD_NOMENCLATURE_FILE);
+//		
+//		for (String line: lines) {
+//			/*
+//			// derived from FQBK-handbook.pdf - p15 - Nomenclature
+//			%%--------------------|----------------|---------------------|-------------|-----------------------------|-----------------------|-----------------------|------------|--------------------------------------------------------------|
+//			##name                | shortName      |desc                 | whIntervals | mode                        | intervals             |cScale                 | symbol     | otherSymbols                                                 |
+//			%%--------------------|----------------|---------------------|-------------|-----------------------------|-----------------------|-----------------------|------------|--------------------------------------------------------------|
+//			MAJOR                 | MAJ            | Ionian              | WWHWWWH     |                             | 1 2 3 4 5 6 7 8       | C D E F G A B C       | C          | Cdelta, Cmaj, C, Cmaj7, Cmaj9, Cmaj13                        |
+//			DOMINANT SEVENTH      | DOM 7TH        | Mixolydian          | WWHWWHW     | 5th Mode of Major           | 1 2 3 4 5 6 b7 8      | C D E F G A Bb C      | C7         | C9, C11, C13                                                 |
+//			MINOR SEVENTH         | MIN 7TH        | Dorian              | WHWWWHW     | 2nd Mode of Major           | 1 2 b3 4 5 6 b7 8     | C D Eb F G A Bb C     | Cm         | C-7, Cm7, Cm9, Cm11, Cm13                                    |
+//			*/
+//			
+//			if (	line.length() > 0 && 
+//					!line.startsWith("//") &&
+//					!line.startsWith("%%") &&
+//					!line.startsWith("##")) {
+//				AebersoldNomenclature aebersoldNomenclature = new AebersoldNomenclature(line);
+//				aebersoldNomenclatures.put(aebersoldNomenclature.name, aebersoldNomenclature);
+//			}
+//		}		
+	}
+	
+
+--------------------------------------------------------------------------------
+		/** Map of intervals to absIntervals, eg maps b5 -> 6 */
+		public static Map<String, Integer> intervalToAbsInterval 	= new HashMap<String, Integer>();
+
+		// init intervalToAbsInterval map
+		for (int i = 0, n = INTERVALS.length; i < n; i++) {
+			intervalToAbsInterval.put(INTERVALS[i], ABS_INTERVALS [i]);	
+		} 
+		
+
+--------------------------------------------------------------------------------
+		// SYSTEM_MYMIT | SYSTEM_AEBERSOLD - defaults to mymit if there is no aebersold definition
+		
+				// deprecated
+		//chordscaleType = ChordscaleWriter.chordscaleTypes.get(type);
+		// /deprecated
+			// deprecated
+	//public static Map<String, ChordscaleType> chordscaleTypes	= new HashMap<String, ChordscaleType>();
+	// /deprecated
+	
+			// deprecated
+	/*
+	public ChordscaleWriter() {
+		init(SYSTEM_AEBERSOLD);
+	}
+	
+	public ChordscaleWriter(String system) {
+		init(system);
+	}
+
+	private void init(String system) {
+		
+		// init chordscaleTypes map using abcSymbol as the key
+		List<String> lines = Util.getLines(CHORDSCALE_TYPES_FILE);
+		
+		for (String line: lines) {
+			if (	line.length() > 0 && 
+					!line.startsWith("//") &&
+					!line.startsWith("%%") &&
+					!line.startsWith("##")) {
+				ChordscaleType chordscaleType = new ChordscaleType(line, system);
+				chordscaleTypes.put(chordscaleType.abcSymbol, chordscaleType);
+				
+				if (!"".equals(chordscaleType.symbols)) {
+					//log.debug("line=" + line + ", chordscaleType.symbols=" + chordscaleType.symbols);
+					List<String> symbols = Util.getList(chordscaleType.symbols, ",");
+					for (String symbol: symbols) {
+						//log.debug("symbol=" + symbol);
+						if (chordscaleTypes.containsKey(symbol)) {
+							log.error("duplicate key in line=" + line + ": symbol=" + symbol);
+						} else {
+							chordscaleTypes.put(symbol, chordscaleType);
+						}
+					}
+				}
+			}
+		}
+		log.debug("chordscaleTypes.size()=" + chordscaleTypes.size());
+	}
+	*/
+	// /deprecated
+		
+				// deprecated
+		//String[] intervals	= ChordsUtil.typeToChordTypeMap.get(type).intervals;
+		// / deprecated
+		
+			// deprecated
+	///** Example: "sus2" -> [{"1", "2", "5"}, "sus2"] */
+	//public static Map<String, ChordType> typeToChordTypeMap 	= new HashMap<String, ChordType>();
+	// /deprecated
+		
+		// deprecated
+		/*
+		// init typeToChordTypeMap
+		List<String> lines = Util.getLines(CHORDSCALE_TYPES_FILE);
+		for (String line: lines) {
+			if (	line.length() > 0 && 
+					!line.startsWith("//") &&
+					!line.startsWith("%%") &&
+					!line.startsWith("##")) {
+				/ *
+				%% |-------------------|---------------------------------|-----------|--------------------|---------------------|-----------------------|------------------------------------------|
+				// |                   |                                 |           |               scale system               |                       |                                          |  
+				%% |-------------------|---------------------------------|-----------|--------------------|---------------------|------------------------------------------------------------------|
+				## | chordIntervals    | symbols                         | abcSymbol | mymit              | aebersold           | aebersoldScaleName    | notes                                    |
+				%% |-------------------|---------------------------------|-----------|--------------------|---------------------|-----------------------|------------------------------------------|
+				1  | 1 2 5             |                                 | sus2      |                    |                     |                       |                                          |          
+				2  | 1 3 #5            | #5, +                           | aug       |                    | b7 9 #11            | WHOLE-TONE            |                                          |  
+				3  | 1 3 #5 7          | maj7#5                          | maj7+5    |                    | 9 #11 13            | LYDIAN AUGMENTED      |                                          |
+				* /
+				String[] arr = line.split(PIPE_DELIM);
+	
+				String chordIntervals 	= arr[1].trim();
+				String symbols 			= arr[2].trim();
+				String abcSymbol 		= arr[3].trim();
+				
+				//log.debug(intervalsStr + " " + symbolsStr + " " + abcSymbol);
+				
+				ChordType chordType = new ChordType(chordIntervals, abcSymbol); 
+				
+				if (typeToChordTypeMap.containsKey(abcSymbol)) {
+					log.error("typeToChordTypeMap.containsKey=" + abcSymbol);
+				} else {
+					typeToChordTypeMap.put(abcSymbol, chordType);	
+				}
+				
+				if (!"".equals(symbols)) {
+					String[] typeStrs = symbols.split(",");
+					for (String typeStr: typeStrs) {
+						typeStr = typeStr.trim();
+						if (typeToChordTypeMap.containsKey(typeStr)) {
+							log.error("typeToChordTypeMap.containsKey=" + typeStr);
+						} else {
+							typeToChordTypeMap.put(typeStr, chordType);
+							//log.debug(typeStr + " -> " + chordType);
+						}
+					}
+				}
+			}
+		}
+		*/
+		// //deprecated
+
+		// deprecated
+		//ChordType chordType = typeToChordTypeMap.get(chord.type);
+		//return chord.note + chordType.abcSymbol;
+		// /deprecated
+		
+		
+--------------------------------------------------------------------------------
+	
+	/**
+	 * @return list of interval objects generated by combining the chordIntervals and the scaleIntervals
+	 */
+	public List<Interval> getIntervals() {
+		return intervals;
+	}
+--------------------------------------------------------------------------------
+//	if (verify) {
+//		verifyAebersoldScaleIntervals();
+//	}
+
+	
+	/**
+	 * TODO 
+	 * 
+	 * Verify that 
+	 * 		1) none of the aebersold scaleSystemIntervals are present in the chordIntervals.
+	 * 		2) that the combination of chordIntervals and scaleSystemIntervals is equal to the
+	 *         intervals defined in the AEBERSOLD_NOMENCLATURE_FILE  
+	 */
+	private void verifyAebersoldScaleIntervals() {
+		// 1)
+		List<String> chordIntervalStrs = Util.getList(chordIntervals);
+		List<String> scaleIntervalStrs = Util.getList(scaleIntervals);
+		
+		List<Interval> intervalsFromChord = new ArrayList<Interval>();
+		List<Interval> intervalsFromScale = new ArrayList<Interval>();
+		
+		for (String s: chordIntervalStrs) {
+			Interval interval = new Interval(s);
+			//interval.type = CHORD;
+			intervalsFromChord.add(interval);
+		}
+		
+		String systemStr = "";
+		for (String s: scaleIntervalStrs) {
+			Interval interval = new Interval(s);
+			interval.type = SCALE; // default
+			intervalsFromScale.add(interval);
+		
+			for (Interval chordInterval: intervalsFromChord) {
+				if (chordInterval.equals(interval)) {
+					interval.type = CHORD;
+					break;
+				}
+			}
+			
+			if (interval.type != CHORD) {
+				systemStr +=  interval.interval + " ";
+			}
+		}
+
+		if (systemStr.length() > 1) {
+			systemStr = systemStr.substring(0, systemStr.length() - 1);	
+		}
+		
+		log.debug(abcSymbol + " " + systemStr + (systemStr.equals(scaleIntervals) ? " ok" : " ERROR"));
+
+	}	
+	
+
+--------------------------------------------------------------------------------
+//		/** Verify CHORDSCALE_TYPES_FILE against AEBERSOLD_NOMENCLATURE_FILE. */
+//		public static boolean verify								= true;
+		if (verify) {
+		}
+				if (verify) {
+					/*
+					String aebersoldNomenclatureName = chordscaleType.aebersoldNomenclatureName;
+					if (aebersoldNomenclatures.containsKey(aebersoldNomenclatureName)) {
+						AebersoldNomenclature aebersoldNomenclature = aebersoldNomenclatures.get(aebersoldNomenclatureName);
+						chordscaleType.aebersoldNomenclatureShortName = aebersoldNomenclature.shortName; 
+						if (!chordscaleType.aebersoldScale.equals(aebersoldNomenclature.intervals)) {
+							log.error(chordscaleType.aebersoldNomenclatureName + " " + chordscaleType.aebersoldScale + "  " + aebersoldNomenclature.intervals);
+						}
+					}
+					*/
+				}
+--------------------------------------------------------------------------------
+//			// the first part may not have been implicitly declared
+//			if (part.name.equals("")) {
+//				part.name = "A";
+//			} 
+//			if (chordSequence.contains("[") && chordSequence.contains(":2]")) {
+//				part.repeat = true;
+//			} 
+//			
+//			part.chordSequence = normalize(chordSequence);
+//			parts.add(part);
+
+--------------------------------------------------------------------------------
+		/*	
+		// get input file content
+		List<String> lines = Util.getLines(inputFile);
+		int chordCount = 0;
+		for (String line: lines) {
+			
+			if (line.startsWith("%") || line.indexOf(":") == 1) {
+				if (line.indexOf("Q:") == 0) {
+					// suppress tempo marking
+					sb.append("%" + line + NL); 
+				} else {
+					// comment or other abc information field
+					sb.append(line + NL);
+				}
+			} else {
+				line = Util.expandChordSequence(line, "{", "}");
+				line = Util.expandChordSequence(line, "[", "]");
+				
+				//line = Util.stripSpaces(line);
+				log.debug("line=" + line);
+
+				// extract the chords
+				String[] bars = line.split(PIPE_DELIM);
+				//log.debug(bars.length);
+				String lastBar = "";
+				
+				for (String bar: bars) {
+					bar = Util.stripSpaces(bar);
+					if (lastBar.equals(bar)) {
+						sb.append(REST_4);
+						chordCount++;
+					} else {
+						if (bar.length() > 0) {
+							if (bar.contains(",")) {
+								String[] chords = bar.split(",");
+								for (String chord: chords) {
+									sb.append(getChordscale(chord).abc);
+									chordCount++;
+								}
+							} else {
+								String chord = bar;
+								sb.append(getChordscale(chord).abc);
+								chordCount++;
+							}
+						} else {
+							// empty bar, so add bar rest; note: empty bars must 
+							// initially contain at least one space in the chords file  
+							sb.append(REST_4);
+							chordCount++;
+						}
+					}
+					sb.append(BARLINE);
+					if (chordCount >= 4) {
+						chordCount = 0;
+					} else {
+						// append backslash so as to not create a new manuscript line
+						sb.append(BS);
+					}
+					sb.append(NL);
+					lastBar = bar;
+				}				
+			}
+		}
+		*/
+
+--------------------------------------------------------------------------------
+		//if (chordSequence.endsWith(PIPE)) {
+		//	chordSequence = chordSequence.substring(0, chordSequence.length() - 1);
+		//}
+
+--------------------------------------------------------------------------------
+				String pipeDelim = "[" + PIPE + "]";
+				//String[] bars = line.split("\\|");
+
+--------------------------------------------------------------------------------
+//		String[] tunes = dir.list(new ExtensionFilter(CHORDS_EXT));
+//		
+//		int i = 0;
+//		for (String tune: tunes) {
+//			tunes[i] = tune.replace("." + CHORDS_EXT, "");
+//			i++;
+//		}
+//		return tunes;
+		
+
+--------------------------------------------------------------------------------
+		//writeChords(lines); // TODO - emulate chordsToAbc.pl, creating an abc-playable file 
+		//                              from the input file 
+				//if (chordscaleType.midi.equals(Y)) {
+					//sb.append(chordscaleType.toMidiData() + NL);
+				//}
+		//StringBuffer sb = new StringBuffer();
+		//midiData = sb.toString();
+	public static String midiData								= "";
+--------------------------------------------------------------------------------
+			// write out the chord notes
+//			int noteCount = 0;
+//			for (Note note: notes) {
+//				if (note.type == CHORD) {
+//					noteCount++;
+//					sb.append(note.abcStr + SPACE);
+//					if (noteCount > 0 && (noteCount % 4) == 0 && noteCount < chordSize) {
+//						sb.append(" | ");
+//					}
+//				}
+//			}
+//			if (noteCount % 4 > 0) {
+//				sb.append("z" + (4 - (noteCount % 4)));
+//			}
+//			sb.append(" | ");
+			
+			// write out the added scale notes
+//			sb.append("\"^Added\" ");
+//			noteCount = 0;
+//			for (Note note: notes) {
+//				if (note.type == SCALE) {
+//					noteCount++;
+//					if (note.alphaStr.equals(lastNote.alphaStr) && note.accidentalStr.equals("")) {
+//						sb.append("="); // prepend abc natural
+//					}
+//					sb.append(note.abcStr + SPACE);
+//					if (noteCount > 0 && (noteCount % 4) == 0 && noteCount < addedSize) {
+//						sb.append(" | ");
+//					}
+//				}
+//				lastNote = note;
+//			}
+//			if (noteCount % 4 > 0) {
+//				sb.append("z" + (4 - (noteCount % 4)));
+//			}
+//			sb.append(" | ");
+			
+			// write out the scale notes
+//			for (Note note: notes) {
+//				if (lastNote != null && note.alphaStr.equals(lastNote.alphaStr) && note.accidentalStr.equals("")) {
+//					sb.append("="); // prepend abc natural
+//				}
+//				if (note.type == CHORD) {
+//					sb.append(note.abcStr + SPACE);
+//				} else {
+//					sb.append(note.abcStr + "2" + SPACE);	
+//				}
+//				lastNote = note;
+//			}			
+			
+///////////////////////////////////////////////////////////////////////////////
+	/**
+	 * @return an abc notation representation of this chordscale
+	 */
+	public String toAbc() {
+		StringBuffer sb = new StringBuffer();
+		Note lastNote = null;
+		
+		//String chordScaleTypeNameStr = "\"^" + chordScaleType.name + "\"";
+		String chordNameStr = "\"" + chordName + "\"";
+
+		//sb.append(Util.padWithSpaces(chordScaleTypeNameStr, 30) + Util.padWithSpaces(chordNameStr, 10) + "z4 | ");
+		//sb.append(Util.padWithSpaces(chordScaleTypeNameStr, 30) + Util.padWithSpaces(chordNameStr, 10));
+		sb.append(Util.padWithSpaces(chordNameStr, 10));
+		
+		// write out the chord notes
+//		int noteCount = 0;
+//		for (Note note: notes) {
+//			if (note.type == CHORD) {
+//				noteCount++;
+//				sb.append(note.abcStr + SPACE);
+//				if (noteCount > 0 && (noteCount % 4) == 0 && noteCount < chordSize) {
+//					sb.append(" | ");
+//				}
+//			}
+//		}
+//		if (noteCount % 4 > 0) {
+//			sb.append("z" + (4 - (noteCount % 4)));
+//		}
+//		sb.append(" | ");
+		
+		// write out the added scale notes
+//		sb.append("\"^Added\" ");
+//		noteCount = 0;
+//		for (Note note: notes) {
+//			if (note.type == SCALE) {
+//				noteCount++;
+//				if (note.alphaStr.equals(lastNote.alphaStr) && note.accidentalStr.equals("")) {
+//					sb.append("="); // prepend abc natural
+//				}
+//				sb.append(note.abcStr + SPACE);
+//				if (noteCount > 0 && (noteCount % 4) == 0 && noteCount < addedSize) {
+//					sb.append(" | ");
+//				}
+//			}
+//			lastNote = note;
+//		}
+//		if (noteCount % 4 > 0) {
+//			sb.append("z" + (4 - (noteCount % 4)));
+//		}
+//		sb.append(" | ");
+		
+		// write out the scale notes
+//		for (Note note: notes) {
+//			if (lastNote != null && note.alphaStr.equals(lastNote.alphaStr) && note.accidentalStr.equals("")) {
+//				sb.append("="); // prepend abc natural
+//			}
+//			if (note.type == CHORD) {
+//				sb.append(note.abcStr + SPACE);
+//			} else {
+//				sb.append(note.abcStr + "2" + SPACE);	
+//			}
+//			lastNote = note;
+//		}
+		//sb.append(" | "); // + NL
+		
+		return sb.toString();
+	}
+	
+
+--------------------------------------------------------------------------------
+/**
+ * @return a midi instruction for the chordScaleType, indicating the intervals 
+ *         to be used to generate the 'backing' chord
+ */
+//public String toMidiData() {
+//	//%%MIDI chordname m11    0 3 10 14 17
+//
+//	String midiIntervalsStr = "";
+//	for (Interval interval: intervals) {
+//		if (interval.type == CHORD) // && !interval.omit
+//		midiIntervalsStr += interval.absInterval + " ";
+//	}
+//	String midiData = "%%MIDI chordname " + Util.padWithSpaces(abcSymbol, 10) + midiIntervalsStr;
+//	
+//	return midiData;
+//}
+
+
+
+/**
+ * The constructor using CHORDSCALE_TYPES_FILE.
+ * 
+ * @param line
+ */
+//public ChordscaleType (String line) {
+//	//name                     | abcSymbol    | writenSymbols          | chordIntervalStr       | midiOmitStr  | scaleAddStr         | midi | comment                    
+//	//------------------------- -------------- ------------------------ ------------------------ -------------- --------------------- ------ ----------------------
+//	//Dominant 7th             | 7            |                        | 1  3  5 b7             |              | b9 9 #9 #11 b13 13  |      | [1] VIII
+//
+//	log.debug(line);
+//	String[] arr = line.split("\\|");
+//
+//	name				= arr[0].trim();
+//	abcSymbol			= arr[1].trim();
+//	writenSymbols		= arr[2].trim();
+//	chordIntervalStr	= arr[3].trim();
+//	midiOmitStr			= arr[4].trim();
+//	scaleAddStr			= arr[5].trim();
+//	midi				= arr[6].trim();
+//	comment				= arr[7].trim();	
+//	
+//	if (abcSymbol.equals("")) {
+//		abcSymbol = "maj";	
+//	}
+//	
+//	List<String> chordIntervals	= getList(chordIntervalStr);	// the chord intervals
+//	List<String> midiOmits		= getList(midiOmitStr);			// the intervals to omit when constructing the midi chord
+//	List<String> scaleAdds		= getList(scaleAddStr);			// the intervals to add when constructing the chord scale
+//	
+//	for (String chordInterval: chordIntervals) {
+//		Interval interval = new Interval(chordInterval);
+//		interval.omit = midiOmits.contains(chordInterval);
+//		interval.type = CHORD;
+//		intervals.add(interval);
+//	}
+//	for (String add: scaleAdds) {
+//		Interval interval = new Interval(add);
+//		interval.type = SCALE;
+//		if (interval.interval > 8) {
+//			interval.interval 			-= 7;
+//			interval.semitoneInterval 	-= 12;
+//		}
+//		intervals.add(interval);
+//	}		
+//
+//	Collections.sort(intervals, INTERVAL_COMPARATOR); 
+//}
+
+	/**
+	 * @param alphaStr
+	 * @param tone
+	 * @return
+	 */
+//	private String getNoteStr(String alphaStr, Tone tone) {
+//		for (String noteStr: tone.noteStrs) {
+//			if (noteStr.substring(0, 1).equals(alphaStr)) {
+//				return noteStr;
+//			}
+//		}
+//		return "ERROR";
+//	}
+	
+	/**
+	 * @return abc representation of this chordScale
+	 */
+	public String getAbc() {
+		if (abc == null) {
+			abc = toAbc();
+		}
+		
+		return abc;
+	}
+	
+//			Tone tone = tones.get((rootStrToneIndex + interval.absInterval));
+//			log.debug("tone=" + tone);
+			
+
+			//			String noteStr = getNoteStr(alphaStr, tone);
+//			log.debug("noteStr=" + noteStr);
+//			
+//			Note note = new Note(noteStr, interval.type);
+//			notes.add(note);
+//
+//			if (note.type == CHORD) chordSize++;
+//			if (note.type == SCALE) addedSize++;
+//			scaleSize++;
+--------------------------------------------------------------------------------
+	//public static List<Tone> tones			= new ArrayList<Tone>();
+	//public static List<Pitch> pitches		= new ArrayList<Pitch>();
+
+	//public List<Note> notes 				= new ArrayList<Note>();
+	//public int chordSize					= 0;
+	//public int addedSize					= 0;
+	//public int scaleSize					= 0;
+
+--------------------------------------------------------------------------------
+
+
+
+//	static {
+//		// init tones
+//		int i = 0;
+//		tones.add(new Tone("B#  C  Dbb", i++));
+//		tones.add(new Tone("B## C# Db ", i++));
+//		tones.add(new Tone("C## D  Ebb", i++));
+//		tones.add(new Tone("D#  Eb Fbb", i++));
+//		tones.add(new Tone("D## E  Fb ", i++));
+//		tones.add(new Tone("E#  F  Gbb", i++));
+//		tones.add(new Tone("E## F# Gb ", i++));
+//		tones.add(new Tone("F## G  Abb", i++));
+//		tones.add(new Tone("G#  Ab    ", i++));
+//		tones.add(new Tone("G## A  Bbb", i++));
+//		tones.add(new Tone("A#  Bb cbb", i++));
+//		tones.add(new Tone("A## B  cb ", i++));
+//
+//		tones.add(new Tone("B#  c  dbb", i++));
+//		tones.add(new Tone("B## c# db ", i++));
+//		tones.add(new Tone("c## d  ebb", i++));
+//		tones.add(new Tone("d#  eb fbb", i++));
+//		tones.add(new Tone("d## e  fb ", i++));
+//		tones.add(new Tone("e#  f  gbb", i++));
+//		tones.add(new Tone("e## f# gb ", i++));
+//		tones.add(new Tone("f## g  abb", i++));
+//		tones.add(new Tone("g#  ab    ", i++));
+//		tones.add(new Tone("g## a  bbb", i++));
+//		tones.add(new Tone("a#  bb cbb", i++));
+//		tones.add(new Tone("a## b  cb ", i++));
+//		
+//		i = 0;
+//		pianoKeys.add(new Pitch("B#  C  Dbb", i++));
+//		pianoKeys.add(new Pitch("B## C# Db ", i++));
+//		pianoKeys.add(new Pitch("C## D  Ebb", i++));
+//		pianoKeys.add(new Pitch("D#  Eb Fbb", i++));
+//		pianoKeys.add(new Pitch("D## E  Fb ", i++));
+//		pianoKeys.add(new Pitch("E#  F  Gbb", i++));
+//		pianoKeys.add(new Pitch("E## F# Gb ", i++));
+//		pianoKeys.add(new Pitch("F## G  Abb", i++));
+//		pianoKeys.add(new Pitch("G#  Ab    ", i++));
+//		pianoKeys.add(new Pitch("G## A  Bbb", i++));
+//		pianoKeys.add(new Pitch("A#  Bb cbb", i++));
+//		pianoKeys.add(new Pitch("A## B  cb ", i++));
+//
+//		pianoKeys.add(new Pitch("B#  c  dbb", i++));
+//		pianoKeys.add(new Pitch("B## c# db ", i++));
+//		pianoKeys.add(new Pitch("c## d  ebb", i++));
+//		pianoKeys.add(new Pitch("d#  eb fbb", i++));
+//		pianoKeys.add(new Pitch("d## e  fb ", i++));
+//		pianoKeys.add(new Pitch("e#  f  gbb", i++));
+//		pianoKeys.add(new Pitch("e## f# gb ", i++));
+//		pianoKeys.add(new Pitch("f## g  abb", i++));
+//		pianoKeys.add(new Pitch("g#  ab    ", i++));
+//		pianoKeys.add(new Pitch("g## a  bbb", i++));
+//		pianoKeys.add(new Pitch("a#  bb cbb", i++));
+//		pianoKeys.add(new Pitch("a## b  cb ", i++));
+		
+//	}
+
+	//public static final String[] RELATIVE_NOTES 		= {"C",	"C#", "Db",	"D", "D#", "Eb", "E", "F", "F#", "Gb", "G", "G#", "Ab", "A", "Bbb",	"A#", "Bb",	"B", "Cb"};
+	//public static final int[] RELATIVE_NOTE_VALUES 	= {	0,   1,    1,    2,   3,    3,    4,   5,   6,    6,    7,   8,    8,    9,   9,     10,   10,   11,  11};
+
+		/** The steps of a major scale (the 'white notes') upto the 13th */
+		int[] intervalsArr 		    = {1, 2, 3, 4, 5, 6,  7,  8,  9, 10, 11, 12, 13};
+		/** The corresponding semitone intervals. */
+		int[] semitoneIntervalsArr		= {0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21};
+	//public final String[] ACCIDENTAL_STRS		= {"bb", "b", "", "#", "##"};
+	//public final String[] ABC_ACCIDENTAL_STRS	= {"__", "_", "", "^", "^^"};
+--------------------------------------------------------------------------------
+
+
+	public static final File KLEZMER_CHORDS_DIR		= new File(MUSIC_DIR, "klezmer/chords");
+	public static final File JAZZ_CHORDS_DIR		= new File(MUSIC_DIR, "jazz/chords");
+	public static final File KLEZMER_ABC_DIR		= new File(MUSIC_DIR, "klezmer/abc/audio/chordsToAbc");
+	public static final File JAZZ_ABC_DIR			= new File(MUSIC_DIR, "jazz/abc/audio/chordsToAbc");
+
+	/**
+	 * @return
+	 */
+	private String[] getTunes(String type) {
+		File chordsDir = (type.equals(JAZZ))
+				? JAZZ_CHORDS_DIR
+				: KLEZMER_CHORDS_DIR;
+		
+		String[] tunes = chordsDir.list(new ExtensionFilter(CHORDS_EXT));
+		
+		int i = 0;
+		for (String tune: tunes) {
+			tunes[i] = tune.replace("." + CHORDS_EXT, "");
+			i++;
+		}
+
+		return tunes;
+	}
+	
+
+
+//	    refreshJazzButton.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//			    jazzTuneBox.setModel(new DefaultComboBoxModel(getTunes(JAZZ)));
+//			}
+//		});
+//	    
+//	    refreshKlezmerButton.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				klezmerTuneBox.setModel(new DefaultComboBoxModel(getTunes(KLEZMER)));
+//			}
+//		});
+	    
+
+
+	    // second row //////////////////////////////////////////////////////////
+	    
+//	    y += AC_ROW_HEIGHT + SP;
+//	    x = 0;
+//
+//		// jazz tunes
+//	    JLabel jazzLabel = new JLabel("Jazz:");
+//	    jazzLabel.setBounds(x, y, MIN_WIDTH, AC_ROW_HEIGHT);
+//	    add(jazzLabel);	    
+//	    x += MIN_WIDTH + SP;
+//	    String[] jazzTunes = getTunes(JAZZ);
+//		final JComboBox jazzTuneBox = new JComboBox(jazzTunes);
+//		jazzTuneBox.setBounds(x, y, TUNE_WIDTH, AC_ROW_HEIGHT);
+//		add(jazzTuneBox);
+//		x += TUNE_WIDTH + SP;
+//	    
+//		// refreshJazz button
+//	    final JButton refreshJazzButton = new JButton("Refresh");
+//	    refreshJazzButton.setBounds(x, y, BUTTON_WIDTH, AC_ROW_HEIGHT);
+//	    add(refreshJazzButton);
+//	    x += BUTTON_WIDTH + SP;
+//		
+//		x = 210;
+//		y += AC_ROW_HEIGHT + SP;
+//		
+//		// klezmer tunes
+//	    JLabel klezmerLabel = new JLabel("Klezmer:");
+//	    klezmerLabel.setBounds(x, y, MIN_WIDTH, AC_ROW_HEIGHT);
+//	    add(klezmerLabel);
+//	    x += MIN_WIDTH + SP;
+//	    String[] klezmerTunes = getTunes(KLEZMER);
+//		final JComboBox klezmerTuneBox = new JComboBox(klezmerTunes);
+//		klezmerTuneBox.setBounds(x, y, TUNE_WIDTH, AC_ROW_HEIGHT);
+//		add(klezmerTuneBox);
+//		x += TUNE_WIDTH + SP;
+//
+//	    // refreshKlezmer button
+//	    final JButton refreshKlezmerButton = new JButton("Refresh");
+//	    refreshKlezmerButton.setBounds(x, y, BUTTON_WIDTH, AC_ROW_HEIGHT);
+//	    add(refreshKlezmerButton);
+//	    x += BUTTON_WIDTH + SP;
+
+
+    /**
+	 * @return
+	 */
+//	private String[] getKlezmerTunes() {
+//		File chordsDir = new File(KLEZMER_CHORDS_DIR);
+//		String[] tunes = chordsDir.list(new ExtensionFilter(CHORDS_EXT));
+//		
+//		for (String tune: tunes) {
+//			tune = tune.replace("." + CHORDS_EXT, "");
+//		}
+//
+//		return tunes;
+//	}
+//
+//	private String[] getJazzTunes() {
+//		File chordsDir = new File(JAZZ_CHORDS_DIR);
+//		String[] tunes = chordsDir.list(new ExtensionFilter(CHORDS_EXT));
+//
+//		return tunes;
+//	}
+
+// Create an editable combobox
+String[] items = {"item1", "item2"};
+JComboBox cb = new JComboBox(items);
+cb.setEditable(true);
+
+// Create and register listener
+MyItemListener actionListener = new MyItemListener();
+cb.addItemListener(actionListener);
+
+class MyItemListener implements ItemListener {
+    // This method is called only if a new item has been selected.
+    public void itemStateChanged(ItemEvent evt) {
+        JComboBox cb = (JComboBox)evt.getSource();
+
+        // Get the affected item
+        Object item = evt.getItem();
+
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            // Item was just selected
+        } else if (evt.getStateChange() == ItemEvent.DESELECTED) {
+            // Item is no longer selected
+        }
+    }
+}
+
+
+//					if (bar.indexOf(",") == -1) {
+//					// the bar contains a single chord, which will be repeated for the whole bar
+//					chord = ChordUtil.getChord(bar);
+//					for (int i = 0; i < beatsPerBar; i++) {
+//						chords.add(chord);
+//					}
+//				} else {
+
+					//				}				
+
+					// bar     1       2       3       4        
+					// chord   C               Am  F   G   
+					// beat    1 2 3 4 1 2 3 4 1 2 3 4 1 2 3 4 
+					// polyad    |   |   |   |   |   |   |   |
+					// fifth       .       .               .   
+					// root    .       .       .   .   .       
+					// % 4     1 2 3 0 1 2 3 0 1 2 3 0 1 2 3 0 
+
+	public String getText() {
+		StringBuffer sb  = new StringBuffer();
+		
+		for (String abcLine: abcLines) {
+			sb.append(abcLine + NL);
+		}
+		
+		return sb.toString();
+	}
+
+
+
+	/**
+	 * @param key
+	 * @return
+	 */
+//	public String getAbcField(String key) {
+//		return abcFieldToValueMap.get(key);
+//	}
+	
+
+
+								if (bar.indexOf(",") == -1) {
+									// the bar contains a single chord
+									String chordName = bar;
+									sb.append("\"" + ChordUtil.getAbcChordName(chordName) + " | ");
+								} else {
+
+						}				
+
+	/**
+	 * TODO finish implementation.
+	 */
+	public void saveAsAbc() {
+		String dir = (tuneType.equals(JAZZ)) ? JAZZ_ABC_DIR : KLEZMER_ABC_DIR; 
+		File file = new File(dir + FS + title + ".abc");
+
+		if (!file.exists()) {
+			StringBuffer sb = new StringBuffer();
+
+			for (String abcField: abcFields) {
+				String value = abcFieldToValueMap.get(abcField);
+				if (value == null) {
+					value = abcFieldToDefaultValueMap.get(abcField);
+				}
+				
+				if (!"".equals(value)) {
+					sb.append(abcFieldToSymbolMap.get(abcField) + ": " + value + NL);	
+				}
+			}
+			
+			sb.append("P:A" + NL);
+			
+			String abcMeter = getAbcField("meter");
+			int beatsPerBar = Integer.parseInt(abcMeter.substring(0, 1));	
+			
+			for (String abcLine: abcLines) {
+				log.debug("abcLine=" + abcLine);
+				abcLine = abcLine.replace(SPACE, "");
+				
+				if (abcLine.startsWith("%")) {
+					sb.append(abcLine + NL);
+				} else {
+					String[] bars = abcLine.split("\\|");
+					for (String bar: bars) {
+						bar = bar.trim();
+						if (!"".equals(bar)) {
+							log.debug("bar=" + bar);
+							if (bar.indexOf(",") == -1) {
+								// the bar contains a single chord
+								String chordName = bar;
+								sb.append("\"" + ChordUtil.getAbcChordName(chordName) + "\" z" + beatsPerBar + " | ");
+							} else {
+								// TODO
+								// the bar contains a multiple chords, which will be translateded as written, one chord per beat,
+								// any unaccounted for beats will be assigne a rest
+								String[] chordNames = bar.split(",");
+								int len = chordNames.length;
+								for(String chordName: chordNames) {
+									//log.debug("chordName=" + chordName);
+									sb.append("\"" + ChordUtil.getAbcChordName(chordName) + "\" ");
+								}
+								if (len < beatsPerBar) {
+									int rest = beatsPerBar - len;
+									sb.append(" z" + rest);
+								}
+								sb.append(" | ");
+							}				
+						}
+					}
+					sb.append(NL);
+				}
+			}
+			
+			Util.writeToFile(file, sb.toString());
+		} else {
+			log.debug(file.getName() + " exists");
+		}
+	}
+
+	static {
+		for (int i = 0, n = abcFields.length; i < n; i++ ) {
+			abcFieldToSymbolMap.put(abcFields[i], abcFieldSymbols[i]);
+		}
+		
+		abcFieldToDefaultValueMap.put("referenceNumber",	"1");
+		abcFieldToDefaultValueMap.put("title",				"");
+		abcFieldToDefaultValueMap.put("authorOfLyrics",		"");
+		abcFieldToDefaultValueMap.put("book",				"");
+		abcFieldToDefaultValueMap.put("composer",			"");
+		abcFieldToDefaultValueMap.put("notes",				"");
+		abcFieldToDefaultValueMap.put("origin",				"");
+		abcFieldToDefaultValueMap.put("source",				"");
+		abcFieldToDefaultValueMap.put("transcriber",		"");
+		abcFieldToDefaultValueMap.put("unitNoteLength",		"1/4");
+		abcFieldToDefaultValueMap.put("meter",				"4/4");
+		abcFieldToDefaultValueMap.put("parts",				"AAAA");
+		abcFieldToDefaultValueMap.put("tempo",				"90");
+		abcFieldToDefaultValueMap.put("rhythm",				"");
+		abcFieldToDefaultValueMap.put("key",				"C");
+		abcFieldToDefaultValueMap.put("words",				"");
+	}
+
+			/*
+			@referenceNumber	= 1
+			@title				= A Glezele Vayn
+			@authorOfLyrics		= Walter Raleigh
+			@book				= O'Neills
+			@composer			= Robert Jones
+			@notes				= see also O'Neills - 234
+			@origin				= UK, Yorkshire, Bradford
+			@source				= collected in Brittany
+			@transcriber		= John Smith, j.s@aol.com
+			@unitNoteLength		= 1/4
+			@meter				= 4/4
+			@parts				= AAAA
+			@tempo				= 1/4=120
+			@rhythm				= reel
+			@key				= Dm
+			@words				= lyrics after tune
+			@tempoRange			= 70-100
+			*/
+//			} else if (line.startsWith("@"))  {
+//				// abc field definition eg: @referenceNumber	= 1
+//				int index = line.indexOf("=");
+//				String name = line.substring(1, index).trim();
+//				String value = line.substring(index + 1).trim();
+//				log.debug(name + "=" + value);
+//				abcFieldToValueMap.put(name, value);
+//			} else if (line.startsWith("$"))  {
+//				// player definition eg: $tempoRange			= 70-100
+//				if	(line.startsWith("$tempoRange")) { 
+//					tempoRange 	= line.substring(line.indexOf("=") + 1).trim();
+//				}
+
+	/** Subset of abc definitions in order of appearance in an abc file. */
+	public final static String[] abcFields 	= {
+			"referenceNumber",
+			"title",
+			"authorOfLyrics",
+			"book",
+			"composer",
+			"notes",
+			"origin",
+			"source",
+			"transcriber",
+			"unitNoteLength",
+			"meter",
+			"parts",
+			"tempo",
+			"rhythm",
+			"key",
+			"words",
+	};
+	/** Matching abc field symbols. */
+	public final static String[] abcFieldSymbols = {	
+			"X", // reference number   X:1, X:2      
+			"T", // title              T:Paddy O'Rafferty  
+			"A", // author of lyrics   A:Walter Raleigh    
+			"B", // book               B:O'Neills   
+			"C", // composer           C:Robert Jones, C:Trad.  
+			"N", // notes (annotation) N:see also O'Neills - 234 
+			"O", // origin             O:UK, Yorkshire, Bradford 
+			"S", // source             S:collected in Brittany  
+			"Z", // transcriber        Z:John Smith, j.s@aol.com
+			"L", // unit note length   L:1/4, L:1/8    
+			"M", // meter              M:3/4, M:4/4    
+			"P", // parts              P:A, P:ABAC, P:(A2B)3  
+			"Q", // tempo              Q:"allegro" 1/4=120  
+			"R", // rhythm             R:R, R:reel 
+			"K", // key                K:G, K:Dm, K:AMix   
+			"W", // words              W:lyrics after tune  				
+	};	
+	/** Example: "referenceNumber" -> "1". */
+	public static Map<String, String> abcFieldToValueMap 	= new HashMap<String, String>();
+	/** Example: "referenceNumber" -> "X". */
+	public static Map<String, String> abcFieldToSymbolMap 	= new HashMap<String, String>();
+	/** Example: "referenceNumber" -> "X". */
+	public static Map<String, String> abcFieldToDefaultValueMap
+															= new HashMap<String, String>()
+
+	/**
+	 * @return intervalStr -> abcSymbol map
+	 */
+	private Map<String, String> getIntervalStrToAbcSymbolMap() {
+		Map<String, String> map = new HashMap<String, String>();
+		
+		List<String> lines = Util.getLines(new File(DATA_DIR + FS + "intervalsToAbc.txt"));
+		
+		for (String line: lines) {
+			String[] arr = line.split("\\|");
+			map.put(arr[1].trim(), arr[2].trim());
+		}
+		
+		return map;
+	}
+//	public static ChordPlayer chordPlayer			= null;	
+//	public static MetronomePlayer metronomePlayer	= null;
+//				if (AudioController.chordPlayer != null) {
+//				AudioController.chordPlayer.end();
+//				AudioController.chordPlayer = null;
+//			}
+
+				//AudioController.metronomePlayer = player;
+				
+				String range = tune.range;
+				if (!"".equals(range)) {
+					if (range.indexOf("-") != -1) {
+						beginTempo 	= Integer.parseInt(range.substring(0, range.indexOf("-")));
+						endTempo	= Integer.parseInt(range.substring(range.indexOf("-")));
+						if (endTempo > beginTempo) {
+							doIncrement = true;
+						}
+					}
+				}
+				if (!doIncrement) {
+					beginTempo = Integer.parseInt(tune.tempo.substring(tune.tempo.indexOf("=")));
+				}
+
+
+//		int[] semitones 	= NoteUtil.abcSymbolToSemitonesMap.get(type);
+		//		polyadVals = new int[semitones.length];
+//		int i = 0;
+//		for (int semitone: semitones) {
+//			polyadVals[i++] = rootVal + OCTAVE + semitone; 	
+//		}
+
+
+//			/** Example: "sus2" -> {0, 2, 7} */			
+//			public static Map<String, int[]> abcSymbolToSemitonesMap	= new HashMap<String, int[]>(); 
+
+			//int[] semitones = new int[intervalStrs.length];
+			//int i = 0;
+			//for (String intervalStr: intervalStrs) {
+			//	semitones[i++] = intervalSemitoneMap.get(intervalStr);
+			//}
+			//abcSymbolToSemitonesMap.put(abcSymbol, semitones);
+			
+			// for debugging
+			//String semitoneStr = "";
+			//for (int semitone: semitones) {
+			//	semitoneStr += semitone + " "; 
+			//}
+			//log.debug(abcSymbol + " -> " + semitoneStr);
+
+
+		sb.append("X: " + referenceNumber + NL);
+		sb.append("T: " + title + NL);
+		sb.append("A: " + authorOfLyrics + NL);
+		sb.append("B: " + book + NL);
+		sb.append("C: " + composer + NL);
+		sb.append("N: " + notes + NL);
+		sb.append("O: " + origin + NL);
+		sb.append("S: " + source + NL);
+		sb.append("Z: " + transcriber + NL);
+		sb.append("L: " + unitNoteLength + NL);
+		sb.append("M: " + meter + NL);
+		sb.append("P: " + parts + NL);
+		sb.append("Q: " + tempo + NL);
+		sb.append("R: " + rhythm + NL);
+		//sb.append("r: " + remark + NL);
+		sb.append("K: " + key + NL);
+		sb.append("W: " + words + NL);
+
+	// TODO set defaults here
+//	public String referenceNumber;
+//	public String title;
+//	public String authorOfLyrics;    
+//	public String book;   
+//	public String composer;  
+//	public String notes; 
+//	public String origin; 
+//	public String source;
+//	public String transcriber;
+//	public String unitNoteLength;
+//	public String meter;
+//	public String parts;  
+//	public String tempo;  
+//	public String rhythm;    
+//	public String key;   
+//	public String words;   
+      
+
+			else if	(line.startsWith("X:")) { referenceNumber 	= line.substring(2).trim(); } 
+			else if (line.startsWith("T:")) { title 			= line.substring(2).trim();	} 
+			else if (line.startsWith("A:")) { authorOfLyrics 	= line.substring(2).trim(); } 
+			else if (line.startsWith("B:")) { book 				= line.substring(2).trim(); } 
+			else if (line.startsWith("C:")) { composer 			= line.substring(2).trim(); } 
+			else if (line.startsWith("N:")) { notes 			= line.substring(2).trim(); } 
+			else if (line.startsWith("O:")) { origin			= line.substring(2).trim(); } 
+			else if (line.startsWith("S:")) { source			= line.substring(2).trim(); } 
+			else if (line.startsWith("Z:")) { transcriber		= line.substring(2).trim(); } 
+			else if (line.startsWith("L:")) { unitNoteLength 	= line.substring(2).trim(); } 
+			else if (line.startsWith("M:")) { meter 			= line.substring(2).trim(); } 
+			else if (line.startsWith("P:")) { parts 			= line.substring(2).trim(); } 
+			else if (line.startsWith("Q:")) { tempo 			= line.substring(2).trim(); } 
+			else if (line.startsWith("R:")) { rhythm			= line.substring(2).trim(); } 
+			else if (line.startsWith("K:")) { key 				= line.substring(2).trim(); } 
+			else if (line.startsWith("W:")) { words				= line.substring(2).trim(); } 
+			//else if (line.startsWith("r:")) { range				= line.substring(2).trim(); }
+
+
+//	public static Map<String, Integer> keyMap	= new HashMap<String, Integer>();
+//	static {
+//		keyMap.put("A", 21 + OCT);
+//		keyMap.put("B", 23 + OCT);
+//		keyMap.put("C", 24 + OCT);
+//		keyMap.put("D", 26 + OCT);
+//		keyMap.put("E", 28 + OCT);
+//		keyMap.put("F", 29 + OCT);
+//		keyMap.put("G", 31 + OCT);		
+//	}
+
+	
+
+	/**
+	 * Set tempo to bpm
+	 * @param bpm
+	 */
+	public void setTempo(int bpm) {
+		//this.bpm = bpm;
+		tempo.setSelectedItem(bpm);
+	    tempo.updateUI();
+	}
+
+	private String[] getKlezmerTunes() {
+		File chordsDir = new File(KLEZMER_CHORDS_DIR);
+		String[] tunes = chordsDir.list(new ExtensionFilter(CHORDS_EXT));
+
+		return tunes;
+	}
+
+	private String[] getJazzTunes() {
+		File chordsDir = new File(JAZZ_CHORDS_DIR);
+		String[] tunes = chordsDir.list(new ExtensionFilter(CHORDS_EXT));
+
+		return tunes;
+	}	
+
+		//----------------------------------------------------------------------
+		// deprecated code
+		/*
+		
+		// buttons
+		playButton = new JButton("Play");
+		playButton.setBounds(x, y, w, h);
+		x += w + SP;
+		playButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			    // get current values
+			    String keySelected			= (String) key.getSelectedItem();
+			    int tempoSelected 			= (Integer) tempo.getSelectedItem();
+			    String playerTypeSelected	= (String) playerType.getSelectedItem();
+			    String typeSelected			= (String) type.getSelectedItem();
+			    
+			    int root = keyMap.get(keySelected);
+  
+			    // TODO use getInstance instead
+				if (playerTypeSelected.equals("Blues")) {
+					player = new BluesPlayer(midiChannels, root, tempoSelected);	
+				} else if (playerTypeSelected.equals("Celtic")) {
+					player = new CelticPlayer(midiChannels, root, tempoSelected, typeSelected);
+				} else if (playerTypeSelected.equals("Jazz")) {
+					String tuneSelected	= (String) jazzTune.getSelectedItem();
+					player = new JazzPlayer(midiChannels, tempoSelected, tuneSelected);
+				} else if (playerTypeSelected.equals("Klezmer")) {
+					String tuneSelected	= (String) klezmerTune.getSelectedItem();
+					player = new KlezmerPlayer(midiChannels, tempoSelected, tuneSelected);
+				} else if (playerTypeSelected.equals("Metronome")) {
+					//player = new MetronomePlayer(midiChannels, root, tempoSelected);
+				} else {
+				}
+			    
+				playButton.setEnabled(false);
+				stopButton.setEnabled(true);
+				
+				if (playerTypeSelected.equals("Klezmer2")) {
+					
+				} else {
+					player.start();
+				}
+			}
+		});
+
+
+		stopButton = new JButton("Stop");
+		stopButton.setBounds(x, y, w, h);
+		x += w + SP;
+		stopButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(player != null){
+					player.end();
+					player = null;
+				}
+				playButton.setEnabled(true);
+				stopButton.setEnabled(false);
+				log.debug(bpm);
+//				tempo.setSelectedItem(bpm);
+//			    tempo.updateUI();
+			}
+		});
+		
+		// combo boxes
+		w = 50;		
+		// keys
+		String[] keys = {"A", "B", "C", "D", "E", "F", "G"};
+	    key = new JComboBox(keys);
+	    key.setBounds(x, y, w, h);
+	    x += w + SP;
+	    
+		// tempos
+	    Integer[] tempos = {60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180};
+	    tempo = new JComboBox(tempos);
+	    tempo.setBounds(x, y, w, h);
+	    x += w + SP;
+
+		w = 100;
+	    // playerTypes
+		String[] playerTypes = {
+				"Jazz",
+				"Blues",
+				"Celtic",
+				"Klezmer"//,
+				//"Metronome"
+		};
+		playerType = new JComboBox(playerTypes);
+		playerType.setBounds(x, y, w, h);
+	    x += w + SP;
+
+		// types
+		String[] types = {
+				"Jig", 
+				"Reel"
+		};
+		type = new JComboBox(types);
+		type.setBounds(x, y, w, h);
+	    x += w + SP;
+	    
+	    w = 250;
+	    // klezmer tunes
+		String[] klezmerTunes = getKlezmerTunes();
+		klezmerTune = new JComboBox(klezmerTunes);
+		klezmerTune.setBounds(x, y, w, h);
+	    x += w + SP;
+
+		// jazz tunes
+		String[] jazzTunes = getJazzTunes();
+		jazzTune = new JComboBox(jazzTunes);
+		jazzTune.setBounds(x, y, w, h);
+
+		add(playButton);
+		add(stopButton);
+	    add(key);
+	    add(tempo);
+	    add(playerType);
+	    add(type);
+	    add(klezmerTune);
+	    add(jazzTune);
+	    */
+		// end deprecated code
+	    //----------------------------------------------------------------------
+
+
+		/*
+		if (type.equals("")) {
+			// major
+			fifthVal = rootVal + 7;
+			polyadVals = new int[3];
+			polyadVals[0] = rootVal + OCTAVE;
+			polyadVals[1] = polyadVals[0] + 4;
+			polyadVals[2] = polyadVals[0] + 7;
+		} else if (type.equals("m")) {
+			// minor
+			fifthVal = rootVal + 7;
+			polyadVals = new int[3];
+			polyadVals[0] = rootVal + OCTAVE;
+			polyadVals[1] = polyadVals[0] + 3;
+			polyadVals[2] = polyadVals[0] + 7;
+		} else if (type.equals("aug")) {
+			// augmented
+			fifthVal = rootVal + 8;
+			polyadVals = new int[3];
+			polyadVals[0] = rootVal + OCTAVE;
+			polyadVals[1] = polyadVals[0] + 4;
+			polyadVals[2] = polyadVals[0] + 8;
+		} else if (type.equals("dim")) {
+			// diminished
+			fifthVal = rootVal + 6;
+			polyadVals = new int[3];
+			polyadVals[0] = rootVal + OCTAVE;
+			polyadVals[1] = polyadVals[0] + 3;
+			polyadVals[2] = polyadVals[0] + 6;
+		} else if (type.equals("7")) {
+			// dominant seventh
+			fifthVal = rootVal + 7;
+			polyadVals = new int[4];
+			polyadVals[0] = rootVal + OCTAVE;
+			polyadVals[1] = polyadVals[0] + 4;
+			polyadVals[2] = polyadVals[0] + 7;
+			polyadVals[3] = polyadVals[0] + 10;
+		} else if (type.equals("maj7")) {
+			// major 7th
+			fifthVal = rootVal + 7;
+			polyadVals = new int[4];
+			polyadVals[0] = rootVal + OCTAVE;
+			polyadVals[1] = polyadVals[0] + 4;
+			polyadVals[2] = polyadVals[0] + 7;
+			polyadVals[3] = polyadVals[0] + 11;
+		} else if (type.equals("m7")) {
+			// minor 7th
+			fifthVal = rootVal + 7;
+			polyadVals = new int[4];
+			polyadVals[0] = rootVal + OCTAVE;
+			polyadVals[1] = polyadVals[0] + 3;
+			polyadVals[2] = polyadVals[0] + 7;
+			polyadVals[3] = polyadVals[0] + 10;
+		} else if (type.equals("dim7")) {
+			// diminished 7th
+			fifthVal = rootVal + 6;
+			polyadVals = new int[4];
+			polyadVals[0] = rootVal + OCTAVE;
+			polyadVals[1] = polyadVals[0] + 3;
+			polyadVals[2] = polyadVals[0] + 6;
+			polyadVals[3] = polyadVals[0] + 9;
+		} else if (type.equals("aug7")) {
+			// augmented 7th
+			fifthVal = rootVal + 8;
+			polyadVals = new int[4];
+			polyadVals[0] = rootVal + OCTAVE;
+			polyadVals[1] = polyadVals[0] + 4;
+			polyadVals[2] = polyadVals[0] + 8;
+			polyadVals[3] = polyadVals[0] + 10;			
+		} else if (type.equals("m7b5")) {
+			// half diminished 7th
+			fifthVal = rootVal + 7;
+			polyadVals = new int[4];
+			polyadVals[0] = rootVal + OCTAVE;
+			polyadVals[1] = polyadVals[0] + 3;
+			polyadVals[2] = polyadVals[0] + 6;
+			polyadVals[3] = polyadVals[0] + 10;
+		} else if (type.equals("6")) {
+			// major 6th
+			fifthVal = rootVal + 7;
+			polyadVals = new int[4];
+			polyadVals[0] = rootVal + OCTAVE;
+			polyadVals[1] = polyadVals[0] + 4;
+			polyadVals[2] = polyadVals[0] + 7;
+			polyadVals[3] = polyadVals[0] + 9;
+		} else if (type.equals("m6")) {
+			// minor 6th
+			fifthVal = rootVal + 7;
+			polyadVals = new int[4];
+			polyadVals[0] = rootVal + OCTAVE;
+			polyadVals[1] = polyadVals[0] + 3;
+			polyadVals[2] = polyadVals[0] + 7;
+			polyadVals[3] = polyadVals[0] + 9;			
+		} else if (type.equals("sus2")) {
+			// suspended 2nd
+			fifthVal = rootVal + 7;
+			polyadVals = new int[3];
+			polyadVals[0] = rootVal + OCTAVE;
+			polyadVals[1] = polyadVals[0] + 2;
+			polyadVals[2] = polyadVals[0] + 7;			
+		} else if (type.equals("sus4")) {
+			// suspended 4th
+			fifthVal = rootVal + 7;
+			polyadVals = new int[3];
+			polyadVals[0] = rootVal + OCTAVE;
+			polyadVals[1] = polyadVals[0] + 5;
+			polyadVals[2] = polyadVals[0] + 7;			
+		//} else if (modifier.equals("")) {
+			
+		//} else if (modifier.equals("")) {
+			
+		} else {
+			log.error("unrecognized modifier=" + type);
+		}
+		*/
+
+
+/*
+public static final String[] OCTAVE_NAMES = {
+	"C0",	//  12
+	"C1",	//  24
+	"C2",	//  36
+	"C3",	//  48
+	"C4",	//  60 middle C
+	"C5",	//  72
+	"C6",	//  84	
+	"C7",	//  96
+	"C8",	// 108
+	};
+public static final int[] OCTAVE_VALUES = {
+	12,
+	24,
+	36,
+	48,
+	60,
+	72,
+	84,	
+	96,
+	108,
+};
+*/
+
+//public static final int AcousticGrand 		= 1;
+//public static final int ElectricPiano1 		= 5;
+//public static final int ElectricPiano2 		= 6;
+//public static final int RockOrgan 			= 19;
+//public static final int ReedOrgan 			= 21;
+//public static final int AcousticGuitarNylon = 25;
+
+/* identifier definitions */
+//public static final int C 	= 0;
+//public static final int D  	= 2;
+//public static final int E  	= 4;		
+//public static final int F 	= 5;
+//public static final int G 	= 7;
+//public static final int A 	= 9;
+//public static final int B 	= 11;
+
+//public static final int R 	= 0;
+//public static final int R2D = 1;
+//public static final int R2  = 2;
+//public static final int R3D = 3;
+//public static final int R3  = 4;
+//public static final int R4 	= 5;
+//public static final int R5D = 6;
+//public static final int R5 	= 7;
+//public static final int R6D = 8;
+//public static final int R6 	= 9;
+//public static final int R7D = 10;
+//public static final int R7 	= 11;
+//public static final int R8 	= 12;
+//
+//public static final int O1R 	= 12;
+//public static final int O1R2D 	= 13;
+//public static final int O1R2  	= 14;
+//public static final int O1R3D 	= 15;
+//public static final int O1R3  	= 16;
+//public static final int O1R4 	= 17;
+//public static final int O1R5D 	= 18;
+//public static final int O1R5 	= 19;
+//public static final int O1R6D 	= 20;
+//public static final int O1R6 	= 21;
+//public static final int O1R7D 	= 22;
+//public static final int O1R7 	= 23;
+//public static final int O1R8 	= 24;
+
+
+
+
+/* note values */
+
+// base note values
+//public static final int c0 	= 0;
+//public static final int d0 	= 2;
+//public static final int ef0 = 3;
+//public static final int e0 	= 4;
+//public static final int f0 	= 5;
+//public static final int fs0 = 6;
+//public static final int g0 	= 7;
+//public static final int a0 	= 9;
+//public static final int b0 	= 11;
+
+// bass note values
+//public static final int c3 	= 0 + i8 * 3;
+//public static final int d3 	= 2 + i8 * 3;
+//public static final int ef3 = 3 + i8 * 3;
+//public static final int e3 	= 4 + i8 * 3;
+//public static final int f3 	= 5 + i8 * 3;
+//public static final int fs3 = 6 + i8 * 3;
+//public static final int g3 	= 7 + i8 * 3;
+//public static final int a3 	= 9 + i8 * 3;
+//public static final int bf3 = 10 + i8 * 3;
+//public static final int b3 	= 11 + i8 * 3;
+
+// chord note values
+//public static final int c4 	= 0 + i8 * 4;
+//public static final int cs4 = 1 + i8 * 4;
+//public static final int d4 	= 2 + i8 * 4;
+//public static final int ef4 = 3 + i8 * 4;
+//public static final int e4 	= 4 + i8 * 4;
+//public static final int f4 	= 5 + i8 * 4;
+//public static final int fs4 = 6 + i8 * 4;
+//public static final int gf4 = 6 + i8 * 4;
+//public static final int g4 	= 7 + i8 * 4;
+//public static final int af4 = 8 + i8 * 4;
+//public static final int a4 	= 9 + i8 * 4;
+//public static final int bf4 = 10 + i8 * 4;
+//public static final int b4 	= 11 + i8 * 4;
+
+//public static final int c5 	= 0 + i8 * 5;
+//public static final int cs5	= 1 + i8 * 5;
+//public static final int df5 = 1 + i8 * 5;
+//public static final int d5 	= 2 + i8 * 5;
+//public static final int ef5 = 3 + i8 * 5;
+//public static final int e5 	= 4 + i8 * 5;
+//public static final int f5 	= 5 + i8 * 5;
+//public static final int fs5 = 6 + i8 * 5;
+//public static final int g5 	= 7 + i8 * 5;
+//public static final int af5 = 8 + i8 * 5;
+//public static final int a5 	= 9 + i8 * 5;
+//public static final int bf5	= 10 + i8 * 5;
+//public static final int b5 	= 11 + i8 * 5;
+
+//public static final int[] A7	= {a4, cs5, e5, g5};
+//public static final int[] C 	= {c4, e5, g5};
+//public static final int[] Cm 	= {c4, ef5, g5};
+//public static final int[] C7 	= {c4, e5, g5, bf5};
+//public static final int[] D 	= {d4, fs4, a4};
+//public static final int[] Dm 	= {d4, f4, a4};
+//public static final int[] Ef	= {ef4, g4, bf4};
+//public static final int[] F		= {f4, a4, c5};
+//public static final int[] Fm	= {f4, af4, c5};
+//public static final int[] G7	= {g4, b4, d4, f4};
+//public static final int[] Gm	= {g4, bf4, d4};
+//public static final int[] Bf 	= {bf4, d5, f5};
+//public static final int[] Bfm 	= {bf4, df5, f5};
+//public static final int[] Bf7 	= {bf4, d5, f5, af5};
+
+
+				/*
+				if (beatsPerBar == 2) {
+					if (pulse == 2) {
+						if (pulseCount % 2 == 0) {
+							// get the next chord
+							chord = chords.get(pulseCount / 2);				
+							//log.debug(pulseCount + " " + chord);
+						}
+						
+						// example: 2 beatsPerBar: pulse = 2
+						// pulse   0 1 2 3 4...
+						// beat    1   2   1...
+						// polyad    |   | 
+						// fifth       .   
+						// root    .       .
+						// % 4     0 1 2 3 0...  
+						
+						int mod = pulseCount % 4;
+						if (mod == 0) {
+							beginNote(new Note(BASS_1, chord.root, 2, v8));
+						} else if (mod == 1 || mod == 3) {
+							for (int c: chord.polyad) {
+								beginNote(new Note(CHORD, c, 1, v4));	
+							}
+						} else { // mod == 2
+							if (lastChord == chord) {
+								beginNote(new Note(BASS_1, chord.fifth, 2, v8));
+							} else {
+								beginNote(new Note(BASS_1, chord.root, 2, v8));
+							}
+						}
+					} else {
+						log.error("Unhandled pulse=" + pulse);
+					}
+				} else if (beatsPerBar == 3) {
+					if (pulse == 1) {
+						// example: 3 beatsPerBar
+						// pulse   0 1 2 0 1 2 0...
+						// beat    1 2 3 1 2 3 1...
+						// polyad    | |   | |
+						// fifth         .
+						// root    .
+						// % 3     0 1 2 0 1 2 0...  
+						chord = chords.get(pulseCount);				
+						//log.debug(pulseCount + " " + chord);
+
+						int mod = pulseCount % 3;
+						if (mod == 0) {
+							beginNote(new Note(BASS_1, chord.root, 1, v8));
+							// TODO logic for alternating root and fifth
+							// 		
+							//if (lastChord == chord) {
+							//	beginNote(new Note(BASS_1, chord.fifth, 1, v8));
+							//} else {
+							//	beginNote(new Note(BASS_1, chord.root, 1, v8));
+							//}
+							///
+						} else if (mod == 1 || mod == 2) {
+							for (int c: chord.polyad) {
+								beginNote(new Note(CHORD, c, 1, v4));	
+							}
+						}				
+					} else {
+						log.error("Unhandled pulse=" + pulse);
+					}
+				} else if (beatsPerBar == 4) {
+				*/	
+					/*
+					if (pulse == 1) {
+						// example: 4 beatsPerBar
+						// pulse   0 1 2 3 0...
+						// beat    1 2 3 4 1...
+						// polyad    |   |   
+						// fifth       .
+						// root    .       .
+						// % 4     0 1 2 3 0...  
+						chord = chords.get(pulseCount);				
+						//log.debug(pulseCount + " " + chord);
+
+						int mod = pulseCount % 4;
+						if (mod == 0) {
+							beginNote(new Note(BASS_1, chord.root, 1, v8));
+						} else if (mod == 1 || mod == 3) {
+							for (int c: chord.polyad) {
+								beginNote(new Note(CHORD, c, 1, v4));	
+							}
+						} else { // mod == 3
+							if (lastChord == chord) {
+								beginNote(new Note(BASS_1, chord.fifth, 1, v8));
+							} else {
+								beginNote(new Note(BASS_1, chord.root, 1, v8));
+							}
+						}				
+					} else if (pulse == 2) {
+					*/
+						//if (pulseCount % 2 == 0) {
+							// get the next chord
+						//	chord = chords.get(pulseCount / 2);				
+							//log.debug(pulseCount + " " + chord);
+						//}
+						chord = chords.get(pulseCount - 1);
+						
+						// example: 4 beatsPerBar
+						// beat    1 2 3 4 1 2 3 4
+						// polyad    |   |   |   |
+						// fifth       .       . 
+						// root    .       .   
+						// % 4     1 2 3 0 1 2 3 0  
+						
+						int mod = pulseCount % 4;
+						if (mod == 1) { // beat 1
+							beginNote(new Note(BASS_1, chord.root, 2, v8));
+						} else if (mod == 2 || mod == 0) { // beat 2, 4
+							for (int c: chord.polyad) {
+								beginNote(new Note(CHORD, c, 1, v4));	
+							}
+						} else { // mod == 3
+							if (lastChord == chord) {
+								beginNote(new Note(BASS_1, chord.fifth, 2, v8));
+							} else {
+								beginNote(new Note(BASS_1, chord.root, 2, v8));
+							}
+						}	
+					//}
+				//} else {
+				//	log.error("Unhandled beatsPerBar=" + beatsPerBar);
+				//}
+
+
+	//protected MidiChannel[] midiChannels	= null;
+	//protected int R;
+	//protected double bpm;
+	//private String sequence 					= null;
+	//private AudioController audioController		= null;
+	//private final int INC				= 10;
+	
+
+
+			//String sequence = getSequenceFromFile();
+		
+		//int pos = sequence.indexOf("|");
+		//String rhythm = sequence.substring(0, pos);
+		//3/4:1:90-120
+		//String[] arr = rhythm.split(":");
+		//int len = arr.length;
+		
+		//int beatsPerBar = Integer.parseInt(arr[0].substring(0, 1));
+		//int pulse 		= Integer.parseInt(arr[1]); // pulses per beat
+		//int limit 		= -1; // if tempo should get faster after each repeat, then this will have a positive value > bpm
+	
+	
+	private String expandSequence(String sequence, String start, String end) {
+		if (sequence.indexOf(start) != -1) {
+			// process repeats
+			StringBuffer sb = new StringBuffer();
+			int pos = 0;
+
+			while (sequence.indexOf(end) != -1) {
+				pos = sequence.indexOf(start);
+				sb.append(sequence.substring(0, pos));
+				sequence = sequence.substring(pos + 1); 
+						
+				pos = sequence.indexOf(end);
+				String repeat = sequence.substring(0, pos);
+				//log.debug("repeat=" + repeat);
+				String[] info = repeat.split(":");
+				String phrase = info[0];
+				int num = Integer.parseInt(info[1]);
+				for (int i = 0; i < num; i++) {
+					sb.append(phrase);
+				}
+				sequence = sequence.substring(pos + 1);				
+			}
+			sb.append(sequence);
+
+			sequence =  sb.toString();
+		}
+		return sequence;
+	}
+
+
+	/**
+	 * Sample data:
+	 * 
+	 * 		4
+	 * 		|Dm|Dm,Gm,Dm,Dm|Dm|Dm,A7,Dm,C7
+	 * 		|F|F,Bf,F,F|F|Dm,A7,Dm,Dm|Dm,Dm
+	 * 		[|A7|Dm:7]|A7|Dm,A7,Dm,A7
+	 * 
+	 * Note: the format for a repeated phrase is:
+	 * 
+	 * 		[|A7|Dm:7]
+	 */
+	private String getSequenceFromFile() {
+		List<String> lines = (tuneType.equals("Jazz"))
+				? Util.getLines(new File(JAZZ_CHORDS_DIR + FS + tune))
+				: Util.getLines(new File(KLEZMER_CHORDS_DIR + FS + tune));
+				
+		String sequence = "";
+		for(String line: lines) {
+			line = line.trim();
+			sequence += line;
+		}
+		sequence = sequence.replace(SPACE, "");
+		log.debug(sequence);
+
+		sequence = expandSequence(sequence, "{", "}");
+		sequence = expandSequence(sequence, "[", "]");
+		
+		return sequence;
+	}
+	
+
+
+	public class ExtFilter implements FilenameFilter { 
+		String ext;
+		
+		public ExtFilter(String ext) { 
+			this.ext = "." + ext; 
+		}
+		
+		public boolean accept(File dir, String name) { 
+			return name.endsWith(ext); 
+		} 
+	}
+
+
+
+//	/* chord-types input files */
+//	/** C:/rob/music/jazz/util/GuitarCodex/GuitarCodex_Plus.jar */
+//	private File guitarCodexFile 				= new File(CHORD_TYPES_DIR + FS + "guitarCodex.txt");
+//	/** C:/rob/music/jazz/pdf/scannedBooks/A Beginners Approach To Jazz Improvisation.pdf */
+//	private File beginnersApproachFile 			= new File(CHORD_TYPES_DIR + FS + "beginnersApproach.txt");
+//	/** C:/rob/music/jazz/docs/chord-symbols.docx */
+//	private File chordSymbolsFile 				= new File(CHORD_TYPES_DIR + FS + "chordSymbols.txt");
+//	/** C:/rob/music/docs/Common chord modifiers.docx */
+//	private File commonChordModifiersFile 		= new File(CHORD_TYPES_DIR + FS + "commonChordModifiers.txt");
+//	/** C:/rob/music/jazz/docs/Symbols.pdf */
+//	private File jazzChordSymbolsFile 			= new File(CHORD_TYPES_DIR + FS + "jazzChordSymbols.txt");
+//	/** C:/rob/music/jazz/pdf/scannedBooks/You Can Teach Yourself Jazz Guitar - extract.pdf */
+//	private File youCanTeachYourselfFile 		= new File(CHORD_TYPES_DIR + FS + "youCanTeachYourself.txt");
+//	/** C:/rob/music/jazz/pdf/scannedBooks/Ultimate Guitar Chord Users Guide - extract.pdf */
+//	private File ultimateGuitarFile 			= new File(CHORD_TYPES_DIR + FS + "ultimateGuitar.txt");
+	
+	/* chord-types input files - TODO */
+	///** C:/rob/music/jazz/pdf/scannedBooks/The Gig Bag Book Of Guitar Tab Chords - extract.pdf */
+	//private File gigBagBookFile 				= new File(CHORD_TYPES_DIR + FS + "gigBagBook.txt");
+	///** C:/rob/music/jazz/pdf/scannedBooks/Aebersold/Vol 05 - Time To Play Jazz.pdf */
+	//private File timeToPlayJazzFile 			= new File(CHORD_TYPES_DIR + FS + "timeToPlayJazz.txt");
+	
+//	File[] files = {
+//			guitarCodexFile,
+//			beginnersApproachFile,
+//			chordSymbolsFile,
+//			commonChordModifiersFile,
+//			jazzChordSymbolsFile,
+//			youCanTeachYourselfFile,
+//			ultimateGuitarFile,
+//			};
+
+
+
+//	if (file.equals(guitarCodexFile)) {
+//	parseGuitarCodex();
+//} else {
+
+	//}
+
+	
+	/**
+	 * Parse guitarCodexFile.
+	 */
+	private void parseGuitarCodex() {
+		String src =  getCss(guitarCodexFile);
+		List<String> lines = Util.getLines(guitarCodexFile);
+		
+		StringBuffer sb = new StringBuffer();
+
+		for (String line: lines) {
+			//major: major: 1: 3: 5
+			log.debug(line);
+			
+			String[] arr = line.split(":");
+			
+			String symbol 		= "";
+			String desc 		= "";
+			String intervalStr 	= "";
+
+			int i = 1;
+			for (String s: arr) {
+				s = s.trim();
+				if (i == 1) {
+					symbol = s;
+				} else if (i == 2) {
+					desc = s;
+				} else {
+					intervalStr += s + " ";
+				}
+				i++;
+			}
+			intervalStr = intervalStr.trim();
+			
+			sb.append(desc + " | " + symbol + " | " + intervalStr + NL);
+			
+			ChordType chordType = null;
+			
+			if (chordTypes.containsKey(intervalStr)) {
+				chordType = chordTypes.get(intervalStr);
+			} else {
+				intervalStrs.add(intervalStr);
+				chordType = new ChordType(intervalStr);
+				chordTypes.put(intervalStr, chordType);
+			}
+			
+			chordType.symbols.add(new Symbol(src, symbol));
+			chordType.descs.add(new Desc(src, desc));
+		}
+		
+		File outFile = new File(CHORD_TYPES_DIR + FS + "guitarCodex-out.txt");
+		Util.writeToFile(outFile, sb.toString(), false, false);
+	}
+
+
+//		html.append("	span." + getCss(guitarCodexFile)       		+ " {color: #00f}" + NL);
+//		html.append("	span." + getCss(beginnersApproachFile) 		+ " {color: #080}" + NL);
+//		html.append("	span." + getCss(chordSymbolsFile)      		+ " {color: #c00}" + NL);
+//		html.append("	span." + getCss(commonChordModifiersFile)   + " {color: #088}" + NL);
+//		html.append("	span." + getCss(jazzChordSymbolsFile)  		+ " {color: #880}" + NL);
+
+
+//		html.append("<span class='" + getCss(guitarCodexFile)       	+ "'>" + guitarCodexFile.getName()       	+ "</span>" + BR + NL);
+//		html.append("<span class='" + getCss(jazzChordSymbolsFile)  	+ "'>" + jazzChordSymbolsFile.getName() 	+ "</span>" + BR + NL);
+//		html.append("<span class='" + getCss(chordSymbolsFile)      	+ "'>" + chordSymbolsFile.getName()     	+ "</span>" + BR + NL);
+//		html.append("<span class='" + getCss(commonChordModifiersFile)  + "'>" + commonChordModifiersFile.getName()	+ "</span>" + BR + NL);
+//		html.append("<span class='" + getCss(beginnersApproachFile) 	+ "'>" + beginnersApproachFile.getName() 	+ "</span>" + BR + NL);
+
+
+//		/* src definitions */
+//		private final String SRC_GC					= "gc";
+//		private final String SRC_BA 				= "ba";
+//		private final String SRC_CS					= "cs";
+//		private final String SRC_JCS				= "jcs";
+
+
+//		String[] srcs = {
+//				SRC_BA,
+//				SRC_CS,
+//				SRC_JCS,
+//				};
+		
+		//parseChordTypes(files, srcs);
+
+
+		//parseJazzChordSymbols();
+		//parseBeginnersApproach();
+
+
+	/**
+	 * Parse jazzChordSymbolsFile.
+	 */
+	private void parseJazzChordSymbols() {
+		String src = SRC_JCS;
+		List<String> lines = Util.getLines(jazzChordSymbolsFile);
+
+		for (String line: lines) {
+			line = line.trim();
+
+			//major triad              | maj                 | 1  3  5                | I     
+			String[] arr = line.split("\\|");
+			String desc = arr[0].trim();
+			String symbolStr = arr[1].trim();
+			String intervalStr = arr[2].trim();
+
+			// jazzChordSymbols in some cases contains multiple symbol definitions per chord
+			String[] symbols = symbolStr.split(",");
+			
+			ChordType chordType = null;
+			
+			if (chordTypes.containsKey(intervalStr)) {
+				chordType = chordTypes.get(intervalStr);
+			} else {
+				intervalStrs.add(intervalStr);
+				chordType = new ChordType(intervalStr);
+				chordTypes.put(intervalStr, chordType);
+			}
+			
+			for (String symbol: symbols) {
+				chordType.symbols.add(new Symbol(src, symbol.trim()));	
+			}
+			chordType.descs.add(new Desc(src, desc));
+		}
+	}
+
+	/**
+	 * Parse beginnersApproachFile.
+	 */
+	private void parseBeginnersApproach() {
+		String src = SRC_BA;
+		List<String> lines = Util.getLines(beginnersApproachFile);
+
+		for (String line: lines) {
+			line = line.trim();
+
+			//major triad              | maj                 | 1  3  5                | I     
+			String[] arr = line.split("\\|");
+			String desc = arr[0];
+			String symbol = arr[1];
+			String intervalStr = arr[2];
+
+			// remove double-spaces from intervalStr 
+			String[] intervals = intervalStr.split(" ");
+			intervalStr = "";
+			for (String interval: intervals) {
+				if (!interval.equals("")) {
+					intervalStr += interval + " ";
+				}
+			}
+			intervalStr = intervalStr.trim();
+			
+			ChordType chordType = null;
+			
+			if (chordTypes.containsKey(intervalStr)) {
+				chordType = chordTypes.get(intervalStr);
+			} else {
+				intervalStrs.add(intervalStr);
+				chordType = new ChordType(intervalStr);
+				chordTypes.put(intervalStr, chordType);
+			}
+			
+			chordType.symbols.add(new Symbol(src, symbol));
+			chordType.descs.add(new Desc(src, desc));
+		}
+	}
+
+
+ // + 
+				//"% " + 
+				//Util.padWithSpaces(name, maxName + 1) +
+				//Util.padWithSpaces(desc, maxDesc + 1) +
+				//Util.padWithSpaces(intervals, maxIntervals + 1);
+	public static int maxSymbol 	= 0;
+	public static int maxAbcSymbol 	= 0;
+	public static int maxIntervals 	= 0;
+	public static int maxSemitones 	= 0;
+	public static int maxDesc 		= 0;
+
+		//log.debug("maxName=" + MidiDefinition.maxSymbol);
+		//log.debug("maxMidiName=" + MidiDefinition.maxAbcSymbol);
+		//log.debug("maxIntervals=" + MidiDefinition.maxIntervals);
+		//log.debug("maxSemitones=" + MidiDefinition.maxSemitones);
+		//log.debug("maxDesc=" + MidiDefinition.maxDesc);
+		
+
+		//sb.append("P:AAAA" + NL);
+		
+
+
+			//len = md.symbol.length();
+			//if (len > MidiDefinition.maxSymbol) {
+			//	MidiDefinition.maxSymbol = len;
+			//}
+
+			//len = md.abcSymbol.length();
+			//if (len > MidiDefinition.maxAbcSymbol) {
+			//	MidiDefinition.maxAbcSymbol = len;
+			//}
+
+			//len = md.desc.length();
+			//if (len > MidiDefinition.maxDesc) {
+			//	MidiDefinition.maxDesc = len;
+			//}
+
+			//len = md.intervals.length();
+			//if (len > MidiDefinition.maxIntervals) {
+			//	MidiDefinition.maxIntervals = len;
+			//}
+			//len = md.semitones.length();
+			//if (len > MidiDefinition.maxSemitones) {
+			//	MidiDefinition.maxSemitones = len;
+			//}
+
+
+	/**
+	 * @return an abc notation representation of this chord
+	 */
+	public String toAbc() {
+		StringBuffer sb = new StringBuffer();
+		Note lastNote = null;
+		
+		String chordScaleTypeNameStr = "\"^" + chordScaleType.name + "\"";
+		String chordNameStr = "\"" + chordName + "\"";
+
+		sb.append(Util.padWithSpaces(chordScaleTypeNameStr, 30) + Util.padWithSpaces(chordNameStr, 10) + "z4 | ");
+		
+		// write out the chord notes
+		sb.append("\"^Chord\" ");
+		int noteCount = 0;
+		for (Note note: notes) {
+			if (note.type == CHORD) {
+				noteCount++;
+				sb.append(note.abcStr + SPACE);
+				if (noteCount > 0 && (noteCount % 4) == 0 && noteCount < chordSize) {
+					sb.append(" | ");
+				}
+			}
+		}
+		if (noteCount % 4 > 0) {
+			sb.append("z" + (4 - (noteCount % 4)));
+		}
+		sb.append(" | ");
+		
+		// write out the added scale notes
+		sb.append("\"^Added\" ");
+		noteCount = 0;
+		for (Note note: notes) {
+			if (note.type == SCALE) {
+				noteCount++;
+				if (note.alphaStr.equals(lastNote.alphaStr) && note.accidentalStr.equals("")) {
+					sb.append("="); // prepend abc natural
+				}
+				sb.append(note.abcStr + SPACE);
+				if (noteCount > 0 && (noteCount % 4) == 0 && noteCount < addedSize) {
+					sb.append(" | ");
+				}
+			}
+			lastNote = note;
+		}
+		if (noteCount % 4 > 0) {
+			sb.append("z" + (4 - (noteCount % 4)));
+		}
+		sb.append(" | ");
+		
+		// write out the scale notes
+		sb.append("\"^Scale\" ");
+		noteCount = 0;
+		for (Note note: notes) {
+			noteCount++;
+			if (note.alphaStr.equals(lastNote.alphaStr) && note.accidentalStr.equals("")) {
+				sb.append("="); // prepend abc natural
+			}
+			sb.append(note.abcStr + SPACE);
+			if (noteCount > 0 && (noteCount % 4) == 0 && noteCount < scaleSize) {
+				sb.append(" | ");
+			}
+			lastNote = note;
+		}
+		if (noteCount % 4 > 0) {
+			sb.append("z" + (4 - (noteCount % 4)));
+		}
+		sb.append(" | ");
+		
+		return sb.toString();
+	}
+
+	/**
+	 * @param s
+	 * @param len
+	 * @return a String of spaces of length len
+	 */
+	public static String getSpaces(String s, int len) {
+		String spaces = "";
+		if (s == null) {
+			s = "";
+		}
+
+		int n = s.length();
+		if (n >= len) {
+			return s;
+		}
+		
+		for (int i = 0, m = len - n; i < m; i++) {
+			spaces += SPACE;
+		}
+		
+		return spaces;
+	}
+	
+	/**
+	 * Return content of a text file as a list of lines.
+	 * 
+	 * @param fileName
+	 * @return
+	 */
+	public static List<String> getLines(File file) {
+		List<String> lines = new ArrayList<String>();
+		BufferedReader bufferedReader = null;
+		try {
+			bufferedReader = new BufferedReader(new FileReader(file));
+			String line;
+			while ((line = bufferedReader.readLine()) != null) {
+				line = line.trim();
+				if (line.startsWith("%END") || line.startsWith("END")) {
+					break;
+				}
+				if (line.length() > 0) {				
+					lines.add(line);
+				}
+			}
+		} catch (Exception e) {
+			log.debug("getLines: " + e.toString());
+		} finally {
+			if (bufferedReader != null) {
+				try {
+					bufferedReader.close();
+				} catch (IOException e1) {
+				}
+			}
+		}
+		return lines;
+	}
+
+
+	/**
+	 * @param file
+	 * @param startsWithFilter
+	 * @return list of lines in a text file, ignoring empty lines and lines  
+	 *         beginning with startsWithFilter
+	 */
+	public static List<String> getLinesUsingFilter(
+			File file, 
+			String startsWithFilter) {
+		List<String> lines = new ArrayList<String>();
+		BufferedReader bufferedReader = null;
+		try {
+			bufferedReader = new BufferedReader(new FileReader(file));
+			String line;
+			while ((line = bufferedReader.readLine()) != null) {
+				line = line.trim();
+				if (line.length() > 0 && !line.startsWith(startsWithFilter)) {				
+					lines.add(line);
+				}
+			}
+		} catch (Exception e) {
+			log.error(e);
+		} finally {
+			if (bufferedReader != null) {
+				try {
+					bufferedReader.close();
+				} catch (Exception e) {
+				}
+			}
+		}
+		
+		return lines;
+	}
+	
+	/**
+	 * @param file
+	 * @param startsWithLimit
+	 * @return list of lines in a text file, ignoring empty lines and lines  
+	 *         after the first occurrence of startsWithLimit
+	 */
+	public static List<String> getLinesUsingLimit(
+			File file, 
+			String startsWithLimit) {
+		List<String> lines = new ArrayList<String>();
+		BufferedReader bufferedReader = null;
+		try {
+			bufferedReader = new BufferedReader(new FileReader(file));
+			String line;
+			while ((line = bufferedReader.readLine()) != null) {
+				line = line.trim();
+				if (line.startsWith(startsWithLimit)) {
+					break;
+				} else if (line.length() > 0) {				
+					lines.add(line);
+				} else {
+				}
+			}
+		} catch (Exception e) {
+			log.error(e);
+		} finally {
+			if (bufferedReader != null) {
+				try {
+					bufferedReader.close();
+				} catch (Exception e) {
+				}
+			}
+		}
+		
+		return lines;
+	}
+
+
+	/**
+	 * Return content of a text file as a list of lines.
+	 * 
+	 * @param fileName
+	 * @return
+	 */
+	public static List<String> getLines(String fileName) {
+		return getLines(new File(fileName));
+	}
+
+
+	    /*
+public static String removeSpaces(String s) {
+	StringTokenizer st = new StringTokenizer(s, " ", false);
+	String t = "";
+	while (st.hasMoreElements()) {
+		t += st.nextElement();
+	}
+	return t;
+}
+*/
+	    
+	    
+	    //MetronomePlayer metronomePlayer = MetronomePlayer.getInstance();
+	    //metronomePlayer.metronomePanel.setBounds(0, y, Constants.WIDTH, PLAYER_PANEL_HEIGHT);
+	    //add(metronomePlayer.metronomePanel);
+	    //players.add(metronomePlayer);
+
+	    
+	        /*
+	private MetronomePlayer(
+			MidiChannel[] midiChannels,
+			int root, 
+			int pitch,
+			int beginTempo,
+			int endTempo,
+			int numBeats,
+			int increment,
+			JLabel metronomeTempo,
+			MetronomeBeatPanel metronomePanel) {
+		super(midiChannels);	
+		
+		name 				= "Metronome";
+		this.pitch			= pitch;
+		this.beginTempo		= beginTempo;
+		this.endTempo 		= endTempo;
+		this.numBeats 		= numBeats;
+		this.increment 		= increment;
+		this.metronomeTempo	= metronomeTempo;
+		this.metronomePanel	= metronomePanel;
+		
+		log.debug("constructed");
+	}
+	*/
+	
+	    	/** The player for this panel. */
+	private MetronomePlayer metronomePlayer = null;
+	    
+	    
+	    		/** The player for this panel. */
+		private MetronomePlayer metronomePlayer = null;
+
+		//metronomePlayer = MetronomePlayer.getInstance(this);
+		//AudioController.players.add(metronomePlayer);
+	    //int root 		= AudioController.keyMap.get("A"); // not used, but required by player super-constructor
+		//int pitch 		= AudioController.keyMap.get("A") + OCT * 3;
+
+	        /**
+     * @return singleton instance of this class
+     */
+    public static MetronomePlayer getInstance(MetronomePanel metronomePanel) {
+        if (metronomePlayer == null) {
+        	metronomePlayer = new MetronomePlayer(metronomePanel);
+    	}
+    	return metronomePlayer;
+    }
+
+	    

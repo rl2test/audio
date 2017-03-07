@@ -1,0 +1,1139 @@
+728|312|2
+12-4 2-4/duplicities|128|1
+502 Blues|153|1
+52nd Street Theme|93|2
+A Call For All Demons|1|1
+A Child Is Born|2|1
+A Family Joy|4|1
+A Fine Romance|3|1
+A Foggy Day|6|1
+A Night In Tunisia|7|1
+Ablution|1|2
+Affirmation|2|2
+African Flower|8|1
+Afro Blue|9|1
+After You|1|3
+After You've Gone|2|3
+Afternoon In Paris|10|1
+Ain't Misbehavin'|3|3
+Airegin|11|1
+Airmail Special|3|2
+Alanjuneally|6|3
+Alfie|1|1
+Alfie's Theme|4|2
+Alice In Wonderland|12|1
+All Alone|5|2
+All Blues|13|1
+All Or Nothing At All|4|3
+All God's Chillun Got Rhythm|6|2
+All In Love Is Fair|14|1
+All My Tomorrows|15|1
+All Of Me|16|1
+All Of You|17|1
+All The Things You Are|18|1
+Alone Together|19|1
+Along Came Betty|7|3
+Altoitis|7|2
+Always And Forever|8|3
+Ana Maria|20|1
+And Now, The Queen|22|1
+And On The Third Day|23|1
+Angel Eyes|24|1
+Angela|9|3
+Another Star|8|2
+Anthropology|25|1
+April|10|2
+April In Paris|26|1
+April Joy|27|1
+April Skies|9|2
+Arise, Her Eyes|28|1
+Armageddon|30|1
+Armando's Rhumba|10|3
+Around Again|22|1
+As Time Goes By|31|1
+Ask Me Now|12|2
+Au Privave|32|1
+Autumn In 3|12|3
+Autumn In New York|33|1
+Autumn Leaves|36|1
+Autumn Nocturne|13|3
+Avalon|13|2
+Avalon Place|14|3
+Ay, Arriba|34|1
+Backstage Sally|14|2
+Bags And Traie|15|2
+Bags' Groove|16|2
+Ballad For Anita|15|3
+Ballad For Trane|16|3
+Ballet|37|1
+Ba-lue Bolivar Ba-lues-are|20|2
+Barbados|17|2
+Barbara|18|2
+Basin Street Blues|19|2
+Batterie|38|1
+Be Bop|21|2
+Be My Love|18|3
+Beautiful Friendship|17|3
+Beautiful Love|39|1
+Beauty And The Blast|40|1
+Beethoven's Blue 3rd|20|2
+Beneath It All|41|1
+Berrie's Tune|24|3
+Beside Myself|20|3
+Bess, You Is My Woman Now|22|3
+Bessie's Blues|42|1
+Best Thing For You Is Me|25|3
+Better Git It In Your Soul|22|2
+Better Git It In Your Soul|26|3
+Bewitched|43|1
+Beyond All Limits|23|2
+Beyond The Bluebird,|27|3
+Big Nick|44|1
+Big P|404|2
+Billie's Bounce|24|2
+Bills' Hit Tune|205|2
+Birdland|26|2
+Birk's Works|37|2
+Birth Of The Blues|25|2
+Bitter Suite In The Ozone|45|1
+Black And Tan Fantasy|28|2
+Black Diamond|46|1
+Black Monday|2|1
+Black Narcissus|47|1
+Black Nile|48|1
+Black Orpheus|49|1
+Blessed Relief|50|1
+Bloomdido|29|2
+Blue A La Mode|32|2
+Blue And Sentimental|30|2
+Blue Bossa|51|1
+Blue Comedy|52|1
+Blue Daniel|28|3
+Blue In Green|53|1
+Blue Monk|54|1
+Blue Moon|31|2
+Blue Room|55|1
+Blue Seven|33|2
+Blue Silver|35|2
+Blue Train|58|1
+Bluebird|29|3
+Blues Backstage|30|3
+Blues By Five|33|2
+Blues Connotation|32|2
+Blues For Alice|57|1
+Blues For Philly Joe|34|2
+Blues For Wood|34|2
+Blues In The Closet|36|2
+Bluesette|56|1
+Body And Soul|59|1
+Bohemia After Dark|406|2
+Bolivia|31|3
+Boogie Stop Shuffle|38|2
+Booker's Waltz|39|2
+Bop Boy,|34|3
+Bop Shop|32|3
+Boplicity|60|1
+Born To Be Blue|35|3
+Bossa Rokka ,|36|3
+Boston Marathon|61|1
+Bouncing With Bud|40|2
+Boy Next Door, The|37|3
+Brainville|62|1
+Branilian Beat|41|2
+Brian's Song|42|2
+Bright Boy|43|2
+Bright Moments|44|2
+Bright Size Life|64|1
+Brilliant Corners|45|2
+Broadway Blues|65|1
+Brown Skin Girl|46|2
+Brownout|66|1
+Bud Powell|38|3
+Budo|47|2
+Bud's Blues|40|3
+Bud's Bubble|48|2
+Bunko|49|2
+Busch-wacked|41|3
+Buster Rides Again|37|2
+But Beautiful|67|1
+But Not For Me|50|2
+Butterfly|68|1
+Buzzy|42|3
+By Myself|43|3
+Bye Bye Baby|44|3
+Bye Bye Blackbird|51|2
+Byrdlike|407|2
+C-Jam Blues|55|2
+Can't We Be Friends|52|2
+Canyon Song|72|1
+Captain|70|1
+Caravan|53|2
+Careful|54|2
+Careful|45|3
+Careless Love|55|2
+Catch Me|56|2
+Celia|46|3
+Central Park West|156|1
+Ceora|73|1
+Certain Smile, A|48|3
+C'est What|57|2
+Chameleon|58|2
+Chariots|49|3
+Chase, The|59|2
+Chasin' The Trane|62|2
+Cheek To Cheek|50|3
+Cheese Cake|60|2
+Chega De Saudade (No More Blues)|74|1
+Chelsea Bells|76|1
+Chelsea Bridge|77|1
+Cherokee|78|1
+Cheryl|53|3
+Chicken Feathers|79|1
+Children's Song|80|1
+Chippie|85|1
+Circle|61|2
+Close Enough For Love|54|3
+Colors Of Chloe|82|1
+Come Rain Or Come Shine|63|2
+Come Sunday|88|1
+Comin' Home Baby|64|2
+Como En Vietnam|86|1
+Compensation|55|3
+Con Alma|89|1
+Conception|90|1
+Conference Of The Birds|91|1
+Confessin (that I Love You)|65|2
+Confirmation|92|1
+Contemplation|3|1
+Cookin'|66|2
+Cool Blues|64|2
+Cool Eyes|56|3
+Coral|93|1
+Corcovado|94|1
+Core, The|66|2
+Cork "n" Bib|70|2
+Cottontail|95|1
+Could It Be You|96|1
+Countdown|97|1
+Country Roads|98|1
+Cousin Mary|62|2
+Crabfeathers|365|1
+Crazeology|67|2
+Crescent|99|1
+Criss Cross|68|2
+Cry Me A River|58|3
+Crystal Silence|100|1
+Cut Of This World|226|3
+Cute|69|2
+Daahoud|101|1
+Dacapolypso|60|3
+Dancing On The Ceiling|102|1
+Darn That Dream|103|1
+Day Dream|59|3
+Day In Vienna, A|71|2
+Day In, Day Out|62|3
+Day Waves|106|1
+Days And Nights Waiting|104|1
+Days Of Wine And Roses, The|105|1
+De Pois De Amor O'vazio|110|1
+Dear Old Stockholm|108|1
+Dearly Beloved|107|1
+Decision|408|2
+Deep Purple|72|2
+Delores|109|1
+Deluge|116|1
+Desafinado|112|1
+Desert Air|114|1
+Dewey Square|73|2
+Dexterity|117|1
+Diane|74|2
+Dig|64|3
+Dindi|75|2
+Django|120|1
+Do Nothin' Till You Hear From Me|77|2
+Do You Know What It Means To Miss New Orleans|80|2
+Doin' The Pig|118|1
+Dolphin Dance|122|1
+Dolphin, The|121|1
+Domingo|76|2
+Domino Biscuit|123|1
+Donna Lee|124|1
+Don't Ask Why|66|3
+Don't Blame Me|125|1
+Don't Ever Go Away|67|3
+Don't Get Around Much Anymore|126|1
+Don't Look Back|68|3
+Double Clutching|70|3
+Down For Double|78|2
+Doxy|79|2
+Dream Dancing|71|3
+Drive, The|81|2
+Duff|70|2
+Duke, The|127|1
+E.k.'s Blues|92|2
+Early Autumn|82|2
+East Of The Sun (And West Of The Moon)|72|3
+Easy Living|129|1
+Easy To Love|130|1
+Ecclusiastics|131|1
+Eclypso|83|2
+Eiderdown|132|1
+Eighty One|134|1
+Einbahnstrasse|92|2
+El Gaucho|135|1
+Elizete|136|1
+Elora|84|2
+Emanon|73|3
+Embraceable You|85|2
+Emily|74|3
+Empathy|137|1
+Enchance|86|2
+End Of A Love Affair, The|75|3
+Endlessly|76|3
+Epilogue|87|2
+Epistrophy|138|1
+Equinox|139|1
+Equipoise|140|1
+Esp|141|1
+Estate|78|3
+Etemal Triangle|79|3
+Evening In Concert|88|2
+Everything Happens To Me|82|3
+Everything I Have Is Yours|89|2
+Everything I Love|83|3
+Ev'ry Time We Say Goodbye|80|3
+Exercise #3|142|1
+Exercise #6|143|1
+Eye Of The Hurricane|90|2
+Ezz-thetic|91|2
+Fables Of Faubus|144|1
+Fall|146|1
+Falling Grace|147|1
+Falling In Love With Love|148|1
+Fanhandle Hook|232|3
+Father|84|3
+Favela|85|3
+Fee-fi-fo-fum|149|1
+Feelings And Things|150|1
+Feels So Good|94|2
+Fell Like Makin' Love|86|3
+Fields We Know, The|151|1
+First Moves|96|2
+First Trip|97|2
+Five Brothers|98|2
+Five Hundred Miles High|152|1
+Five Spot After Dark|104|2
+Flags|156|1
+Flim Flam|99|2
+Flintstone's Theme|100|2
+Flower Is A Lonesome Thing, A|101|2
+Fly By Night|102|2
+Fly Me To The Moon|106|2
+Flying Home|105|2
+Follow Your Heart|154|1
+Fools Rush In (Where Angels Fear To Tread)|107|2
+Footprints|157|1
+For Heavens Sake|159|1
+For Heavens Sake|87|3
+For Minors Only|108|2
+Forest Flower|158|1
+Fortune Smiles|160|1
+Four|161|1
+Four Brothers|109|2
+Four On Six|162|1
+Four Winds|163|1
+Fox Hunt|110|2
+Freddie Froo|111|2
+Freddie The Freeloader|164|1
+Free|116|2
+Free Cell Block "f", Tis Nazi Usa|112|2
+Freedom Jazz Dance|165|1
+Freight Trane|88|3
+French Waltz|89|3
+Friday The 13th|114|2
+Friday The 13th|90|3
+From Now On|91|3
+From The Heart|92|3
+From This Moment On|94|3
+Full Moon And Empty Arms|95|3
+Funk Dumplin|104|2
+Funkallero|96|3
+Funky|116|2
+Games People Play|117|2
+Gary's Waltz|166|1
+Gaviota|98|3
+Gemini|167|1
+General Mojo's Well Laid Plan|168|1
+Gentle Rain|169|1
+Gentle Rain|122|2
+Gentle Wind And Falling Tear|118|2
+Georgia On My Mind|119|2
+Get Out Of Town|120|2
+Gettin' It Togetha'|117|2
+Ghost Of A Chance, A|121|2
+Giant Steps|170|1
+Girl From Ipanema, The|171|1
+Girl Talk|122|2
+Gloria's Step|172|1
+Gnu Blu|97|3
+God Bless The Child|173|1
+Godchild|100|3
+Golden Lady|174|1
+Golden Notebooks|124|2
+Gone With The Wind|101|3
+Good Bait|123|2
+Good Evening Mr And Mrs America|176|1
+Goodbye|102|3
+Goodbye Porkpie Hat|175|1
+Got A Match|103|3
+Grand Central|178|1
+Green Dolphin Street|179|1
+Green Mountains|180|1
+Gregory Is Here|126|2
+Groove Merchant|128|2
+Groove Yard|129|2
+Groovin' Fish|181|1
+Groovy Samba|130|2
+Grow Your Own|182|1
+H & H|112|3
+Half Nelson|184|1
+Harlem Nocturne|104|3
+Hassan's Dream|185|1
+Have You Met Miss Jones|186|1
+Heartsong|106|3
+Heaven|187|1
+Hello, Young Lovers|188|1
+Henninger Flats|190|1
+Here's That Rainy Day|191|1
+Herzog|192|1
+Hey There|194|1
+High Hopes|108|3
+High Wire The Aerialist|110|3
+Hold Out Your Hand|195|1
+Hot House|113|3
+Hotel Hello|198|1
+Hotel Overture|196|1
+Hotel Vamp|197|1
+House Of Jade|201|1
+How About You|114|3
+How Deep Is The Ocean|115|3
+How High The Moon|202|1
+How Insensitive|203|1
+How Long Has This Been Going On|116|3
+How My Heart Sings|204|1
+Hullo, Bolinas|205|1
+I Believe In You|150|2
+I Can't Get Started|208|1
+I Concentrate On You|118|3
+I Could Write A Book|209|1
+I Cover The Waterfront|152|2
+I Didn't Know What Time It Was|117|3
+I Fall In Love Too Easily|120|3
+I Get A Kick Out Of You|158|2
+I Got It Bad (And That Ain't Good)|213|1
+I Hear A Rhapsody|160|2
+I Left My Heart In San Francisco|121|3
+I Let A Song Go Out Of My Heart|214|1
+I Love You|215|1
+I Loves You Porgy|128|3
+I Mean You|219|1
+I Need You Here|122|3
+I Remember Clifford|235|1
+I Remember You|169|2
+I Should Care|237|1
+I Thought About You|174|2
+I Will Wait For You|179|2
+I Wish You Love|124|3
+Icarus|206|1
+Ice Cream Konitz|149|2
+Ictus|38|1
+Ida Lupino|210|1
+Idol Gossip|153|2
+If I Loved You|154|2
+If I Should Lose You|155|2
+If I Were A Bell|156|2
+If You Could See Me Now|157|2
+If You Never Come To Me|212|1
+Iii Wind|142|3
+I'll Be Around|126|3
+I'll Be Seeing You|129|3
+I'll Close My Eyes|130|3
+I'll Remember April|218|1
+I'll Take Romance|131|3
+I'm A Fool To Want You|161|2
+I'm Afraid|6|1
+I'm All Smiles|216|1
+I'm Gettin' Sentimental Over You|163|2
+I'm Glad There Is You|132|3
+I'm Old Fashioned|133|3
+I'm Through With Love|134|3
+I'm Your Pal|221|1
+Imagination|162|2
+Impressions|220|1
+In A Capricornian Way|143|3
+In A Mellow Tone|222|1
+In A Sentimental Mood|223|1
+In Case You Haven't Heard|164|2
+In Her Family|144|3
+In Love In Vain|145|3
+In Pursuit Of The 27th Man|167|2
+In The Days Of Our Love|146|3
+In Walked Bud|168|2
+In Your Own Sweet Way|232|1
+In Your Quiet Place|233|1
+Incentive|165|2
+Inchworm|224|1
+Indian Lady|225|1
+Indian Summer|148|3
+Indiana (Back Home Again In)|166|2
+Inner Urge|229|1
+Inside In|226|1
+Interplay|230|1
+Intrepid Fox|231|1
+Invitation|234|1
+Iris|236|1
+Irv's At Midnight|149|3
+Is It Really True|171|2
+Isfahan|150|3
+Island Birdie|170|2
+Isn't It Romantic|238|1
+Isotope|239|1
+Israel|240|1
+It Could Happen To You|172|2
+It Don't Mean A Thing|241|1
+It Had To Be You|173|2
+It Might As Well Be Spring|176|2
+It Never Entered My Mind|151|3
+It's A Raggy Waltz|242|1
+It's All Right With Me|152|3
+It's Only A Paper Moon|175|2
+It's You Or No One|154|3
+I've Found A New Baby|178|2
+I've Got A Crush On You|135|3
+I've Got The World On A String|136|3
+I've Got You Under My Skin|138|3
+I've Grown Accustomed To Your Face|140|3
+I've Never Been In Love Before|141|3
+Jackie|179|2
+Jaco|180|2
+Japanese Waltz, A|155|3
+Je Ne Sais Pas|182|2
+Jeannine|181|2
+Jelly Roll|243|1
+Jersey Bounce|156|3
+Jinrikisha|244|1
+Jitterbug Waltz|184|2
+Jitterbug Waltz|158|3
+Jive Samba|157|3
+Jody Grind, The|183|2
+Jordu|245|1
+Jorgie's|186|2
+Journey To Recife|246|1
+Joy Spring|247|1
+Joy To The World|188|2
+Joyce's Samba|187|2
+Ju-ju|248|1
+Julian|162|3
+Jump For Me|189|2
+Jump Monk|250|1
+Jumpin' With Symphony Sid|188|2
+June 15th, 1967|252|1
+Just A Few|190|2
+Just A-sittin' And A-rockin'|191|2
+Just Friends|249|1
+Just In Time|192|2
+Just One Of Those Things|160|3
+Just Squeeze Me|163|3
+Just The Way You Are|194|2
+Just You, Just Me|193|2
+Kary's France|196|2
+Katrina Ballerina|197|2
+Kelo|5|1
+Kentucky Oysters|198|2
+Kicker, The|198|2
+Kids Are Pretty People|199|2
+Killer Joe|200|2
+La Fiesta|254|1
+La Nevada Blues|206|2
+Ladies In Mercedes|164|3
+Lady Bird|256|1
+Lady Is A Tramp, The|166|3
+Lady's Blues|201|2
+Lakes|202|2
+Lament|257|1
+Las Vegas Tango|258|1
+Last Page, The|204|2
+Laura|203|2
+Lazy Afternoon|167|3
+Lazy Bird|259|1
+Leap Of Faith|168|3
+Leila|207|2
+Lennie-bird|227|2
+Lennie's Pennies|208|2
+Leroy The Magician|260|1
+Lester Leaps In|209|2
+Let's Cook One|210|2
+Liberated Brother|211|2
+Lie Awake|261|1
+Lies|212|2
+Light As A Feather|213|2
+Li'l Darlin'|169|3
+Like Someone In Love|262|1
+Like Sonny|214|2
+Limbo|206|2
+Limehouse Blues|263|1
+Line For Lyons|170|3
+Litha|264|1
+Little B's Poem|266|1
+Little Chicago Fire, A|215|2
+Little Face|172|3
+Little Girl Blue|174|3
+Little Niles|267|1
+Little Rootie Tootie|409|2
+Little Sunflower|216|2
+Little Waltz|270|1
+Little Willie Leaps|171|3
+Liturgy|268|1
+Locomotion|217|2
+Lone Jack|218|2
+Lonely Dreams|220|2
+Long Ago And Far Away|272|1
+Long As You Know You're Living Yours|271|1
+Long View, The|176|3
+Lonnie's Lament|273|1
+Look To The Sky|274|1
+Looking Back|275|1
+Loop,the|178|3
+Lotus On Irish Streams, A|179|3
+Loud-zee|180|3
+Love For Sale|222|2
+Love Vibrations|225|2
+Love Walked In|182|3
+Lover Man|224|2
+Lovers Rain Dance|181|3
+Lucky Southern|276|1
+Lullaby Of Birdland|277|1
+Lullaby Of The Leaves|184|3
+Lulu's Back In Town|185|3
+Lunar Tune|408|2
+Lush Life|278|1
+Lydian April|226|2
+Magician In You, The|280|1
+Maiden Voyage|281|1
+Majoong|286|1
+Make Someone Happy|228|2
+Makin' Whoopee|186|3
+Mallet Man|282|1
+Man I Love, The|229|2
+Man In The Green Shirt|284|1
+Mandala|188|3
+Manhattan|189|3
+Manteca|410|2
+Masquerade|230|2
+Matrix|190|3
+May Dance|287|1
+May-reh|231|2
+Mayreh|191|3
+Meaning Of The Blues, The|192|3
+Meditation|288|1
+Mellow Mood|232|2
+Memories Of Tomorrow|289|1
+Memories Of You|233|2
+Memphis Underground|305|1
+Menina Flor|234|2
+Mercy, Mercy, Mercy|235|2
+Mevlevia|290|1
+Mi Boj A Samba|194|3
+Michelle|292|1
+Midnight Mood|293|1
+Midnight Sun|196|3
+Milano|294|1
+Miles Ahead|236|2
+Milestones|193|3
+Minor Mishap|237|2
+Minor Mood|238|2
+Minority|295|1
+Misty|296|1
+Miyako|297|1
+Moak's Shop|239|2
+Moanin'|240|2
+Modesty Blues|241|2
+Molten Glass|298|1
+Moment To Moment|198|3
+Moment's Notice|299|1
+Monk's Mood|234|2
+Monk's Sphere|243|2
+Monster & The Flower, The|200|3
+Montage|300|1
+Mood Indigo|301|1
+Moon And Sand|202|3
+Moon Germs|302|1
+Moon Glow|244|2
+Moon Rays|245|2
+Moonchild|93|1
+Moonlight In Vermont|199|3
+Moontrane|246|2
+Moose The Mooche|247|2
+More I See You, The|303|1
+Morning|248|2
+Moten's Swing|249|2
+Mother Of The Dead Man|304|1
+Mountain Greenery|204|3
+Move|250|2
+Moving Out|251|2
+Mr Broadway, Theme From|252|2
+Mr Clean|227|2
+Mr Jin|7|1
+Mr Jones|253|2
+Mr Magic|254|2
+Mr Pc|305|1
+Mr Sims|255|2
+Mrs Miniver|256|2
+Muezzin'|257|2
+Muezzin'|205|3
+My Favorite Things|306|1
+My Foolish Heart|307|1
+My Funny Valentine|308|1
+My Heart Stood Still|208|3
+My Little Boat|309|1
+My Little Suede Shoes|258|2
+My Man's Gone Now|206|3
+My Old Flame|259|2
+My One And Only Love|310|1
+My Romance|311|1
+My Ship|314|1
+Mysterious Traveler|312|1
+Mystic Touch|243|2
+N Ight We Called It A Day, The|212|3
+Naima|315|1
+Nancy Joe|265|2
+Nardis|316|1
+Nature Boy|260|2
+Neal's Blues|209|3
+Nearness Of You, The|261|2
+Nefertiti|317|1
+Never Let Me Go|210|3
+Never Will I Marry|318|1
+New Thing, A|262|2
+Nica's Dream|319|1
+Nice'n Easy|211|3
+Night And Day|320|1
+Night Dreamer|321|1
+Night Has A Thousand Eyes|322|1
+Nightingale Sang In Berkeley Square, A|213|3
+Nimbus|323|1
+No Me Esqueca|263|2
+No Moe|264|2
+No Splice|268|2
+Nobody Else But Me|214|3
+Nonsequence|324|1
+North Atlantic Run|266|2
+Nostalgia In Times Square|326|1
+Now He Beats The Drum-now He Stops|215|3
+Now He Sings, Now He Sobs|216|3
+Now's The Time|265|2
+Number 6|217|3
+Nutville|269|2
+Off Minor|270|2
+Oh Lady Be Good|271|2
+Old Devil Moon|272|2
+Old Folks|218|3
+Oleo|327|1
+Olhos De Gato|328|1
+Olinoqui Valley|8|1
+On A Clear Day (You Can See Forever)|273|2
+On A Clear Day (You Can See Forever)|219|3
+On The Sly|220|3
+On The Stairs|277|2
+On The Street Where You Live|222|3
+On The Trail|270|2
+Once I Loved|329|1
+Once In Awhile|274|2
+One By One|275|2
+One Finger Snap|330|1
+One Foot In The Gutter|276|2
+One For Daddy-0|278|2
+One Note Samba|331|1
+Only You Know|224|3
+Open Your Eyes, You Can Fly|332|1
+Opus De Funk|278|2
+Orbits|334|1
+Ornithology|335|1
+Our Delight|228|3
+Our Love Is Here To Stay|279|2
+Out Back Of The Barn|280|2
+Out Of Nowhere|336|1
+Over The Rainbow|229|3
+Ow|230|3
+Oye Como Ya|403|2
+Palo-alto|282|2
+Pannonica|281|2
+Party's Over, The|231|3
+Passion Dance|337|1
+Passport|234|3
+Patterns|284|2
+Peace|340|1
+Peaches En Regalia|338|1
+Pearlie's Swine|341|1
+Pee Wee|342|1
+Peggy's Blue Skylight|343|1
+Pennies From Heaven|286|2
+Penny Arcade|287|2
+Pensativa|344|1
+Pent-up House|346|1
+People|236|3
+People Will Say We're In Love|292|2
+Perdido|288|2
+Perdido Line|290|2
+Perfect Love, Jamala|9|1
+Perhaps|238|3
+Peri's Scope|347|1
+Petite Fleure|293|2
+Petits Machins|294|2
+Pfrancing (no Blues)|348|1
+Phase Dance|296|2
+Picadilly Lilly|239|3
+Pick Yourself Up|295|2
+Pinocchio|349|1
+Pithycanthropus Erectus|350|1
+Plain Jane|10|1
+Platz Blues|235|3
+Played Twice|351|1
+Poinciana|240|3
+Point Of Return|241|3
+Polka Dots And Moonbeams|297|2
+Poor Butterfly|242|3
+Portrait Of Jennie|298|2
+Portsmouth Figurations|352|1
+Pragression|299|2
+Preacher, The|300|2
+Prelude To A Kiss|353|1
+Pretty Girl Is Like A Melody, A|243|3
+Prince Of Darkness|354|1
+Prism|244|3
+Pure Imagination|245|3
+Pursuance|300|2
+Pussy Cat Dues|355|1
+Quicksilver|301|2
+Quiet Now|356|1
+Rahsaan's Run|246|3
+Ramblin'|307|2
+Raven, The|357|1
+Re: Person I Knew|248|3
+Real Guitarist, The|358|1
+Recado Bossa Nova|302|2
+Recordame|359|1
+Red Clay|362|1
+Red Cross|303|2
+Reflections|11|1
+Reincarnation Of A Lovebird|360|1
+Relaxin' At Carmarillo|249|3
+Remark You Made, A|304|2
+Re-re|247|3
+Resolution|363|1
+Rhythm-a-ning|309|2
+Road Song|12|1
+Robbin's Nest|306|2
+Room 608|252|3
+Rosewood|250|3
+Round Midnight|364|1
+Round Trip|307|2
+Rubberneck|308|2
+Saint James Infirmary|325|2
+Saint Thomas|315|2
+Saint Thomas|253|3
+Salt Peanuts|310|2
+Samba De Orfeu|254|3
+Samba Du Bois|311|2
+Sambacide|258|3
+Same Shame|366|1
+Sandu|312|2
+Santurce|256|3
+Satin Doll|367|1
+Scene Is Clean, The|411|2
+Scotch 'n' Soda|368|1
+Scrapple From The Apple|369|1
+Sea Journey|370|1
+Seabrook Revisited|259|3
+Secret Love|260|3
+Seems To Me|262|3
+Self Portrait In 3 Colors|372|1
+Semblence|373|1
+Senjor Mouse|374|1
+September In The Rain|313|2
+September Song|314|2
+Serenade To A Cuckoo|377|1
+Serenade To A Soul Sister|316|2
+Serene|315|2
+Serenity|319|2
+Serpent's Tooth|263|3
+Seven Come Eleven|378|1
+Seven Steps To Heaven|379|1
+Seventeen West|317|2
+Shades Of Light|380|1
+Shadow Of Your Smile|381|1
+Shaw Nuff|264|3
+Shiny Stockings|318|2
+Short Riff|356|2
+Short Stop|322|2
+Shutter Bug|322|2
+Sidewinder|382|1
+Silver's Serenade|320|2
+Simone|321|2
+Sing Me Softly Of The Blues|383|1
+Sippin' At Bell's|325|2
+Sister Sadie|324|2
+Sister Sadie|266|3
+Skating In Central Park|384|1
+Skylark|267|3
+Sleepin' Bee, A|268|3
+Sleeping Bee, A|412|2
+Slipped Disc|326|2
+Slow, Hot; Wind|328|2
+Slowly Gone, Bygone|385|1
+Smoke Gets In Your Eyes|329|2
+So In Love|270|3
+So What|399|1
+Softly As A Morning Sunrise|330|2
+Solar|386|1
+Solitude|387|1
+Some Nerve|272|3
+Some Other Blues|319|2
+Some Other Time|389|1
+Some Skunk Funk|390|1
+Someday My Prince Will Come|388|1
+Someone To Watch Over Me|331|2
+Something From Everyone|273|3
+Sometime Ago|392|1
+Son Of Mr Green Genes|396|1
+Song|393|1
+Song For Bilbad|332|2
+Song For My Father|394|1
+Song For My Lady|317|2
+Song For Sisyphus|274|3
+Song Is You, The|395|1
+Sonnymoon For Two|276|3
+Soon|277|3
+Sophisticated Lady|397|1
+Sorcerer, The|398|1
+Soul Eyes|333|2
+Soultrane|334|2
+Sound Lee|335|2
+Space Circus Part 1|400|1
+Space Circus Part 2|402|1
+Speak Like A Child|336|2
+Speak Low|337|2
+Speak No Evil|404|1
+Spiral|338|2
+Spiral Dance|405|1
+Spirit Samba|278|3
+Spring Can Really Hang You Up The Most|280|3
+Spring Can Really Hang You Up The Most|339|2
+Spring Is Here|406|1
+Squirrel|282|3
+Stablemates|283|3
+Star Eyes|341|2
+Star Eyes|284|3
+Star-crossed Lovers|407|1
+Stardust|340|2
+Stars Fell On Alabama|285|3
+Steeple Chase|286|3
+Stella By Starlight|408|1
+Steps|409|1
+Stolen Moments|410|1
+Stompin' At The Savoy|411|1
+Stormy Weather|287|3
+Straight Life|343|2
+Straight No Chaser|412|1
+Strayhorn 2|344|2
+Street Louis Blues|342|2
+Street Of Dreams|288|3
+Strode Rode|345|2
+Strollin'|346|2
+Struttin' With Some Barbecue|347|2
+Stuff|413|1
+Subconscious Lee|348|2
+Sugar|414|1
+Summer In Central Park|349|2
+Summer Knows, The|350|2
+Summer Samba|415|1
+Summertime|323|2
+Sunny|289|3
+Sunny Side Of The Street|290|3
+Sunshine Express|351|2
+Swedish Pastry|416|1
+Sweeping Up|200|1
+Sweet Georgia Bright|417|1
+Sweet Georgia Brown|353|2
+Sweet Henry|418|1
+Sweet Lorraine|291|3
+Sweet Rain|419|1
+Sweetest Sounds, The|352|2
+Swing Dentz Swing|292|3
+Swing Shift|294|3
+Swingin' Shepherd Blues|323|2
+Sy Clone|295|3
+Syeeda's Song Flute|354|2
+T.j.r.c.|296|3
+Tadd's Delight|357|2
+Take Five|420|1
+Take The "a" Train|421|1
+Taking A Chance On Love|358|2
+Tame Thy Pen|422|1
+Tangerine|359|2
+Tautology|360|2
+Tea For Two|298|3
+Teach Me Tonight|297|3
+Teenie' Blues|361|2
+Tell Me A Bedtime Story|424|1
+Tenderly|362|2
+Tenor Madness|376|2
+That Old Feeling|300|3
+That's All|301|3
+The Disguise, The Sphinx|4|1
+Theirs Tears|363|2
+Their's Tears|307|3
+Theme From Maxine|302|3
+Theme From Mr Broadway|252|2
+Then I'll Be Tired Of You|303|3
+There Goes My Heart|304|3
+There Is No Greater Love|423|1
+There Will Never Be Another You|426|1
+These Foolish Things|364|2
+They Can't Take That Away From Me|427|1
+They Say It's Wonderful|306|3
+Things Ain't What They Used To Be|365|2
+Things Ain't What They Used To Be|308|3
+Things To Come|366|2
+Think On Me|428|1
+This Can't Be Love|309|3
+This I Dig Of You|367|2
+Three And One|310|3
+Three Base Hit|413|2
+Three Flowers|429|1
+Thrill Is Gone, The|311|3
+Thriving On A Riff|368|2
+Thumper, The|356|2
+Thyme's Time|312|3
+Tickle-toe|369|2
+Tidal Breeze|314|3
+Till There Was You|370|2
+Time After Time|371|2
+Time For Love, A|315|3
+Time Remembered|432|1
+Time Was|318|3
+Times Lie|316|3
+Tiny Capers|319|3
+Tippin'|372|2
+Tis'|320|3
+To Kill A Brick|321|3
+Toad's Place|374|2
+Tomorrow's Destiny|373|2
+Tones For Joan's Bones|430|1
+Too Close For Comfort|322|3
+Too Marvelous For Words|323|3
+Touch Of Your Lips, The|324|3
+Tough Talk|433|1
+Train Samba|434|1
+Trance|435|1
+Trane's Blues|376|2
+Tricotism|325|3
+Triste|436|1
+Tune 88|326|3
+Tune-up|437|1
+Turn Around|377|2
+Turn Out The Stars|438|1
+Twisted|361|2
+Two Not One|378|2
+Un Poco Loco|327|3
+Unforgettable|328|3
+Unquity Road|439|1
+Untitled Tune|478|1
+Untitled Tune|480|1
+Untitled Tune|481|1
+Up Jumped Spring|440|1
+Upper Manhattan Medical Group|441|1
+Valse Hot|13|1
+Vashkar|442|1
+Very Early|443|1
+Very Thought Of You, The|329|3
+Violets For Your Furs|330|3
+Vonetta|379|2
+Wail|331|3
+Wait Till You See Her|445|1
+Walk Tall|382|2
+Walkin' Shoes|380|2
+Walk'in Thing, A|381|2
+Walkin' Thing, A|381|2
+Walking|446|1
+Wall Street|383|2
+Wall-eye Blues|332|3
+Walter L|447|1
+Waltz|448|1
+Waltz For A Lovely Wife|449|1
+Waltz For Debby|450|1
+Waltzin|451|1
+Watch What Happens|333|3
+Watch What Happens|384|2
+Water Colors|385|2
+Watermelon Man|334|3
+Watersign|386|2
+Wave|452|1
+Way You Look Tonight, The|388|2
+Webb City|414|2
+Weekend Blues|389|2
+We'll Be Together Again|453|1
+Well You Needn't|454|1
+Wendy|390|2
+West Coast Blues|455|1
+What A Difference A Day Made|335|3
+What Am I Here For|456|1
+What Are You Doing The Rest Of Your Life|457|1
+What Is This Thing Called Love|460|1
+What Kind Of Fool Am I|338|3
+What Was|458|1
+What's New|391|2
+When I Fall In Love|461|1
+When Lights Are Low|392|2
+When Sunny Gets Blue|462|1
+When The Sun Comes Out|339|3
+When Your Lover Has Gone|340|3
+Where Are You|463|1
+Where Or When|341|3
+While We're Young|342|3
+Whisper Not|393|2
+Who Can I Turn To|394|2
+Who Can I Turn To|343|3
+Whopper, The|395|2
+Why Did I Choose You|344|3
+Wies Side Stroll|336|3
+Witchcraft|346|3
+Wil I You Still Be Mine|345|3
+Wild Flower|464|1
+Willow Weep For Me|396|2
+With Every Breath I Take|347|3
+Work Song|399|2
+Wow|397|2
+Wrap Your Troubles In Dreams|348|3
+Wrong Is Right|398|2
+Yana Amina|400|2
+Yardbird Suite|401|2
+Yes Or No|471|1
+Yesterday|472|1
+Yesterdays|473|1
+You & The Night & The Music|349|3
+You Are The Sunshine Of My Life|474|1
+You Are Too Beautiful|475|1
+You Better Leave It Alone|399|2
+You Do Something To Me|350|3
+You Don't Know What Love Is|476|1
+You Go To My Head|352|3
+You Make Me Feel So Young|351|3
+You Must Believe In Spring|354|3
+You Stepped Out Of A Dream|402|2
+You Took Advantage Of Me|477|1
+You'd Be So Nice To Come Home To|403|2
+Younger Than Springtime|358|3
+You're Everything|356|3
+Yours Is My Heart Alone|359|3
+You've Changed|355|3
