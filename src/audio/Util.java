@@ -493,6 +493,7 @@ public class Util {
 		return arrToString(arr, COMMA);
 	}
 	
+
 	/**
 	 * @param arr
 	 * @return
@@ -530,7 +531,25 @@ public class Util {
 	}
 	
 	/**
-	 * This method returns the reminder in the form more usually expected. 
+	 * @param arr
+	 * @return
+	 */
+	public static String arrToString(Integer[] arr) {
+		String ret = "";
+		if (arr != null) {
+			int len = arr.length;
+			if (len > 0) {
+				for (int n: arr) {
+					ret += n + ",";
+				}
+				ret = ret.substring(0, ret.length() - 1);
+			}
+		}
+		return ret;
+	}
+
+	/**
+	 * This method returns the remainder in the form more usually expected. 
 	 * Simple java modulo arithmetic returns negative numbers if i is negative.
 	 *  
 	 * 		eg. for modulus = 3, i = -6 -> 6

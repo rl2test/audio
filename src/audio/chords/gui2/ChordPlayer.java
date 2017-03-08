@@ -14,7 +14,9 @@ import static audio.Constants.V8;
 import static audio.Constants.OCTAVE;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.sound.midi.MidiChannel;
 
@@ -22,6 +24,7 @@ import org.apache.log4j.Logger;
 
 import audio.Config;
 import audio.MidiNote;
+import audio.Util;
 import audio.chords.Bar;
 import audio.chords.Chord;
 import audio.chords.Tune;
@@ -52,6 +55,7 @@ public class ChordPlayer extends Thread {
 	public StatusPanel statusPanel 			= null;
 	/** DisplayPanel reference. */
 	public DisplayPanel displayPanel 		= null;
+	public Map<Integer, Integer[]> patterns = new HashMap<Integer, Integer[]>();
 
 	/**
 	 * Called from playButton.
@@ -82,6 +86,32 @@ public class ChordPlayer extends Thread {
 		this.text			= text;
 		this.chordPanel 	= chordPanel;
 		this.displayPanel 	= displayPanel;
+		
+		String[] patternStrs = {
+				"2 1-",
+				"3 1-5",
+				"4 1-5-",
+				"5 1--5-",
+				"6 1--5--",
+				"7 1-1-5--",};
+		int n = 0;
+		for(String str: patternStrs) {
+			int len = str.length();
+			for (int i = 0; i < len; i++) {
+				String s = String.valueOf(str.charAt(i));
+				if (i == 0) {
+					n = Integer.parseInt(s);	
+					patterns.put(n, new Integer[len - 2]);
+				} else {
+					if (s.equals(" ")) {
+					} else if (s.equals("-")) {
+						patterns.get(n)[i - 2] = 0;
+					} else {
+						patterns.get(n)[i - 2] = Integer.parseInt(s);
+					}
+				}
+			}	
+		}
 	}
 
 	/* (non-Javadoc)
@@ -95,7 +125,6 @@ public class ChordPlayer extends Thread {
 
 			final int BASS_VOL 		= V8;
 			final int CHORD_VOL 	= V3;
-			String style			= Config.properties.get("style");
 			
 			//bass
 			MidiChannel bassChannel = GuiController.midiChannels[CHANNEL_BASS];
@@ -105,18 +134,13 @@ public class ChordPlayer extends Thread {
 			//chord
 			MidiChannel chordChannel = GuiController.midiChannels[CHANNEL_CHORD];
 			chordChannel.controlChange(10, V8); // set pan
-			//if ((style.equals("gypsy"))) {
-				chordChannel.programChange(NYLON_STRING_GUITAR);	
-				//chordChannel.programChange(ELECTRIC_PIANO_1);
-			//} else {
-				//chordChannel.programChange(ELECTRIC_PIANO_1);	
-			//}
+			chordChannel.programChange(NYLON_STRING_GUITAR);	
 
 			String transposeTo = chordPanel.getTransposeTo();
 			
 			Tune tune = new Tune(genre, text, transposeTo);
-			//log.debug(tune);
 			beatsPerBar	= tune.beatsPerBar;
+			Integer[] pattern = patterns.get(beatsPerBar);
 			
 			if (tune.transposed) {
 				chordPanel.updateMessage("transposed from " + tune.transposeFrom + " to " + tune.transposeTo);
@@ -200,33 +224,19 @@ public class ChordPlayer extends Thread {
 					}
 				}
 
-				//log.debug("beatCount=" + beatCount + " / " + beatsPerBar);
 				Chord chord = bar.chords.get(beatCount);
 				Chord nextChord = (beatCount == beatsPerBar - 1) ? null : bar.chords.get(beatCount + 1);
 				if (!chord.name.equals(lastChordName) || beatCount == 0) {
 					chordBeatCount = 0;
 				}
-				//log.debug("chord=" + chord);
-				//log.debug("nextChord=" + nextChord);
 				
 				// bass
-				//int chordIntIndex = (chordBeatCount % 2 == 0) ? 0 : 2;
-				//beginMidiNote(new MidiNote(CHANNEL_BASS, chord.chordIntegers[chordIntIndex] - OCTAVE, 1, BASS_VOL));
-				if (chordBeatCount == 0) {
-					if (nextChord != null) {
-						int dur = (chord.name.equals(nextChord.name)) ? 2 : 1;
-						beginMidiNote(new MidiNote(CHANNEL_BASS, chord.chordIntegers[0] - OCTAVE, dur, BASS_VOL));
-					} else {
-						beginMidiNote(new MidiNote(CHANNEL_BASS, chord.chordIntegers[0] - OCTAVE, 1, BASS_VOL));
-					}
-				} else if (chordBeatCount == 2) {
-					if (nextChord != null) {
-						int dur = (chord.name.equals(nextChord.name)) ? 2 : 1;
-						beginMidiNote(new MidiNote(CHANNEL_BASS, chord.chordIntegers[2] - OCTAVE, dur, BASS_VOL));
-					} else {
-						beginMidiNote(new MidiNote(CHANNEL_BASS, chord.chordIntegers[0] - OCTAVE, 1, BASS_VOL));
-					}
-				} 
+				int patternVal = pattern[beatCount];
+				if (patternVal > 0) {
+					int chordInt = (patternVal == 1 || chordBeatCount == 0) ? chord.chordIntegers[0] : chord.chordIntegers[2];
+					int dur = (nextChord != null && chord.name.equals(nextChord.name)) ? 2 : 1;
+					beginMidiNote(new MidiNote(CHANNEL_BASS, chordInt - OCTAVE, dur, BASS_VOL));
+				}
 
 				// chord
 				for (int i = 1, n = chord.chordIntegers.length; i < n; i++) {
@@ -288,37 +298,6 @@ public class ChordPlayer extends Thread {
 		
 		midiNotes		= null;
 		endMidiNotes	= null;
-		log 		= null;
+		log 			= null;
 	}	
 }
-
-
-/*
-if (style.equals("none")) {
-	//log.debug("beatCount=" + beatCount);
-	Beat beat = bar.pattern.beats[beatCount];
-	
-	// root
-	if (beat.r > 0) {
-		beginMidiNote(new MidiNote(CHANNEL_BASS, chord.rootValue, beat.r, BASS_VOL));
-	}
-	// fifth
-	if (beat.f > 0) {
-		if (chord.fifthValue > 0) {
-			// For aug chords for example, fifthValue may not have 
-			// been set, so substitute the root but use the fifth 
-			// duration. 
-			beginMidiNote(new MidiNote(CHANNEL_BASS, chord.fifthValue, beat.f, BASS_VOL));	
-		} else {
-			beginMidiNote(new MidiNote(CHANNEL_BASS, chord.rootValue, beat.f, BASS_VOL));
-		}
-	}
-	// chord - chord duration is always either 0 or 1	
-	if (beat.c > 0) {
-		for (int chordInteger: chord.chordIntegers) {
-			beginMidiNote(new MidiNote(CHANNEL_CHORD, chordInteger, 1, CHORD_VOL));	
-		}
-	}
-} else {
-//}
-*/	
