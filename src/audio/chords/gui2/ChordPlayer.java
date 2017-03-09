@@ -51,8 +51,6 @@ public class ChordPlayer extends Thread {
 	private String text						= null;
 	/** ChordPanel reference. */
 	public ChordPanel chordPanel 			= null;
-	/** StatusPanel reference. */
-	public StatusPanel statusPanel 			= null;
 	/** DisplayPanel reference. */
 	public DisplayPanel displayPanel 		= null;
 	public Map<Integer, Integer[]> patterns = new HashMap<Integer, Integer[]>();

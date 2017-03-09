@@ -109,6 +109,7 @@ public class Constants {
 	public static final String ALPHABET					= "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	
 	public static final String[] TRANSPOSE_KEYS 		= {"C", "F", "Bb", "Eb", "Ab", "Db", "F#", "B", "E", "A", "D", "G"};
+	public static final int[] TRANSPOSE_KEY_INTERVALS	= { 0,   5,   10,   3,    8,    1,    6,    11,  4,   9,   2,   7 };
 
 	
 	/** The list of alphabetical tokens. */	

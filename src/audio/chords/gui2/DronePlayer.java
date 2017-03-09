@@ -5,6 +5,7 @@ import static audio.Constants.CLARINET;
 import static audio.Constants.OCT_2;
 import static audio.Constants.OCT_3;
 import static audio.Constants.TRANSPOSE_KEYS;
+import static audio.Constants.TRANSPOSE_KEY_INTERVALS;
 import static audio.Constants.V8;
 import static audio.Constants.V6;
 
@@ -63,14 +64,12 @@ public class DronePlayer extends Thread {
 	 * @return the numeric interval of this key relative to C
 	 */
 	private int getKeyInterval(String key) {
-		int interval = 0;
-		for (String k: TRANSPOSE_KEYS) {
-			if (k.equals(key)) {
-				break;
+		for (int i = 0; i < TRANSPOSE_KEYS.length; i++) {
+			if (TRANSPOSE_KEYS[i].equals(key)) {
+				return TRANSPOSE_KEY_INTERVALS[i];
 			}
-			interval++;
 		}
-		return interval;
+		return 0;
 	}
 	
 	/**

@@ -44,8 +44,6 @@ public class ChordTextPanel extends JPanel implements ChordPanel {
     /** Stop button. */
 	private final JButton stopButton 				= new JButton("Stop");
 	public JTextField textField 					= null;
-	/** StatusPanel reference. */
-	public StatusPanel statusPanel 					= null;
  
     /**
      * @return singleton instance of this class
@@ -210,8 +208,6 @@ public class ChordTextPanel extends JPanel implements ChordPanel {
 	    // play button listener
 	    playButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				statusPanel.clear();
-				
 				// get current values
 			    int beginTempo		= (Integer) beginTempoBox.getSelectedItem();
 			    int endTempo 		= (Integer) endTempoBox.getSelectedItem();

@@ -76,8 +76,6 @@ public class ChordFilePanel extends JPanel implements ChordPanel {
 	private final JComboBox<String> tuneBox 		= new JComboBox<String>();
 	/** The text area. */
 	public JTextArea textArea 						= null;
-	/** StatusPanel reference. */
-	public StatusPanel statusPanel 					= null;
 	/** DisplayPanel. */
 	public DisplayPanel displayPanel 				= null;
 	/** Transpose box. */
@@ -314,7 +312,7 @@ public class ChordFilePanel extends JPanel implements ChordPanel {
 		y += ROW_HEIGHT + SP;  
 		
 		//log.debug("GuiController.h=" + GuiController.h);
-		int textAreaHeight 		= (int) ((GuiController.h - (3 * (SINGLE_ROW_PANEL_HEIGHT + 1) + DOUBLE_ROW_PANEL_HEIGHT + 1 + y)));
+		int textAreaHeight 		= (int) ((GuiController.h - (2 * (SINGLE_ROW_PANEL_HEIGHT + 1) + DOUBLE_ROW_PANEL_HEIGHT + 1 + y)));
 		int textAreaWidth		= (int) (GuiController.w  * 0.3);
 		int displayPanelHeight 	= textAreaHeight;
 		int displayPanelWidth 	= (int) (GuiController.w  * 0.7);
@@ -344,8 +342,6 @@ public class ChordFilePanel extends JPanel implements ChordPanel {
 	    // play button listener
 	    playButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				statusPanel.clear();
-
 				// get current values
 			    int beginTempo		= (Integer) beginTempoBox.getSelectedItem();
 			    int endTempo 		= (Integer) endTempoBox.getSelectedItem();
@@ -476,8 +472,6 @@ public class ChordFilePanel extends JPanel implements ChordPanel {
 		stopButton.setEnabled(false);
 
 		log.debug("msg=" + msg);
-
-		statusPanel.setText(msg);
     }
     
 	/**

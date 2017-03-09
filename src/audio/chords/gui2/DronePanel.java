@@ -32,8 +32,6 @@ public class DronePanel extends JPanel {
 	private static DronePanel panel 			= null;
 	/** The drone player. */
 	public DronePlayer dronePlayer 				= null;
-	/** StatusPanel reference. */
-	public StatusPanel statusPanel 				= null;
 	/** Key box. */
 	private final JComboBox<String> keyBox 		= new JComboBox<String>();
     /** Play button. */
@@ -94,8 +92,6 @@ public class DronePanel extends JPanel {
 	    // play button listener
 	    playButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				statusPanel.clear();
-
 				String key = (String) keyBox.getSelectedItem();	
 				
 				playButton.setEnabled(false);

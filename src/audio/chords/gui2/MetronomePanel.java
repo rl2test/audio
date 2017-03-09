@@ -36,8 +36,6 @@ public class MetronomePanel extends JPanel {
 	public JLabel metronomeTempoLabel 			= new JLabel("");
 	/** The player. */
 	public MetronomePlayer player 				= null;
-	/** StatusPanel reference. */
-	public StatusPanel statusPanel 					= null;
 	
     /**
      * @return singleton instance of this class

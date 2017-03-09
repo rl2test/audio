@@ -110,7 +110,7 @@ public class GuiController extends JPanel {
 	    
 	    // chord file panel - set bounds height to h - the combined height of all the other panels
 	    ChordFilePanel chordFilePanel = ChordFilePanel.getInstance();
-	    chordFilePanel.setBounds(0, y, w, h - (3 * (SINGLE_ROW_PANEL_HEIGHT + 1) + DOUBLE_ROW_PANEL_HEIGHT + 1));
+	    chordFilePanel.setBounds(0, y, w, h - (2 * (SINGLE_ROW_PANEL_HEIGHT + 1) + DOUBLE_ROW_PANEL_HEIGHT + 1));
 	    add(chordFilePanel);
 	    y += chordFilePanel.getHeight() + 1;
 
@@ -120,16 +120,6 @@ public class GuiController extends JPanel {
 	    add(chordTextPanel);
 	    y += chordTextPanel.getHeight() + 1;
 
-	    // status panel
-	    StatusPanel statusPanel = StatusPanel.getInstance();
-	    statusPanel.setBounds(0, y, w, SINGLE_ROW_PANEL_HEIGHT);
-	    add(statusPanel);
-
-	    dronePanel.statusPanel 		= statusPanel;
-	    metronomePanel.statusPanel 	= statusPanel;
-	    chordFilePanel.statusPanel 	= statusPanel;
-	    chordTextPanel.statusPanel 	= statusPanel;
-	    
 	    chordFilePanel.init();
     }
 

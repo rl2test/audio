@@ -267,8 +267,6 @@ public class ChordTextPanel extends JPanel implements ChordPanel {
 		stopButton.setEnabled(false);
 
 		log.debug("msg=" + msg);
-
-		// TODO statusLabel.setText(msg);
     }
     
 	/* (non-Javadoc)
