@@ -1,6 +1,7 @@
 package audio.chords.gui2;
 
-import static audio.Constants.BG_COLOR;
+import static audio.Constants.COLOR_DARK;
+import static audio.Constants.BG_COLOR_MED;
 import static audio.Constants.FONT;
 import static audio.Constants.ROW_HEIGHT;
 import static audio.Constants.SEPARATOR_HEIGHT;
@@ -10,8 +11,12 @@ import static audio.Constants.WIDTH_2;
 import static audio.Constants.WIDTH_3;
 import static audio.Constants.WIDTH_4;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -38,6 +43,7 @@ public class DronePanel extends JPanel {
 	private final JButton playButton 			= new JButton("Play");
     /** Stop button. */
 	private final JButton stopButton 			= new JButton("Stop");
+	MyMouseListener myMouseListener 			= new MyMouseListener();
 	
     /**
      * @return singleton instance of this class
@@ -51,16 +57,14 @@ public class DronePanel extends JPanel {
 	
     /** Public constructor */
     public DronePanel() {
-        setBackground(BG_COLOR);
+        setBackground(COLOR_DARK);
 		setLayout(null);
 		
 	    int x = 0;
 	    int y = 0;
 	    
 	    // drone label
-	    JLabel droneLabel = new JLabel("Drone");
-	    droneLabel.setBounds(x, y, WIDTH_2, ROW_HEIGHT);
-	    droneLabel.setFont(FONT);
+	    JLabel droneLabel = getLabel("drone", "Drone", BG_COLOR_MED, x, y, WIDTH_2);
 	    add(droneLabel);
 	    x += droneLabel.getWidth() + SP;
 
@@ -112,5 +116,31 @@ public class DronePanel extends JPanel {
 				stopButton.setEnabled(false);
 			}
 		});
-    }    
+    }  
+    
+    public JLabel getLabel(String name, String text, Color color, int x, int y, int w) {
+    	JLabel label = new JLabel(text);
+    	label.setName(name);
+        label.setBackground(BG_COLOR_MED);
+        label.setOpaque(true);
+        label.setBounds(x, y, WIDTH_2, ROW_HEIGHT);
+        label.setFont(FONT);
+        label.addMouseListener(myMouseListener);
+        return label;
+    }
+
+    
+    class MyMouseListener extends MouseAdapter {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+             JLabel l = (JLabel) e.getSource();
+
+             if(l.getName().equals("drone")) {
+                 //doSomething01();
+            	 log.debug("drone clicked");
+             } else if(l.getName().equals("name02")) {
+                 //doSomething02();
+             }	 
+        }
+    }
 }
