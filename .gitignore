@@ -13,7 +13,6 @@
 hs_err_pid*
 
 # added by me
-
 .settings
 bin
 .DS_Store
