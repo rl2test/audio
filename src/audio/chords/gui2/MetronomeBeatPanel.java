@@ -1,6 +1,6 @@
 package audio.chords.gui2;
 
-import static audio.Constants.BG_COLOR_MED;
+import static audio.Constants.C;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -19,7 +19,7 @@ public class MetronomeBeatPanel extends JPanel {
 
     /** Public constructor */
     public MetronomeBeatPanel() {
-        setBackground(BG_COLOR_MED);
+        setBackground(C[12]);
     }    
     
     /**

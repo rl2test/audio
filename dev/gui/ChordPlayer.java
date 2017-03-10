@@ -6,9 +6,7 @@ import static audio.Constants.DEFAULT_END_TEMPO;
 import static audio.Constants.DEFAULT_INCREMENT;
 import static audio.Constants.ELECTRIC_PIANO_1;
 import static audio.Constants.NYLON_STRING_GUITAR;
-import static audio.Constants.V0;
-import static audio.Constants.V4;
-import static audio.Constants.V8;
+import static audio.Constants.V;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,17 +88,17 @@ public class ChordPlayer extends Thread {
 			final int CHANNEL_BASS 	= 0;
 			final int CHANNEL_CHORD = 1;
 
-			final int BASS_VOL 		= V8;
-			final int CHORD_VOL 	= V4;
+			final int BASS_VOL 		= V[8];
+			final int CHORD_VOL 	= V[4];
 			
 			//bass
 			MidiChannel bassChannel = GuiController.midiChannels[CHANNEL_BASS];
-			bassChannel.controlChange(10, V0);
+			bassChannel.controlChange(10, V[0]);
 			bassChannel.programChange(ACOUSTIC_BASS);
 
 			//chord
 			MidiChannel chordChannel = GuiController.midiChannels[CHANNEL_CHORD];
-			chordChannel.controlChange(10, V8);
+			chordChannel.controlChange(10, V[8]);
 			if ((Config.properties.get("style").equals("gypsy"))) {
 				chordChannel.programChange(NYLON_STRING_GUITAR);	
 			} else {

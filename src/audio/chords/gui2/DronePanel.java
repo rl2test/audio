@@ -1,49 +1,36 @@
 package audio.chords.gui2;
 
-import static audio.Constants.COLOR_DARK;
-import static audio.Constants.BG_COLOR_MED;
+import static audio.Constants.C;
 import static audio.Constants.FONT;
 import static audio.Constants.ROW_HEIGHT;
-import static audio.Constants.SEPARATOR_HEIGHT;
-import static audio.Constants.SP;
 import static audio.Constants.TRANSPOSE_KEYS;
-import static audio.Constants.WIDTH_2;
-import static audio.Constants.WIDTH_3;
-import static audio.Constants.WIDTH_4;
+import static audio.Constants.W;
 
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.util.HashMap;
+import java.util.Map;
 
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
 
 import org.apache.log4j.Logger;
 
 public class DronePanel extends JPanel { 
 	/** Default serialVersionUID. */
-	private static final long serialVersionUID 	= 1L;
+	private static final long serialVersionUID 		= 1L;
 	/** The log. */
-	private Logger log							= Logger.getLogger(getClass());
+	private Logger log								= Logger.getLogger(getClass());
 	/** The singleton instance of this class. */    
-	private static DronePanel panel 			= null;
+	private static DronePanel panel 				= null;
 	/** The drone player. */
-	public DronePlayer dronePlayer 				= null;
-	/** Key box. */
-	private final JComboBox<String> keyBox 		= new JComboBox<String>();
-    /** Play button. */
-	private final JButton playButton 			= new JButton("Play");
-    /** Stop button. */
-	private final JButton stopButton 			= new JButton("Stop");
-	MyMouseListener myMouseListener 			= new MyMouseListener();
+	public DronePlayer dronePlayer 					= null;
+	private final MyMouseListener myMouseListener 	= new MyMouseListener();
+	private final boolean LISTENER					= true;
+	private final boolean NO_LISTENER				= false;
+	public static String selectedKey				= "";
+	private Map<String, JLabel> keyMap				= new HashMap<String, JLabel>();
 	
     /**
      * @return singleton instance of this class
@@ -57,90 +44,83 @@ public class DronePanel extends JPanel {
 	
     /** Public constructor */
     public DronePanel() {
-        setBackground(COLOR_DARK);
+        setBackground(C[6]);
 		setLayout(null);
 		
 	    int x = 0;
 	    int y = 0;
 	    
 	    // drone label
-	    JLabel droneLabel = getLabel("drone", "Drone", BG_COLOR_MED, x, y, WIDTH_2);
+	    JLabel droneLabel = getLabel("Drone", C[6], C[16], x, y, W[2], NO_LISTENER);
 	    add(droneLabel);
-	    x += droneLabel.getWidth() + SP;
+	    x += W[2] + 1;
 
-	    // drone combo box
-	    keyBox.setModel(new DefaultComboBoxModel<String>(TRANSPOSE_KEYS));
-		// create and register folderBox listener
-	    keyBox.setBounds(x, y, WIDTH_3, ROW_HEIGHT);
-	    keyBox.setFont(FONT);
-		add(keyBox);
-	    x += keyBox.getWidth() + SP;
-
-	    // play button, in class declaration
-	    playButton.setBounds(x, y, WIDTH_4, ROW_HEIGHT);
-	    playButton.setFont(FONT);
-	    add(playButton);
-	    x += playButton.getWidth() + SP;
-	    
-	    // stop button, in class declaration
-	    stopButton.setBounds(x, y, WIDTH_4, ROW_HEIGHT);
-	    stopButton.setFont(FONT);
-	    add(stopButton);
-	    stopButton.setEnabled(false);
-	    x += stopButton.getWidth() + SP;
-	    
-	    log.debug("final x=" + x);
-	    
-	    /* action listeners */
-
-	    // play button listener
-	    playButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String key = (String) keyBox.getSelectedItem();	
-				
-				playButton.setEnabled(false);
-				stopButton.setEnabled(true);
-				
-				dronePlayer = new DronePlayer(key);
-				dronePlayer.start();
-			}
-		});
-
-	    // stop button listener
-	    stopButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dronePlayer.end();
-				dronePlayer = null;
-
-				playButton.setEnabled(true);
-				stopButton.setEnabled(false);
-			}
-		});
+	    for (String key: TRANSPOSE_KEYS) {
+	    	log.debug(key);
+	    	JLabel label = getLabel(key, C[12], C[0], x, y, W[1], LISTENER);
+	    	add(label);
+	    	keyMap.put(key, label);
+	    	x += W[1] + 1;
+	    }
     }  
     
-    public JLabel getLabel(String name, String text, Color color, int x, int y, int w) {
+    public JLabel getLabel(String text, Color bg, Color fg, int x, int y, int w, boolean addListener) {
     	JLabel label = new JLabel(text);
-    	label.setName(name);
-        label.setBackground(BG_COLOR_MED);
+        label.setBackground(bg);
+        label.setForeground(fg);
         label.setOpaque(true);
-        label.setBounds(x, y, WIDTH_2, ROW_HEIGHT);
+        label.setBounds(x, y, w, ROW_HEIGHT);
         label.setFont(FONT);
-        label.addMouseListener(myMouseListener);
+        label.setHorizontalAlignment(JLabel.CENTER);
+        if (addListener) {
+        	label.addMouseListener(myMouseListener);
+        }
         return label;
     }
 
-    
-    class MyMouseListener extends MouseAdapter {
+    private class MyMouseListener extends MouseAdapter {
         @Override
         public void mouseClicked(MouseEvent e) {
              JLabel l = (JLabel) e.getSource();
-
-             if(l.getName().equals("drone")) {
-                 //doSomething01();
-            	 log.debug("drone clicked");
-             } else if(l.getName().equals("name02")) {
-                 //doSomething02();
-             }	 
+        	 String key = l.getText();
+        	 if (key.equals(selectedKey)) {
+        		selectedKey = "";
+        		unselect(l);
+        	 } else {
+        		if (selectedKey != "") {
+        			JLabel selected = keyMap.get(selectedKey);
+        			unselect(selected);
+        		}	 
+            	select(l);
+        		selectedKey = key;
+        	 }
+        }
+        @Override
+        public void mouseEntered(MouseEvent e) {
+        	JLabel l = (JLabel) e.getSource();
+        	if (!l.getText().equals(selectedKey)) {
+        		l.setBackground(C[14]);
+        	}
+        }
+        @Override
+        public void mouseExited(MouseEvent e) {
+        	JLabel l = (JLabel) e.getSource();
+        	if (!l.getText().equals(selectedKey)) {
+        		l.setBackground(C[12]);
+        	}
+        }
+        
+        public void select(JLabel l) {
+			dronePlayer = new DronePlayer(l.getText());
+			dronePlayer.start();        	
+       	 	l.setBackground(C[4]);
+       	 	l.setForeground(C[16]);
+        }
+        public void unselect(JLabel l) {
+			dronePlayer.end();
+			dronePlayer = null;        	
+        	l.setBackground(C[12]);
+        	l.setForeground(C[0]);
         }
     }
 }

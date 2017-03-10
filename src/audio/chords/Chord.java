@@ -3,7 +3,7 @@ package audio.chords;
 import static audio.Constants.ALPHABET_TOKENS;
 import static audio.Constants.COMMA;
 import static audio.Constants.OCTAVE;
-import static audio.Constants.OCT_2;
+import static audio.Constants.O;
 import static audio.Constants.PERFECT_FIFTH;
 import static audio.Constants.UNDEF;
 
@@ -64,7 +64,7 @@ public class Chord {
 		
 		// define rootValue
 		//log.debug("root=" + root);
-		rootValue = OCT_2 + Maps.noteToInterval.get(root);
+		rootValue = O[2] + Maps.noteToInterval.get(root);
 		//log.debug("rootValue=" + rootValue);
 		
 		//log.debug("type=" + type);		

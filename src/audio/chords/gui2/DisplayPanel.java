@@ -1,16 +1,13 @@
 package audio.chords.gui2;
 
 import static audio.Constants.BARS_FILE;
-import static audio.Constants.BG_COLOR;
-import static audio.Constants.BG_COLOR_MED;
-import static audio.Constants.COLOR_DARK;
+import static audio.Constants.C;
 import static audio.Constants.END;
 import static audio.Constants.NL;
 import static audio.Constants.PIPE;
 import static audio.Constants.ROW_HEIGHT;
 import static audio.Constants.SPACE;
 import static audio.Constants.US;
-import static audio.Constants.WIDTH_5;
 
 import java.awt.Font;
 import java.util.ArrayList;
@@ -41,7 +38,7 @@ public class DisplayPanel extends JPanel {
     /** Public constructor */
     public DisplayPanel() {
     	setLayout(null);
-        setBackground(BG_COLOR);
+        setBackground(C[10]);
     }    
 
     public void init(List<Bar> bars) {
@@ -81,7 +78,7 @@ public class DisplayPanel extends JPanel {
     		
     		// text label
     	    JLabel label = new JLabel(); //bar.sequence
-    	    label.setBackground(BG_COLOR_MED);
+    	    label.setBackground(C[12]);
     	    label.setOpaque(true);
     	    label.setFont(new Font("Arial", Font.PLAIN, 12));
     	    
@@ -109,11 +106,11 @@ public class DisplayPanel extends JPanel {
     
     public void updateBars(int barCount) {
     	if(barCount > 0) {
-    		labels.get(barCount - 1).setBackground(BG_COLOR_MED);
+    		labels.get(barCount - 1).setBackground(C[12]);
     	} else {
-    		labels.get(labels.size() - 1).setBackground(BG_COLOR_MED);
+    		labels.get(labels.size() - 1).setBackground(C[12]);
     	}
-    	labels.get(barCount).setBackground(COLOR_DARK);
+    	labels.get(barCount).setBackground(C[6]);
     }
 }
 

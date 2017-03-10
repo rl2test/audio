@@ -3,7 +3,7 @@ package audio.chords.gui;
 import static audio.Constants.ROW_HEIGHT;
 import static audio.Constants.SP;
 import static audio.Constants.US;
-import static audio.Constants.V8;
+import static audio.Constants.V;
 import static audio.Constants.WIDTH_4;
 import static audio.Constants.WIDTH_5;
 import static audio.Constants.WIDTH_8;
@@ -177,7 +177,7 @@ public class MidiPlayer extends JPanel {
 				midiChannels[0].programChange(program);
 				
 				endMidiNotes();
-				beginMidiNote(new MidiNote(0, note, 1, V8));
+				beginMidiNote(new MidiNote(0, note, 1, V[8]));
 
 				playButton.setEnabled(false);
 				stopButton.setEnabled(true);

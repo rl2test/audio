@@ -1,8 +1,6 @@
 package audio.chords.gui2;
 
-import static audio.Constants.BG_COLOR;
-import static audio.Constants.BG_COLOR_BLUE;
-import static audio.Constants.BG_COLOR_MED;
+import static audio.Constants.C;
 import static audio.Constants.CHORDS_FOLDER;
 import static audio.Constants.COMMA;
 import static audio.Constants.DOUBLE_ROW_PANEL_HEIGHT;
@@ -12,14 +10,10 @@ import static audio.Constants.FS;
 import static audio.Constants.MUSIC_DIR;
 import static audio.Constants.NL;
 import static audio.Constants.ROW_HEIGHT;
-import static audio.Constants.SEPARATOR_HEIGHT;
 import static audio.Constants.SINGLE_ROW_PANEL_HEIGHT;
 import static audio.Constants.SP;
 import static audio.Constants.TRANSPOSE_KEYS;
-import static audio.Constants.WIDTH_2;
-import static audio.Constants.WIDTH_3;
-import static audio.Constants.WIDTH_4;
-import static audio.Constants.WIDTH_9;
+import static audio.Constants.W;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -40,9 +34,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
 import javax.swing.JTextArea;
-import javax.swing.SwingConstants;
 
 import org.apache.log4j.Logger;
 
@@ -101,7 +93,7 @@ public class ChordFilePanel extends JPanel implements ChordPanel {
 	
     /** Private constructor */
     private ChordFilePanel() {
-        setBackground(BG_COLOR);
+        setBackground(C[10]);
 		setLayout(null);
 		
     	int tempoStart	= 40;
@@ -129,19 +121,19 @@ public class ChordFilePanel extends JPanel implements ChordPanel {
 	    
 	    // chord label
 	    JLabel chordFileLabel = new JLabel("ChordFile");
-	    chordFileLabel.setBounds(x, y, WIDTH_3, ROW_HEIGHT);
+	    chordFileLabel.setBounds(x, y, W[3], ROW_HEIGHT);
 	    chordFileLabel.setFont(FONT);
 	    add(chordFileLabel);
 	    x += chordFileLabel.getWidth() + SP;
 	    
 	    // play button, in class declaration
-	    playButton.setBounds(x, y, WIDTH_4, ROW_HEIGHT);
+	    playButton.setBounds(x, y, W[4], ROW_HEIGHT);
 	    playButton.setFont(FONT);
 	    add(playButton);
 	    x += playButton.getWidth() + SP;
 	    
 	    // stop button, in class declaration
-	    stopButton.setBounds(x, y, WIDTH_4, ROW_HEIGHT);
+	    stopButton.setBounds(x, y, W[4], ROW_HEIGHT);
 	    stopButton.setFont(FONT);
 	    add(stopButton);
 	    stopButton.setEnabled(false);
@@ -149,56 +141,56 @@ public class ChordFilePanel extends JPanel implements ChordPanel {
 	    
 	    // begin tempo label
 	    JLabel beginTempoLabel = new JLabel("Begin:");
-	    beginTempoLabel.setBounds(x, y, WIDTH_2, ROW_HEIGHT);
+	    beginTempoLabel.setBounds(x, y, W[2], ROW_HEIGHT);
 	    beginTempoLabel.setFont(FONT);
 	    add(beginTempoLabel);
 	    x += beginTempoLabel.getWidth() + SP;
 	    
 	    // begin tempo combo box
 	    final JComboBox<Integer> beginTempoBox = new JComboBox<Integer>(tempos);
-	    beginTempoBox.setBounds(x, y, WIDTH_3, ROW_HEIGHT);
+	    beginTempoBox.setBounds(x, y, W[3], ROW_HEIGHT);
 	    beginTempoBox.setFont(FONT);
 	    add(beginTempoBox);
 	    x += beginTempoBox.getWidth() + SP;
 	    
 	    // end tempo label
 	    JLabel endTempoLabel = new JLabel("End:");
-	    endTempoLabel.setBounds(x, y, WIDTH_2, ROW_HEIGHT);
+	    endTempoLabel.setBounds(x, y, W[2], ROW_HEIGHT);
 	    endTempoLabel.setFont(FONT);
 	    add(endTempoLabel);
 	    x += endTempoLabel.getWidth() + SP;
 	    
 	    // end tempo combo box
 	    final JComboBox<Integer> endTempoBox = new JComboBox<Integer>(tempos);
-	    endTempoBox.setBounds(x, y, WIDTH_3, ROW_HEIGHT);
+	    endTempoBox.setBounds(x, y, W[3], ROW_HEIGHT);
 	    endTempoBox.setFont(FONT);
 	    add(endTempoBox);
 	    x += endTempoBox.getWidth() + SP;
 	    
 	    // increment label
 	    JLabel incrementLabel = new JLabel("Increment:");
-	    incrementLabel.setBounds(x, y, WIDTH_3, ROW_HEIGHT);
+	    incrementLabel.setBounds(x, y, W[3], ROW_HEIGHT);
 	    incrementLabel.setFont(FONT);
 	    add(incrementLabel);
 	    x += incrementLabel.getWidth() + SP;
 	    
 	    // increment tempo combo box
 	    final JComboBox<Integer> incrementBox = new JComboBox<Integer>(increments);
-	    incrementBox.setBounds(x, y, WIDTH_3, ROW_HEIGHT);
+	    incrementBox.setBounds(x, y, W[3], ROW_HEIGHT);
 	    incrementBox.setFont(FONT);
 	    add(incrementBox);
 	    x += incrementBox.getWidth() + SP;
 	    
 	    // tempo label
 	    JLabel tempoLabel = new JLabel("Tempo:");
-	    tempoLabel.setBounds(x, y, WIDTH_2, ROW_HEIGHT);
+	    tempoLabel.setBounds(x, y, W[2], ROW_HEIGHT);
 	    tempoLabel.setFont(FONT);
 	    add(tempoLabel);
 	    x += tempoLabel.getWidth() + SP;
 	    
 	    // chord tempo label
-	    updateTempoLabel.setBounds(x, y, WIDTH_2, ROW_HEIGHT);
-	    updateTempoLabel.setBackground(BG_COLOR_MED);
+	    updateTempoLabel.setBounds(x, y, W[2], ROW_HEIGHT);
+	    updateTempoLabel.setBackground(C[12]);
 	    updateTempoLabel.setOpaque(true);
 	    updateTempoLabel.setFont(FONT);
 	    add(updateTempoLabel);
@@ -206,21 +198,21 @@ public class ChordFilePanel extends JPanel implements ChordPanel {
 	    
 	    // save button
 	    final JButton saveButton = new JButton("Save");
-	    saveButton.setBounds(x, y, WIDTH_3, ROW_HEIGHT);
+	    saveButton.setBounds(x, y, W[3], ROW_HEIGHT);
 	    saveButton.setFont(FONT);
 	    add(saveButton);
 	    x += saveButton.getWidth() + SP;
 
 	    // saveAs button
 	    final JButton saveAsButton = new JButton("Save As");
-	    saveAsButton.setBounds(x, y, WIDTH_4, ROW_HEIGHT);
+	    saveAsButton.setBounds(x, y, W[4], ROW_HEIGHT);
 	    saveAsButton.setFont(FONT);
 	    add(saveAsButton);
 	    x += saveAsButton.getWidth() + SP;
 	    
 	    // message label
-	    messageLabel.setBounds(x, y, WIDTH_9 + 10, ROW_HEIGHT);
-	    messageLabel.setBackground(BG_COLOR_MED);
+	    messageLabel.setBounds(x, y, W[9] + 10, ROW_HEIGHT);
+	    messageLabel.setBackground(C[12]);
 	    messageLabel.setForeground(Color.WHITE);
 	    messageLabel.setOpaque(true);
 	    messageLabel.setFont(FONT);
@@ -235,7 +227,7 @@ public class ChordFilePanel extends JPanel implements ChordPanel {
 	    
 	    // genre label
 	    JLabel genreLabel = new JLabel("Genre:");
-	    genreLabel.setBounds(x, y, WIDTH_3, ROW_HEIGHT);
+	    genreLabel.setBounds(x, y, W[3], ROW_HEIGHT);
 	    genreLabel.setFont(FONT);
 	    add(genreLabel);
 	    x += genreLabel.getWidth() + SP;
@@ -244,14 +236,14 @@ public class ChordFilePanel extends JPanel implements ChordPanel {
 	    genreBox.setModel(new DefaultComboBoxModel<String>(genreNames));
 		// create and register genreBox listener
 		genreBox.addItemListener(new GenreBoxListener());
-		genreBox.setBounds(x, y, WIDTH_4, ROW_HEIGHT);
+		genreBox.setBounds(x, y, W[4], ROW_HEIGHT);
 		genreBox.setFont(FONT);
 		add(genreBox);
 	    x += genreBox.getWidth() + SP;
 
 		// folder label
 	    JLabel folderLabel = new JLabel("Folder:");
-	    folderLabel.setBounds(x, y, WIDTH_2, ROW_HEIGHT);
+	    folderLabel.setBounds(x, y, W[2], ROW_HEIGHT);
 	    folderLabel.setFont(FONT);
 	    add(folderLabel);
 	    x += folderLabel.getWidth() + SP;
@@ -267,7 +259,7 @@ public class ChordFilePanel extends JPanel implements ChordPanel {
 
 		// tune label
 	    JLabel tuneLabel = new JLabel("Tune:");
-	    tuneLabel.setBounds(x, y, WIDTH_2, ROW_HEIGHT);
+	    tuneLabel.setBounds(x, y, W[2], ROW_HEIGHT);
 	    tuneLabel.setFont(FONT);
 	    add(tuneLabel);
 	    x += tuneLabel.getWidth() + SP; 
@@ -283,7 +275,7 @@ public class ChordFilePanel extends JPanel implements ChordPanel {
 
 	    // refresh button
 	    final JButton refreshTuneButton = new JButton("Refresh");
-	    refreshTuneButton.setBounds(x, y, WIDTH_4, ROW_HEIGHT);
+	    refreshTuneButton.setBounds(x, y, W[4], ROW_HEIGHT);
 	    refreshTuneButton.setFont(FONT);
 	    add(refreshTuneButton);
 	    x += refreshTuneButton.getWidth() + SP;
@@ -291,13 +283,13 @@ public class ChordFilePanel extends JPanel implements ChordPanel {
 	    // transpose combo box
 	    transposeBox.setModel(new DefaultComboBoxModel<String>(TRANSPOSE_KEYS));
 		// create and register folderBox listener
-	    transposeBox.setBounds(x, y, WIDTH_3, ROW_HEIGHT);
+	    transposeBox.setBounds(x, y, W[3], ROW_HEIGHT);
 	    transposeBox.setFont(FONT);
 		add(transposeBox);
 	    x += transposeBox.getWidth() + SP;
 	    
 	    // transpose checkBox
-	    transposeCheckBox.setBounds(x, y, WIDTH_4, ROW_HEIGHT);
+	    transposeCheckBox.setBounds(x, y, W[4], ROW_HEIGHT);
 	    transposeCheckBox.setOpaque(false);
 	    transposeCheckBox.setSelected(false);
 	    transposeCheckBox.setFont(FONT);
@@ -450,12 +442,12 @@ public class ChordFilePanel extends JPanel implements ChordPanel {
     }
     
     public void setTuneUpdated() {
-    	messageLabel.setBackground(BG_COLOR_BLUE);
+    	messageLabel.setBackground(Color.BLUE);
     	messageLabel.setText("The current tune has been updated");
     }
     
     public void clearTuneUpdated() {
-    	messageLabel.setBackground(BG_COLOR_MED);
+    	messageLabel.setBackground(C[12]);
     	messageLabel.setText("");    	
     }
     
@@ -642,7 +634,7 @@ public class ChordFilePanel extends JPanel implements ChordPanel {
 	 * @see audio.chords.gui.ChordPanel#updateTranspose(java.lang.String)
 	 */
 	public void updateMessage(String message) {
-    	messageLabel.setBackground(BG_COLOR_BLUE);
+    	messageLabel.setBackground(Color.BLUE);
     	messageLabel.setText(message);
 	}
 

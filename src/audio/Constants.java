@@ -4,7 +4,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.io.File;
 
+import org.apache.log4j.Logger;
+
 public class Constants {
+	/** The log. */
+	protected static Logger log 						= Logger.getLogger(Constants.class);
 	public static final String WK						= "wk";
 	public static final String HM						= "hm";
 	//java.runtime.version=1.7.0_79-b15
@@ -122,48 +126,6 @@ public class Constants {
 	public static final int PERFECT_FIFTH				= 7;
 	/** Octave. */
 	public static final int OCTAVE 						= 12;
-	
-	
-	/** Preset values between 0 and 127, used for vol and pan. */ 
-	public static final int[] VALUES 					= {0, 16, 32, 48, 64, 80, 96, 112, 127};
-	public static final int V0 							= VALUES[0];
-	public static final int V1 							= VALUES[1];
-	public static final int V2 							= VALUES[2];
-	public static final int V3 							= VALUES[3];
-	public static final int V4 							= VALUES[4];	
-	public static final int V5 							= VALUES[5];
-	public static final int V6 							= VALUES[6];
-	public static final int V7 							= VALUES[7];
-	public static final int V8 							= VALUES[8];
-	
-	// MIDI Note Numbers for Different Octaves - see SummaryOfMidiNoteNumbers.html
-	public static final int OCT_0 						= 12;
-	public static final int OCT_1 						= 24;
-	public static final int OCT_2 						= 36;
-	public static final int OCT_3 						= 48;
-	public static final int OCT_4 						= 60; // middle C
-	public static final int OCT_5 						= 72;
-	public static final int OCT_6 						= 84;	
-	public static final int OCT_7 						= 96;
-	public static final int OCT_8 						= 108;
-	public static final int OCT_9 						= 120;
-	
-	
-	/** Violin tuning. */
-	public static final int[] VIOLIN_STRINGS			= {
-			OCT_3 + 7, 
-			OCT_4 + 2, 
-			OCT_4 + 9, 
-			OCT_5 + 4}; 
-
-	/** Guitar tuning. */
-	public static final int[] GUITAR_STRINGS			= {
-		52, 
-		57, 
-		62, 
-		67,
-		71,
-		76};
 	
 	/* Instrument definitions */
 	public static final String INSTRUMENT_VIOLIN		= "Violin";
@@ -350,25 +312,6 @@ public class Constants {
 	public static int TOP_BAR_HEIGHT 					= 22;
 	public static int DOCK_WIDTH 						= 38;
 	
-	// 31,63,95,127,159,191,223,255
-	public static Color COLOR_DARK						= new Color(95, 95, 95);
-	public static Color BG_COLOR						= new Color(159, 159, 159);
-	public static Color BG_COLOR_MED					= new Color(191, 191, 191);
-	public static Color BG_COLOR_LIGHT					= new Color(223, 223, 223);
-	public static Color BG_COLOR_BLUE					= new Color(0, 0, 255);
-
-	/* Standard widths in multiples of 25. */
-	public static int WIDTH_10 							= 250;	
-	public static int WIDTH_9 							= 225;
-	public static int WIDTH_8 							= 200;
-	public static int WIDTH_7 							= 175;
-	public static int WIDTH_6 							= 150;	
-	public static int WIDTH_5 							= 125;
-	public static int WIDTH_4 							= 100;
-	public static int WIDTH_3 							= 75;
-	public static int WIDTH_2 							= 50;
-	public static int WIDTH_1 							= 25;
-	
 	/** The standard gui row height. */
 	public static int ROW_HEIGHT 						= 25;
 
@@ -387,6 +330,66 @@ public class Constants {
 	/* start, end defs */
 	public static int START								= 0;
 	public static int END								= 1;
-	
 
+	/*
+	0 0
+	1 15
+	2 31
+	3 47
+	4 63
+	5 79
+	6 95
+	7 111
+	8 127
+	9 143
+	10 159
+	11 175
+	12 191
+	13 207
+	14 223
+	15 239
+	16 255
+	*/
+	/* Preset values between 0 and 255 used for vol and pan. */ 
+	public static final int[] V 						= new int[17];
+	/* Preset widths in multiples of 25. */
+	public static int[] W 								= new int[17];
+	/* Preset colors. */ 
+	public static Color[] C								= new Color[17];
+	/* Preset octaves. */ 
+	public static int[] O								= new int[10];
+
+	static {
+		int i = 0;
+		for (i = 0; i <= 16; i++) {
+			int v = (i == 0) ? 0 : i * 16 - 1;
+			log.debug(i + " " + v);
+			V[i] = v;
+			W[i] = i * 25;
+			//C[i] = new Color(v, v, v);
+		}
+		Color[] colors = new Color[17];
+		i = 16;
+		C[i--] = new Color(255, 255, 255);
+		C[i--] = new Color(235, 235, 243);
+		C[i--] = new Color(216, 216, 231);
+		C[i--] = new Color(197, 197, 218);
+		C[i--] = new Color(178, 178, 206);
+		C[i--] = new Color(160, 160, 193);
+		C[i--] = new Color(142, 142, 179);
+		C[i--] = new Color(124, 124, 166);
+		C[i--] = new Color(107, 107, 152);
+		C[i--] = new Color(91, 91, 137);
+		C[i--] = new Color(75, 75, 122);
+		C[i--] = new Color(60, 60, 107);
+		C[i--] = new Color(45, 45, 90);
+		C[i--] = new Color(31, 31, 73);
+		C[i--] = new Color(19, 19, 54);
+		C[i--] = new Color(8, 8, 32);
+		C[i--] = new Color(0, 0, 0);
+		
+		for (i = 0; i < 10; i++) {
+			O[i] = i * 12 + 12;
+		}
+	}
 }

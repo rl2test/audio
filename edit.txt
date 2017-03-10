@@ -1,3 +1,11 @@
+	/** Violin tuning. */
+	public static final int[] VIOLIN_STRINGS			= {55, 62, 69, 76}; 
+
+	/** Guitar tuning. */
+	public static final int[] GUITAR_STRINGS			= {52, 57, 62,  67, 71, 76};
+	
+
+
 	    /*
 	    // separator ///////////////////////////////////////////////////////////
 	    JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);

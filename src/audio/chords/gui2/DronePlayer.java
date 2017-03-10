@@ -2,12 +2,10 @@ package audio.chords.gui2;
 
 //import static audio.Constants.BANDONEON;
 import static audio.Constants.CLARINET;
-import static audio.Constants.OCT_2;
-import static audio.Constants.OCT_3;
+import static audio.Constants.O;
 import static audio.Constants.TRANSPOSE_KEYS;
 import static audio.Constants.TRANSPOSE_KEY_INTERVALS;
-import static audio.Constants.V8;
-import static audio.Constants.V6;
+import static audio.Constants.V;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,13 +45,13 @@ public class DronePlayer extends Thread {
 		int gInterval		= getKeyInterval("G");
 		int keyInterval 	= getKeyInterval(key);
 		
-		int oct = (keyInterval >= gInterval) ? OCT_2 : OCT_3;
+		int oct = (keyInterval >= gInterval) ? O[2] : O[3];
 		
 		int root = oct + keyInterval;
 		int fifth = root + 7;
 		
-		rootNote 			= new MidiNote(0, root, 1, V8);
-		fifthNote 			= new MidiNote(0, fifth, 1, V6);
+		rootNote 			= new MidiNote(0, root, 1, V[8]);
+		fifthNote 			= new MidiNote(0, fifth, 1, V[6]);
 			
 		beginMidiNote(rootNote);
 		beginMidiNote(fifthNote);

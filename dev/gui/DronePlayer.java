@@ -4,8 +4,7 @@ package audio.chords.gui;
 import static audio.Constants.CLARINET;
 import static audio.Constants.OCT_2;
 import static audio.Constants.OCT_3;
-import static audio.Constants.V8;
-import static audio.Constants.V6;
+import static audio.Constants.V;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,8 +49,8 @@ public class DronePlayer extends Thread {
 		int root = oct + keyInterval;
 		int fifth = root + 7;
 		
-		rootNote 			= new MidiNote(0, root, 1, V8);
-		fifthNote 			= new MidiNote(0, fifth, 1, V6);
+		rootNote 			= new MidiNote(0, root, 1, V[8]);
+		fifthNote 			= new MidiNote(0, fifth, 1, V[6]);
 			
 		beginMidiNote(rootNote);
 		beginMidiNote(fifthNote);

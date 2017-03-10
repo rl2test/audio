@@ -1,6 +1,5 @@
 package audio.chords.gui2;
 
-import static audio.Constants.BG_COLOR;
 import static audio.Constants.DOUBLE_ROW_PANEL_HEIGHT;
 import static audio.Constants.ENV;
 import static audio.Constants.RUNTIME_VERSION;

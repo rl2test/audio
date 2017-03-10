@@ -1,8 +1,7 @@
 package audio.chords.gui;
 
 import static audio.Constants.OCT_5;
-import static audio.Constants.V8;
-import static audio.Constants.V4;
+import static audio.Constants.V;
 import static audio.Constants.WOODBLOCK;
 
 import javax.sound.midi.MidiChannel;
@@ -82,8 +81,8 @@ public class MetronomePlayer extends Thread {
 		metronomePanel.metronomeTempoLabel.setText("" + tempo);
 		
 		// the note to be played by the metronome
-		MidiNote midiNote1 = new MidiNote(CHANNEL, PITCH, 1, V4);
-		MidiNote midiNote2 = new MidiNote(CHANNEL, PITCH, 1, V8);
+		MidiNote midiNote1 = new MidiNote(CHANNEL, PITCH, 1, V[4]);
+		MidiNote midiNote2 = new MidiNote(CHANNEL, PITCH, 1, V[8]);
 		MidiNote midiNote = null;
 		while(runFlag){
 			//metronomePanel.beatPanel.beatCount = beatCount;

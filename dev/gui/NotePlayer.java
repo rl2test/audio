@@ -3,7 +3,7 @@ package audio.chords.gui;
 import static audio.Constants.CLARINET;
 import static audio.Constants.GUITAR_STRINGS;
 import static audio.Constants.INSTRUMENT_VIOLIN;
-import static audio.Constants.V8;
+import static audio.Constants.V;
 import static audio.Constants.VIOLIN_STRINGS;
 
 import java.util.ArrayList;
@@ -46,8 +46,8 @@ public class NotePlayer extends Thread {
 		int count = 0;
 		while(runFlag){
 			midiNote = (instrument.equals(INSTRUMENT_VIOLIN))
-					? new MidiNote(0, VIOLIN_STRINGS[count], 1, V8)
-					: new MidiNote(0, GUITAR_STRINGS[count], 1, V8);
+					? new MidiNote(0, VIOLIN_STRINGS[count], 1, V[8])
+					: new MidiNote(0, GUITAR_STRINGS[count], 1, V[8]);
 			beginMidiNote(midiNote);
 			
 			try {

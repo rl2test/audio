@@ -1,8 +1,7 @@
 package audio.chords.gui2;
 
-import static audio.Constants.OCT_5;
-import static audio.Constants.V8;
-import static audio.Constants.V4;
+import static audio.Constants.O;
+import static audio.Constants.V;
 import static audio.Constants.WOODBLOCK;
 
 import javax.sound.midi.MidiChannel;
@@ -15,7 +14,7 @@ public class MetronomePlayer extends Thread {
 	/** The log. */
 	protected Logger log 					= Logger.getLogger(this.getClass());
 	protected boolean runFlag 				= true;
-	private int PITCH 						= OCT_5;
+	private int PITCH 						= O[5];
 	private int CHANNEL 					= 0;
 	private int PROGRAM 					= WOODBLOCK;
 	private int beginTempo;
@@ -82,8 +81,8 @@ public class MetronomePlayer extends Thread {
 		metronomePanel.metronomeTempoLabel.setText("" + tempo);
 		
 		// the note to be played by the metronome
-		MidiNote midiNote1 = new MidiNote(CHANNEL, PITCH, 1, V4);
-		MidiNote midiNote2 = new MidiNote(CHANNEL, PITCH, 1, V8);
+		MidiNote midiNote1 = new MidiNote(CHANNEL, PITCH, 1, V[4]);
+		MidiNote midiNote2 = new MidiNote(CHANNEL, PITCH, 1, V[8]);
 		MidiNote midiNote = null;
 		while(runFlag){
 			//metronomePanel.beatPanel.beatCount = beatCount;

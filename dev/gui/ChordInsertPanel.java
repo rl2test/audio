@@ -1,7 +1,5 @@
 package audio.chords.gui;
-import static audio.Constants.BG_COLOR;
-import static audio.Constants.BG_COLOR_MED;
-import static audio.Constants.COLOR_DARK;
+import static audio.Constants.C;
 import static audio.Constants.NL;
 import static audio.Constants.SP;
 import static audio.Constants.SPACE;
@@ -150,7 +148,7 @@ public class ChordInsertPanel extends JPanel implements MouseListener {
     	g.setColor(BG_COLOR_MED);
     	g.fillRect(0, 0, NUM_HORIZ * CELL_H, NUM_VERT * CELL_V);
         	
-        g.setColor(COLOR_DARK);
+        g.setColor(C[6]);
         // draw horiz lines
 		x1 = 0;
 		x2 = NUM_HORIZ * CELL_H;

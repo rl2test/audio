@@ -1,14 +1,10 @@
 package audio.chords.gui2;
 
-import static audio.Constants.BG_COLOR;
-import static audio.Constants.BG_COLOR_MED;
+import static audio.Constants.C;
 import static audio.Constants.FONT;
 import static audio.Constants.ROW_HEIGHT;
-import static audio.Constants.SEPARATOR_HEIGHT;
 import static audio.Constants.SP;
-import static audio.Constants.WIDTH_2;
-import static audio.Constants.WIDTH_3;
-import static audio.Constants.WIDTH_4;
+import static audio.Constants.W;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -18,9 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 
 import org.apache.log4j.Logger;
 
@@ -57,7 +51,7 @@ public class ChordTextPanel extends JPanel implements ChordPanel {
 	
     /** Private constructor */
     private ChordTextPanel() {
-        setBackground(BG_COLOR);
+        setBackground(C[10]);
 		setLayout(null);
 		
     	int tempoStart	= 60;
@@ -82,24 +76,24 @@ public class ChordTextPanel extends JPanel implements ChordPanel {
 	    
 	    // chord label
 	    JLabel chordTextLabel = new JLabel("ChordText");
-	    chordTextLabel.setBounds(x, y, WIDTH_3, ROW_HEIGHT);
+	    chordTextLabel.setBounds(x, y, W[3], ROW_HEIGHT);
 	    chordTextLabel.setFont(FONT);
 	    add(chordTextLabel);
 	    x += chordTextLabel.getWidth() + SP;
 
 //	    JLabel chordLabel = new JLabel("Chord");
-//	    chordLabel.setBounds(x, y, WIDTH_3, ROW_HEIGHT);
+//	    chordLabel.setBounds(x, y, W[3, ROW_HEIGHT);
 //	    add(chordLabel);
 //	    x += chordLabel.getWidth() + SP;
 
 	    // play button, in class declaration
-	    playButton.setBounds(x, y, WIDTH_4, ROW_HEIGHT);
+	    playButton.setBounds(x, y, W[4], ROW_HEIGHT);
 	    playButton.setFont(FONT);
 	    add(playButton);
 	    x += playButton.getWidth() + SP;
 	    
 	    // stop button, in class declaration
-	    stopButton.setBounds(x, y, WIDTH_4, ROW_HEIGHT);
+	    stopButton.setBounds(x, y, W[4], ROW_HEIGHT);
 	    stopButton.setFont(FONT);
 	    add(stopButton);
 	    stopButton.setEnabled(false);
@@ -107,14 +101,14 @@ public class ChordTextPanel extends JPanel implements ChordPanel {
 	    
 	    // begin tempo label
 	    JLabel beginTempoLabel = new JLabel("Begin:");
-	    beginTempoLabel.setBounds(x, y, WIDTH_2, ROW_HEIGHT);
+	    beginTempoLabel.setBounds(x, y, W[2], ROW_HEIGHT);
 	    beginTempoLabel.setFont(FONT);
 	    add(beginTempoLabel);
 	    x += beginTempoLabel.getWidth() + SP;
 	    
 	    // begin tempo combo box
 	    final JComboBox<Integer> beginTempoBox = new JComboBox<Integer>(tempos);
-	    beginTempoBox.setBounds(x, y, WIDTH_3, ROW_HEIGHT);
+	    beginTempoBox.setBounds(x, y, W[3], ROW_HEIGHT);
 	    beginTempoBox.setFont(FONT);
 	    beginTempoBox.setSelectedItem(Config.getInt("chordText.beginTempoBox.default"));
 	    add(beginTempoBox);
@@ -122,14 +116,14 @@ public class ChordTextPanel extends JPanel implements ChordPanel {
 	    
 	    // end tempo label
 	    JLabel endTempoLabel = new JLabel("End:");
-	    endTempoLabel.setBounds(x, y, WIDTH_2, ROW_HEIGHT);
+	    endTempoLabel.setBounds(x, y, W[2], ROW_HEIGHT);
 	    endTempoLabel.setFont(FONT);
 	    add(endTempoLabel);
 	    x += endTempoLabel.getWidth() + SP;
 	    
 	    // end tempo combo box
 	    final JComboBox<Integer> endTempoBox = new JComboBox<Integer>(tempos);
-	    endTempoBox.setBounds(x, y, WIDTH_3, ROW_HEIGHT);
+	    endTempoBox.setBounds(x, y, W[3], ROW_HEIGHT);
 	    endTempoBox.setFont(FONT);
 	    endTempoBox.setSelectedItem(Config.getInt("chordText.endTempoBox.default"));
 	    add(endTempoBox);
@@ -137,28 +131,28 @@ public class ChordTextPanel extends JPanel implements ChordPanel {
 	    
 	    // increment label
 	    JLabel incrementLabel = new JLabel("Increment:");
-	    incrementLabel.setBounds(x, y, WIDTH_3, ROW_HEIGHT);
+	    incrementLabel.setBounds(x, y, W[3], ROW_HEIGHT);
 	    incrementLabel.setFont(FONT);
 	    add(incrementLabel);
 	    x += incrementLabel.getWidth() + SP;
 	    
 	    // increment tempo combo box
 	    final JComboBox<Integer> incrementBox = new JComboBox<Integer>(increments);
-	    incrementBox.setBounds(x, y, WIDTH_3, ROW_HEIGHT);
+	    incrementBox.setBounds(x, y, W[3], ROW_HEIGHT);
 	    incrementBox.setFont(FONT);
 	    add(incrementBox);
 	    x += incrementBox.getWidth() + SP;
 	    
 	    // tempo label
 	    JLabel tempoLabel = new JLabel("Tempo:");
-	    tempoLabel.setBounds(x, y, WIDTH_2, ROW_HEIGHT);
+	    tempoLabel.setBounds(x, y, W[2], ROW_HEIGHT);
 	    tempoLabel.setFont(FONT);
 	    add(tempoLabel);
 	    x += tempoLabel.getWidth() + SP;
 	    
 	    // chord tempo label
-	    updateTempoLabel.setBounds(x, y, WIDTH_2, ROW_HEIGHT);
-	    updateTempoLabel.setBackground(BG_COLOR_MED);
+	    updateTempoLabel.setBounds(x, y, W[2], ROW_HEIGHT);
+	    updateTempoLabel.setBackground(C[12]);
 	    updateTempoLabel.setOpaque(true);
 	    updateTempoLabel.setFont(FONT);
 	    add(updateTempoLabel);
@@ -166,14 +160,14 @@ public class ChordTextPanel extends JPanel implements ChordPanel {
 	    
 	    // tempo label
 	    JLabel chordLabel = new JLabel("Chord:");
-	    chordLabel.setBounds(x, y, WIDTH_2, ROW_HEIGHT);
+	    chordLabel.setBounds(x, y, W[2], ROW_HEIGHT);
 	    chordLabel.setFont(FONT);
 	    add(chordLabel);
 	    x += chordLabel.getWidth() + SP;
 	    
 	    // update chord label
-	    updateChordLabel.setBounds(x, y, WIDTH_2, ROW_HEIGHT);
-	    updateChordLabel.setBackground(BG_COLOR_MED);
+	    updateChordLabel.setBounds(x, y, W[2], ROW_HEIGHT);
+	    updateChordLabel.setBackground(C[12]);
 	    updateChordLabel.setOpaque(true);
 	    updateChordLabel.setFont(FONT);
 	    add(updateChordLabel);
@@ -188,7 +182,7 @@ public class ChordTextPanel extends JPanel implements ChordPanel {
 		
 		// text label
 	    JLabel textLabel = new JLabel("Text:");
-	    textLabel.setBounds(x, y, WIDTH_3, ROW_HEIGHT);
+	    textLabel.setBounds(x, y, W[3], ROW_HEIGHT);
 	    textLabel.setFont(FONT);
 	    add(textLabel);
 	    x += textLabel.getWidth() + SP; 
