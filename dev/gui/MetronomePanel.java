@@ -30,14 +30,12 @@ public class MetronomePanel extends JPanel {
 	private Logger log							= Logger.getLogger(getClass());
 	/** The singleton instance of this class. */    
 	private static MetronomePanel panel 		= null;
-//	/** The beat panel, which gets updated in real time. */
-//	public MetronomeBeatPanel beatPanel 		= new MetronomeBeatPanel();
 	/** The metronome tempo label, which gets updated in real time. */
 	public JLabel metronomeTempoLabel 			= new JLabel("");
 	/** The player. */
 	public MetronomePlayer player 				= null;
 	/** StatusPanel reference. */
-	public StatusPanel statusPanel 					= null;
+	public StatusPanel statusPanel 				= null;
 	
     /**
      * @return singleton instance of this class

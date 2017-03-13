@@ -2,7 +2,6 @@ package audio.chords.gui2;
 
 import static audio.Constants.C;
 import static audio.Constants.FONT;
-import static audio.Constants.ROW_HEIGHT;
 import static audio.Constants.TRANSPOSE_KEYS;
 import static audio.Constants.W;
 
@@ -56,7 +55,6 @@ public class DronePanel extends JPanel {
 	    x += W[2] + 1;
 
 	    for (String key: TRANSPOSE_KEYS) {
-	    	log.debug(key);
 	    	JLabel label = getLabel(key, C[12], C[0], x, y, W[1], LISTENER);
 	    	add(label);
 	    	keyMap.put(key, label);
@@ -69,7 +67,7 @@ public class DronePanel extends JPanel {
         label.setBackground(bg);
         label.setForeground(fg);
         label.setOpaque(true);
-        label.setBounds(x, y, w, ROW_HEIGHT);
+        label.setBounds(x, y, w, W[1]);
         label.setFont(FONT);
         label.setHorizontalAlignment(JLabel.CENTER);
         if (addListener) {

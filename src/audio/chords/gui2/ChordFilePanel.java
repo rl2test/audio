@@ -3,15 +3,11 @@ package audio.chords.gui2;
 import static audio.Constants.C;
 import static audio.Constants.CHORDS_FOLDER;
 import static audio.Constants.COMMA;
-import static audio.Constants.DOUBLE_ROW_PANEL_HEIGHT;
 import static audio.Constants.EXT_CHORDS;
 import static audio.Constants.FONT;
 import static audio.Constants.FS;
 import static audio.Constants.MUSIC_DIR;
 import static audio.Constants.NL;
-import static audio.Constants.ROW_HEIGHT;
-import static audio.Constants.SINGLE_ROW_PANEL_HEIGHT;
-import static audio.Constants.SP;
 import static audio.Constants.TRANSPOSE_KEYS;
 import static audio.Constants.W;
 
@@ -121,190 +117,190 @@ public class ChordFilePanel extends JPanel implements ChordPanel {
 	    
 	    // chord label
 	    JLabel chordFileLabel = new JLabel("ChordFile");
-	    chordFileLabel.setBounds(x, y, W[3], ROW_HEIGHT);
+	    chordFileLabel.setBounds(x, y, W[3], W[1]);
 	    chordFileLabel.setFont(FONT);
 	    add(chordFileLabel);
-	    x += chordFileLabel.getWidth() + SP;
+	    x += chordFileLabel.getWidth();
 	    
 	    // play button, in class declaration
-	    playButton.setBounds(x, y, W[4], ROW_HEIGHT);
+	    playButton.setBounds(x, y, W[4], W[1]);
 	    playButton.setFont(FONT);
 	    add(playButton);
-	    x += playButton.getWidth() + SP;
+	    x += playButton.getWidth();
 	    
 	    // stop button, in class declaration
-	    stopButton.setBounds(x, y, W[4], ROW_HEIGHT);
+	    stopButton.setBounds(x, y, W[4], W[1]);
 	    stopButton.setFont(FONT);
 	    add(stopButton);
 	    stopButton.setEnabled(false);
-	    x += stopButton.getWidth() + SP;
+	    x += stopButton.getWidth();
 	    
 	    // begin tempo label
 	    JLabel beginTempoLabel = new JLabel("Begin:");
-	    beginTempoLabel.setBounds(x, y, W[2], ROW_HEIGHT);
+	    beginTempoLabel.setBounds(x, y, W[2], W[1]);
 	    beginTempoLabel.setFont(FONT);
 	    add(beginTempoLabel);
-	    x += beginTempoLabel.getWidth() + SP;
+	    x += beginTempoLabel.getWidth();
 	    
 	    // begin tempo combo box
 	    final JComboBox<Integer> beginTempoBox = new JComboBox<Integer>(tempos);
-	    beginTempoBox.setBounds(x, y, W[3], ROW_HEIGHT);
+	    beginTempoBox.setBounds(x, y, W[3], W[1]);
 	    beginTempoBox.setFont(FONT);
 	    add(beginTempoBox);
-	    x += beginTempoBox.getWidth() + SP;
+	    x += beginTempoBox.getWidth();
 	    
 	    // end tempo label
 	    JLabel endTempoLabel = new JLabel("End:");
-	    endTempoLabel.setBounds(x, y, W[2], ROW_HEIGHT);
+	    endTempoLabel.setBounds(x, y, W[2], W[1]);
 	    endTempoLabel.setFont(FONT);
 	    add(endTempoLabel);
-	    x += endTempoLabel.getWidth() + SP;
+	    x += endTempoLabel.getWidth();
 	    
 	    // end tempo combo box
 	    final JComboBox<Integer> endTempoBox = new JComboBox<Integer>(tempos);
-	    endTempoBox.setBounds(x, y, W[3], ROW_HEIGHT);
+	    endTempoBox.setBounds(x, y, W[3], W[1]);
 	    endTempoBox.setFont(FONT);
 	    add(endTempoBox);
-	    x += endTempoBox.getWidth() + SP;
+	    x += endTempoBox.getWidth();
 	    
 	    // increment label
 	    JLabel incrementLabel = new JLabel("Increment:");
-	    incrementLabel.setBounds(x, y, W[3], ROW_HEIGHT);
+	    incrementLabel.setBounds(x, y, W[3], W[1]);
 	    incrementLabel.setFont(FONT);
 	    add(incrementLabel);
-	    x += incrementLabel.getWidth() + SP;
+	    x += incrementLabel.getWidth();
 	    
 	    // increment tempo combo box
 	    final JComboBox<Integer> incrementBox = new JComboBox<Integer>(increments);
-	    incrementBox.setBounds(x, y, W[3], ROW_HEIGHT);
+	    incrementBox.setBounds(x, y, W[3], W[1]);
 	    incrementBox.setFont(FONT);
 	    add(incrementBox);
-	    x += incrementBox.getWidth() + SP;
+	    x += incrementBox.getWidth();
 	    
 	    // tempo label
 	    JLabel tempoLabel = new JLabel("Tempo:");
-	    tempoLabel.setBounds(x, y, W[2], ROW_HEIGHT);
+	    tempoLabel.setBounds(x, y, W[2], W[1]);
 	    tempoLabel.setFont(FONT);
 	    add(tempoLabel);
-	    x += tempoLabel.getWidth() + SP;
+	    x += tempoLabel.getWidth();
 	    
 	    // chord tempo label
-	    updateTempoLabel.setBounds(x, y, W[2], ROW_HEIGHT);
+	    updateTempoLabel.setBounds(x, y, W[2], W[1]);
 	    updateTempoLabel.setBackground(C[12]);
 	    updateTempoLabel.setOpaque(true);
 	    updateTempoLabel.setFont(FONT);
 	    add(updateTempoLabel);
-	    x += updateTempoLabel.getWidth() + SP;
+	    x += updateTempoLabel.getWidth();
 	    
 	    // save button
 	    final JButton saveButton = new JButton("Save");
-	    saveButton.setBounds(x, y, W[3], ROW_HEIGHT);
+	    saveButton.setBounds(x, y, W[3], W[1]);
 	    saveButton.setFont(FONT);
 	    add(saveButton);
-	    x += saveButton.getWidth() + SP;
+	    x += saveButton.getWidth();
 
 	    // saveAs button
 	    final JButton saveAsButton = new JButton("Save As");
-	    saveAsButton.setBounds(x, y, W[4], ROW_HEIGHT);
+	    saveAsButton.setBounds(x, y, W[4], W[1]);
 	    saveAsButton.setFont(FONT);
 	    add(saveAsButton);
-	    x += saveAsButton.getWidth() + SP;
+	    x += saveAsButton.getWidth();
 	    
 	    // message label
-	    messageLabel.setBounds(x, y, W[9] + 10, ROW_HEIGHT);
+	    messageLabel.setBounds(x, y, W[9] + 10, W[1]);
 	    messageLabel.setBackground(C[12]);
 	    messageLabel.setForeground(Color.WHITE);
 	    messageLabel.setOpaque(true);
 	    messageLabel.setFont(FONT);
 	    add(messageLabel);
-	    x += messageLabel.getWidth() + SP;
+	    x += messageLabel.getWidth();
 	    
 	    log.debug("row 1 final x=" + x);
 	    
 	    // row 2 ///////////////////////////////////////////////////////////////
 	    x = 0;
-		y += ROW_HEIGHT + SP;  
+		y += W[1];  
 	    
 	    // genre label
 	    JLabel genreLabel = new JLabel("Genre:");
-	    genreLabel.setBounds(x, y, W[3], ROW_HEIGHT);
+	    genreLabel.setBounds(x, y, W[3], W[1]);
 	    genreLabel.setFont(FONT);
 	    add(genreLabel);
-	    x += genreLabel.getWidth() + SP;
+	    x += genreLabel.getWidth();
 		
 	    // genre combo box
 	    genreBox.setModel(new DefaultComboBoxModel<String>(genreNames));
 		// create and register genreBox listener
 		genreBox.addItemListener(new GenreBoxListener());
-		genreBox.setBounds(x, y, W[4], ROW_HEIGHT);
+		genreBox.setBounds(x, y, W[4], W[1]);
 		genreBox.setFont(FONT);
 		add(genreBox);
-	    x += genreBox.getWidth() + SP;
+	    x += genreBox.getWidth();
 
 		// folder label
 	    JLabel folderLabel = new JLabel("Folder:");
-	    folderLabel.setBounds(x, y, W[2], ROW_HEIGHT);
+	    folderLabel.setBounds(x, y, W[2], W[1]);
 	    folderLabel.setFont(FONT);
 	    add(folderLabel);
-	    x += folderLabel.getWidth() + SP;
+	    x += folderLabel.getWidth();
 	    
 	    // init folder combo box with unpopulated list
 	    folderBox.setModel(new DefaultComboBoxModel<String>(UNPOPULATED_LIST)); // the default
 		// create and register folderBox listener
 	    folderBox.addItemListener(new FolderBoxListener());
-		folderBox.setBounds(x, y, FOLDER_WIDTH, ROW_HEIGHT);
+		folderBox.setBounds(x, y, FOLDER_WIDTH, W[1]);
 		folderBox.setFont(FONT);
 		add(folderBox);
-	    x += folderBox.getWidth() + SP;
+	    x += folderBox.getWidth();
 
 		// tune label
 	    JLabel tuneLabel = new JLabel("Tune:");
-	    tuneLabel.setBounds(x, y, W[2], ROW_HEIGHT);
+	    tuneLabel.setBounds(x, y, W[2], W[1]);
 	    tuneLabel.setFont(FONT);
 	    add(tuneLabel);
-	    x += tuneLabel.getWidth() + SP; 
+	    x += tuneLabel.getWidth(); 
 	    
 		// init tune combo box with unpopulated list
 		tuneBox.setModel(new DefaultComboBoxModel<String>(UNPOPULATED_LIST));
 		// create and register tuneBox listener
 	    tuneBox.addItemListener(new TuneBoxListener());
-		tuneBox.setBounds(x, y, TUNE_WIDTH, ROW_HEIGHT);
+		tuneBox.setBounds(x, y, TUNE_WIDTH, W[1]);
 		tuneBox.setFont(FONT);
 		add(tuneBox);
-		x += tuneBox.getWidth() + SP;
+		x += tuneBox.getWidth();
 
 	    // refresh button
 	    final JButton refreshTuneButton = new JButton("Refresh");
-	    refreshTuneButton.setBounds(x, y, W[4], ROW_HEIGHT);
+	    refreshTuneButton.setBounds(x, y, W[4], W[1]);
 	    refreshTuneButton.setFont(FONT);
 	    add(refreshTuneButton);
-	    x += refreshTuneButton.getWidth() + SP;
+	    x += refreshTuneButton.getWidth();
 
 	    // transpose combo box
 	    transposeBox.setModel(new DefaultComboBoxModel<String>(TRANSPOSE_KEYS));
 		// create and register folderBox listener
-	    transposeBox.setBounds(x, y, W[3], ROW_HEIGHT);
+	    transposeBox.setBounds(x, y, W[3], W[1]);
 	    transposeBox.setFont(FONT);
 		add(transposeBox);
-	    x += transposeBox.getWidth() + SP;
+	    x += transposeBox.getWidth();
 	    
 	    // transpose checkBox
-	    transposeCheckBox.setBounds(x, y, W[4], ROW_HEIGHT);
+	    transposeCheckBox.setBounds(x, y, W[4], W[1]);
 	    transposeCheckBox.setOpaque(false);
 	    transposeCheckBox.setSelected(false);
 	    transposeCheckBox.setFont(FONT);
 	    add(transposeCheckBox);
-	    x += transposeCheckBox.getWidth() + SP;
+	    x += transposeCheckBox.getWidth();
 	    
 	    log.debug("row 2 final x=" + x);
 		
 	    // row 3 ///////////////////////////////////////////////////////////////
 
 		x = 0;
-		y += ROW_HEIGHT + SP;  
+		y += W[1];  
 		
 		//log.debug("GuiController.h=" + GuiController.h);
-		int textAreaHeight 		= (int) ((GuiController.h - (2 * (SINGLE_ROW_PANEL_HEIGHT + 1) + DOUBLE_ROW_PANEL_HEIGHT + 1 + y)));
+		int textAreaHeight 		= (int) ((GuiController.h - (2 * (W[1] + 1) + y)));
 		int textAreaWidth		= (int) (GuiController.w  * 0.3);
 		int displayPanelHeight 	= textAreaHeight;
 		int displayPanelWidth 	= (int) (GuiController.w  * 0.7);
@@ -326,7 +322,7 @@ public class ChordFilePanel extends JPanel implements ChordPanel {
 				displayPanelHeight);
 	    add(displayPanel);
 		
-	    x += textArea.getWidth() + SP;
+	    x += textArea.getWidth();
 	    
 	    
 	    /* action listeners */

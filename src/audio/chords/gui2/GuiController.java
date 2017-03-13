@@ -1,10 +1,9 @@
 package audio.chords.gui2;
 
-import static audio.Constants.DOUBLE_ROW_PANEL_HEIGHT;
 import static audio.Constants.ENV;
 import static audio.Constants.RUNTIME_VERSION;
-import static audio.Constants.SINGLE_ROW_PANEL_HEIGHT;
 import static audio.Constants.TOP_BAR_HEIGHT;
+import static audio.Constants.W;
 import static audio.Constants.WK;
 
 import java.awt.Color;
@@ -97,27 +96,21 @@ public class GuiController extends JPanel {
 	    int y = 1;
 
 	    DronePanel dronePanel = DronePanel.getInstance();
-	    dronePanel.setBounds(x, y, w, SINGLE_ROW_PANEL_HEIGHT);
+	    dronePanel.setBounds(x, y, w, W[1]);
 	    add(dronePanel);
 	    y += dronePanel.getHeight() + 1;
 	    
 	    // metronome panel
 	    MetronomePanel metronomePanel = MetronomePanel.getInstance();
-	    metronomePanel.setBounds(0, y, w, SINGLE_ROW_PANEL_HEIGHT);
+	    metronomePanel.setBounds(0, y, w, W[1]);
 	    add(metronomePanel);
 	    y += metronomePanel.getHeight() + 1;
 	    
 	    // chord file panel - set bounds height to h - the combined height of all the other panels
 	    ChordFilePanel chordFilePanel = ChordFilePanel.getInstance();
-	    chordFilePanel.setBounds(0, y, w, h - (2 * (SINGLE_ROW_PANEL_HEIGHT + 1) + DOUBLE_ROW_PANEL_HEIGHT + 1));
+	    chordFilePanel.setBounds(0, y, w, h - (2 * (W[1] + 1)));
 	    add(chordFilePanel);
 	    y += chordFilePanel.getHeight() + 1;
-
-	    // chord text panel
-	    ChordTextPanel chordTextPanel = ChordTextPanel.getInstance();
-	    chordTextPanel.setBounds(0, y, w, DOUBLE_ROW_PANEL_HEIGHT);
-	    add(chordTextPanel);
-	    y += chordTextPanel.getHeight() + 1;
 
 	    chordFilePanel.init();
     }

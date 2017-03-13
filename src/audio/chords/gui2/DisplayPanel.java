@@ -5,9 +5,9 @@ import static audio.Constants.C;
 import static audio.Constants.END;
 import static audio.Constants.NL;
 import static audio.Constants.PIPE;
-import static audio.Constants.ROW_HEIGHT;
 import static audio.Constants.SPACE;
 import static audio.Constants.US;
+import static audio.Constants.W;
 
 import java.awt.Font;
 import java.util.ArrayList;
@@ -44,14 +44,7 @@ public class DisplayPanel extends JPanel {
     public void init(List<Bar> bars) {
     	log.debug("bars.size()=" + bars.size());
     	StringBuffer sb = new StringBuffer();
-    	/*
-    	Component[] components = this.getComponents();
-    	if (components.length > 0) {
-    		for (Component component: components) {
-    			log.debug(component.getClass().getName());	
-    		}
-    	}
-    	*/
+
 		this.removeAll();
 		labels.clear();
 
@@ -65,15 +58,15 @@ public class DisplayPanel extends JPanel {
     			if (x != 1) {
     				// annotation is in a bar that is not the first of a standard 4-bar phrase
         	    	x = 1;
-        	    	y += ROW_HEIGHT + 1;
+        	    	y += W[1] + 1;
         	    	barCount = 0;
     			}
     			String text = bar.annotation.replace(US, SPACE);
     			sb.append(text + NL);
         	    JLabel label = new JLabel(text);
-        	    label.setBounds(x, y, labelWidth, ROW_HEIGHT);
+        	    label.setBounds(x, y, labelWidth, W[1]);
         	    add(label);
-    	    	y += ROW_HEIGHT + 1;
+    	    	y += W[1] + 1;
     		}
     		
     		// text label
@@ -82,7 +75,7 @@ public class DisplayPanel extends JPanel {
     	    label.setOpaque(true);
     	    label.setFont(new Font("Arial", Font.PLAIN, 12));
     	    
-    	    label.setBounds(x, y, labelWidth, ROW_HEIGHT);
+    	    label.setBounds(x, y, labelWidth, W[1]);
     	    String text = bar.cleanBarStr.replace(",", ", ");
     	    sb.append(Util.pad(text, " ", 20, END) + PIPE);
     	    label.setText(text);
@@ -96,7 +89,7 @@ public class DisplayPanel extends JPanel {
     	    if (barCount % barsPerLine == 0) {
     	    	sb.append(NL);
     	    	x = 1;
-    	    	y += ROW_HEIGHT + 1;
+    	    	y += W[1] + 1;
     	    	barCount = 0;
     	    }
     	}
@@ -105,14 +98,20 @@ public class DisplayPanel extends JPanel {
     }
     
     public void updateBars(int barCount) {
-    	if(barCount > 0) {
-    		labels.get(barCount - 1).setBackground(C[12]);
-    	} else {
-    		labels.get(labels.size() - 1).setBackground(C[12]);
-    	}
-    	labels.get(barCount).setBackground(C[6]);
+    	int prevBarCount = (barCount > 0) ? barCount - 1 : labels.size() - 1;   
+   		labels.get(prevBarCount).setBackground(C[12]);
+   		labels.get(prevBarCount).setForeground(C[0]);
+   		labels.get(barCount).setBackground(C[6]);
+    	labels.get(barCount).setForeground(C[16]);
     }
 }
 
-
+/*
+Component[] components = this.getComponents();
+if (components.length > 0) {
+	for (Component component: components) {
+		log.debug(component.getClass().getName());	
+	}
+}
+*/
 

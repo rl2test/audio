@@ -302,27 +302,9 @@ public class Constants {
 	
 	/* ************************* Gui constants ****************************** */
 	
-	/** Separator height. */
-	public static int SEPARATOR_HEIGHT 					= 6;
-
-	/* Standard horiz or vert spacer. */
-	public static int SP 								= 0;
-
 	/** The height of the Windows taskbar. */
 	public static int TOP_BAR_HEIGHT 					= 22;
 	public static int DOCK_WIDTH 						= 38;
-	
-	/** The standard gui row height. */
-	public static int ROW_HEIGHT 						= 25;
-
-	/** The height of a single-row panel. */
-	public static int SINGLE_ROW_PANEL_HEIGHT			= ROW_HEIGHT;
-
-	/** The height of a double-row panel. */
-	public static int DOUBLE_ROW_PANEL_HEIGHT			= ROW_HEIGHT * 2;
-	
-	/** The width of the chord insert panel. */
-	public static int CHORD_INSERT_PANEL_WIDTH			= 730;
 	
 	/** The default font. */
 	public static Font FONT 							= new Font("Arial", Font.PLAIN, 12);
