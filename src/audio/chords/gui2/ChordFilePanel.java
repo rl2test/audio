@@ -38,7 +38,7 @@ import audio.Config;
 import audio.ExtensionFilter;
 import audio.Util;
 
-public class ChordFilePanel extends JPanel implements ChordPanel { 
+public class ChordFilePanel extends JPanel { 
 	/** Default serialVersionUID. */
 	private static final long serialVersionUID 		= 1L;
 	/** The log. */

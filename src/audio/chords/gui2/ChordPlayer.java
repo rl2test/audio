@@ -42,8 +42,8 @@ public class ChordPlayer extends Thread {
 	private String genre					= "";
 	/** The tune text. */
 	private String text						= null;
-	/** ChordPanel reference. */
-	public ChordPanel chordPanel 			= null;
+	/** ChordFilePanel reference. */
+	public ChordFilePanel chordFilePanel 	= null;
 	/** DisplayPanel reference. */
 	public DisplayPanel displayPanel 		= null;
 	public Map<Integer, Integer[]> patterns = new HashMap<Integer, Integer[]>();
@@ -64,7 +64,7 @@ public class ChordPlayer extends Thread {
 			int increment,
 			String genre,
 			String text,
-			ChordPanel chordPanel,
+			ChordFilePanel chordFilePanel,
 			DisplayPanel displayPanel) {
 		if (beginTempo > 0) {
 			// use gui settings, otherwise retain default values
@@ -75,7 +75,7 @@ public class ChordPlayer extends Thread {
 		}
 		this.genre			= genre;
 		this.text			= text;
-		this.chordPanel 	= chordPanel;
+		this.chordFilePanel 	= chordFilePanel;
 		this.displayPanel 	= displayPanel;
 		
 		String[] patternStrs = {
@@ -127,14 +127,14 @@ public class ChordPlayer extends Thread {
 			chordChannel.controlChange(10, V[8]); // set pan
 			chordChannel.programChange(NYLON_STRING_GUITAR);	
 
-			String transposeTo = chordPanel.getTransposeTo();
+			String transposeTo = chordFilePanel.getTransposeTo();
 			
 			Tune tune = new Tune(genre, text, transposeTo);
 			beatsPerBar	= tune.beatsPerBar;
 			Integer[] pattern = patterns.get(beatsPerBar);
 			
 			if (tune.transposed) {
-				chordPanel.updateMessage("transposed from " + tune.transposeFrom + " to " + tune.transposeTo);
+				chordFilePanel.updateMessage("transposed from " + tune.transposeFrom + " to " + tune.transposeTo);
 			}
 			
 			if (displayPanel != null) {
@@ -159,7 +159,7 @@ public class ChordPlayer extends Thread {
 			}
 			
 			tempo = beginTempo;
-			chordPanel.updateTempo("" + tempo);
+			chordFilePanel.updateTempo("" + tempo);
 			
 			log.debug("usingDefaults=" + usingDefaults);
 			log.debug("beatsPerBar=" + beatsPerBar);
@@ -249,7 +249,7 @@ public class ChordPlayer extends Thread {
 						// increase tempo
 						if (tempo < endTempo && (tempo + increment) <= endTempo) {
 							tempo += increment;
-							chordPanel.updateTempo("" + tempo);
+							chordFilePanel.updateTempo("" + tempo);
 							pulseLen = (int) (1000d * 60d / tempo);	
 						}
 					}
@@ -257,7 +257,7 @@ public class ChordPlayer extends Thread {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			chordPanel.stop("Exception thrown in ChordPlayer.run(): " + e.toString());
+			chordFilePanel.stop("Exception thrown in ChordPlayer.run(): " + e.toString());
 		}
 	}
 	

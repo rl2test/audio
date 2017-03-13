@@ -43,7 +43,7 @@ public class DronePanel extends JPanel {
 	
     /** Public constructor */
     public DronePanel() {
-        setBackground(C[6]);
+        setBackground(C[0]);
 		setLayout(null);
 		
 	    int x = 0;
