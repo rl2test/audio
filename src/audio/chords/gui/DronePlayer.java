@@ -31,7 +31,7 @@ public class DronePlayer extends Thread {
 		log.debug("run()");
 		
 		// set channel
-		MidiChannel channel = GuiController.midiChannels[0];
+		MidiChannel channel = AudioController.midiChannels[0];
 		
 		// set stereo r/l
 		channel.controlChange(10, 64); 
@@ -75,14 +75,14 @@ public class DronePlayer extends Thread {
 	 */
 	private void beginMidiNote(MidiNote midiNote) {
 		midiNotes.add(midiNote);
-		GuiController.midiChannels[midiNote.channel].noteOn(midiNote.pitch, midiNote.vol);
+		AudioController.midiChannels[midiNote.channel].noteOn(midiNote.pitch, midiNote.vol);
 	}
 	
 	/**
 	 * @param midiNote
 	 */
 	private void endMidiNote(MidiNote midiNote) {
-		GuiController.midiChannels[midiNote.channel].noteOff(midiNote.pitch);
+		AudioController.midiChannels[midiNote.channel].noteOff(midiNote.pitch);
 	}
 
 	/**

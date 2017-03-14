@@ -42,8 +42,8 @@ public class ChordPlayer extends Thread {
 	private String genre					= "";
 	/** The tune text. */
 	private String text						= null;
-	/** ChordFilePanel reference. */
-	public ChordFilePanel chordFilePanel 	= null;
+	/** FilePanel reference. */
+	public FilePanel filePanel 				= null;
 	/** DisplayPanel reference. */
 	public DisplayPanel displayPanel 		= null;
 	public Map<Integer, Integer[]> patterns = new HashMap<Integer, Integer[]>();
@@ -56,7 +56,7 @@ public class ChordPlayer extends Thread {
 	 * @param increment
 	 * @param genre
 	 * @param tuneFile
-	 * @param chordFilePanel
+	 * @param filePanel
 	 */
 	public ChordPlayer(
 			int beginTempo,
@@ -64,7 +64,7 @@ public class ChordPlayer extends Thread {
 			int increment,
 			String genre,
 			String text,
-			ChordFilePanel chordFilePanel,
+			FilePanel filePanel,
 			DisplayPanel displayPanel) {
 		if (beginTempo > 0) {
 			// use gui settings, otherwise retain default values
@@ -75,7 +75,7 @@ public class ChordPlayer extends Thread {
 		}
 		this.genre			= genre;
 		this.text			= text;
-		this.chordFilePanel 	= chordFilePanel;
+		this.filePanel 		= filePanel;
 		this.displayPanel 	= displayPanel;
 		
 		String[] patternStrs = {
@@ -118,23 +118,23 @@ public class ChordPlayer extends Thread {
 			final int CHORD_VOL 	= V[3];
 			
 			//bass
-			MidiChannel bassChannel = GuiController.midiChannels[CHANNEL_BASS];
+			MidiChannel bassChannel = AudioController.midiChannels[CHANNEL_BASS];
 			bassChannel.controlChange(10, V[0]); // set pan
 			bassChannel.programChange(ACOUSTIC_BASS);
 
 			//chord
-			MidiChannel chordChannel = GuiController.midiChannels[CHANNEL_CHORD];
+			MidiChannel chordChannel = AudioController.midiChannels[CHANNEL_CHORD];
 			chordChannel.controlChange(10, V[8]); // set pan
 			chordChannel.programChange(NYLON_STRING_GUITAR);	
 
-			String transposeTo = chordFilePanel.getTransposeTo();
+			String transposeTo = filePanel.getTransposeTo();
 			
 			Tune tune = new Tune(genre, text, transposeTo);
 			beatsPerBar	= tune.beatsPerBar;
 			Integer[] pattern = patterns.get(beatsPerBar);
 			
 			if (tune.transposed) {
-				chordFilePanel.updateMessage("transposed from " + tune.transposeFrom + " to " + tune.transposeTo);
+				filePanel.updateMessage("transposed from " + tune.transposeFrom + " to " + tune.transposeTo);
 			}
 			
 			if (displayPanel != null) {
@@ -159,7 +159,7 @@ public class ChordPlayer extends Thread {
 			}
 			
 			tempo = beginTempo;
-			chordFilePanel.updateTempo("" + tempo);
+			filePanel.updateTempo("" + tempo);
 			
 			log.debug("usingDefaults=" + usingDefaults);
 			log.debug("beatsPerBar=" + beatsPerBar);
@@ -249,7 +249,7 @@ public class ChordPlayer extends Thread {
 						// increase tempo
 						if (tempo < endTempo && (tempo + increment) <= endTempo) {
 							tempo += increment;
-							chordFilePanel.updateTempo("" + tempo);
+							filePanel.updateTempo("" + tempo);
 							pulseLen = (int) (1000d * 60d / tempo);	
 						}
 					}
@@ -257,7 +257,7 @@ public class ChordPlayer extends Thread {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			chordFilePanel.stop("Exception thrown in ChordPlayer.run(): " + e.toString());
+			filePanel.stop("Exception thrown in ChordPlayer.run(): " + e.toString());
 		}
 	}
 	
@@ -266,14 +266,14 @@ public class ChordPlayer extends Thread {
 	 */
 	private void beginMidiNote(MidiNote midiNote) {
 		midiNotes.add(midiNote);
-		GuiController.midiChannels[midiNote.channel].noteOn(midiNote.pitch, midiNote.vol);
+		AudioController.midiChannels[midiNote.channel].noteOn(midiNote.pitch, midiNote.vol);
 	}
 	
 	/**
 	 * @param midiNote
 	 */
 	private void endMidiNote(MidiNote midiNote) {
-		GuiController.midiChannels[midiNote.channel].noteOff(midiNote.pitch);
+		AudioController.midiChannels[midiNote.channel].noteOff(midiNote.pitch);
 	}
 
 	/**

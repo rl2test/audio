@@ -16,13 +16,13 @@ import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
 
-public class DronePanel extends JPanel { 
+public class KeyPanel extends JPanel { 
 	/** Default serialVersionUID. */
 	private static final long serialVersionUID 		= 1L;
 	/** The log. */
 	private Logger log								= Logger.getLogger(getClass());
 	/** The singleton instance of this class. */    
-	private static DronePanel panel 				= null;
+	private static KeyPanel panel 				= null;
 	/** The drone player. */
 	public DronePlayer dronePlayer 					= null;
 	private final MyMouseListener myMouseListener 	= new MyMouseListener();
@@ -34,15 +34,15 @@ public class DronePanel extends JPanel {
     /**
      * @return singleton instance of this class
      */
-    public static DronePanel getInstance() {
+    public static KeyPanel getInstance() {
         if (panel == null) {
-        	panel = new DronePanel();
+        	panel = new KeyPanel();
     	}
     	return panel;
     }
 	
     /** Public constructor */
-    public DronePanel() {
+    public KeyPanel() {
         setBackground(C[0]);
 		setLayout(null);
 		

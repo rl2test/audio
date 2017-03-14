@@ -38,13 +38,13 @@ import audio.Config;
 import audio.ExtensionFilter;
 import audio.Util;
 
-public class ChordFilePanel extends JPanel { 
+public class FilePanel extends JPanel { 
 	/** Default serialVersionUID. */
 	private static final long serialVersionUID 		= 1L;
 	/** The log. */
 	private Logger log								= Logger.getLogger(getClass());
 	/** The singleton instance of this class. */    
-	private static ChordFilePanel chordFilePanel 	= null;
+	private static FilePanel filePanel 				= null;
 	/** The update tempo label, which gets updated in real time. */
 	public JLabel updateTempoLabel 					= new JLabel("");
     /** The message label */
@@ -80,15 +80,15 @@ public class ChordFilePanel extends JPanel {
 	/**
      * @return singleton instance of this class
      */
-    public static ChordFilePanel getInstance() {
-        if (chordFilePanel == null) {
-        	chordFilePanel = new ChordFilePanel();
+    public static FilePanel getInstance() {
+        if (filePanel == null) {
+        	filePanel = new FilePanel();
     	}
-    	return chordFilePanel;
+    	return filePanel;
     }
 	
     /** Private constructor */
-    private ChordFilePanel() {
+    private FilePanel() {
         setBackground(C[10]);
 		setLayout(null);
 		
@@ -299,11 +299,10 @@ public class ChordFilePanel extends JPanel {
 		x = 0;
 		y += W[1];  
 		
-		//log.debug("GuiController.h=" + GuiController.h);
-		int textAreaHeight 		= (int) ((GuiController.h - (2 * (W[1] + 1) + y)));
-		int textAreaWidth		= (int) (GuiController.w  * 0.3);
+		int textAreaHeight 		= (int) ((AudioController.h - (2 * (W[1] + 1) + y)));
+		int textAreaWidth		= (int) (AudioController.w  * 0.3);
 		int displayPanelHeight 	= textAreaHeight;
-		int displayPanelWidth 	= (int) (GuiController.w  * 0.7);
+		int displayPanelWidth 	= (int) (AudioController.w  * 0.7);
 		
 		textArea = new JTextArea();
 		textArea.setBounds(
@@ -348,7 +347,7 @@ public class ChordFilePanel extends JPanel {
 							increment,
 							genre,
 							text,
-							chordFilePanel,
+							filePanel,
 							displayPanel);
 				chordPlayer.start();
 			}

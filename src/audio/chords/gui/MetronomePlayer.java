@@ -19,9 +19,9 @@ public class MetronomePlayer extends Thread {
 	public int endTempo;
 	public int numBeats;
 	public int increment;
-	public MetronomePanel panel	= null;
+	public TimePanel panel	= null;
 
-    public MetronomePlayer(int beginTempo, int endTempo, int increment, int numBeats, MetronomePanel panel) {
+    public MetronomePlayer(int beginTempo, int endTempo, int increment, int numBeats, TimePanel panel) {
     	this.beginTempo = beginTempo;
     	this.endTempo = endTempo;
     	this.numBeats = numBeats;
@@ -33,7 +33,7 @@ public class MetronomePlayer extends Thread {
 		log.debug("run()");
  		
 		// set channel
-		MidiChannel channel = GuiController.midiChannels[CHANNEL];
+		MidiChannel channel = AudioController.midiChannels[CHANNEL];
 		
 		// set stereo r/l
 		channel.controlChange(10, 127); 
@@ -101,14 +101,14 @@ public class MetronomePlayer extends Thread {
 	 * @param midiNote
 	 */
 	private void beginMidiNote(MidiNote midiNote) {
-		GuiController.midiChannels[midiNote.channel].noteOn(midiNote.pitch, midiNote.vol);
+		AudioController.midiChannels[midiNote.channel].noteOn(midiNote.pitch, midiNote.vol);
 	}
 	
 	/**
 	 * @param midiNote
 	 */
 	private void endMidiNote(MidiNote midiNote) {
-		GuiController.midiChannels[midiNote.channel].noteOff(midiNote.pitch);
+		AudioController.midiChannels[midiNote.channel].noteOff(midiNote.pitch);
 	}
 
 	/**

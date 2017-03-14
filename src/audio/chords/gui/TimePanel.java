@@ -21,24 +21,27 @@ import org.apache.log4j.Logger;
 
 import audio.Config;
 
-public class MetronomePanel extends JPanel { 
+public class TimePanel extends JPanel { 
 	/** Default serialVersionUID. */
 	private static final long serialVersionUID 		= 1L;
 	/** The log. */
 	private Logger log								= Logger.getLogger(getClass());
 	/** The singleton instance of this class. */    
-	private static MetronomePanel panel 			= null;
+	private static TimePanel panel 			= null;
 	/** The player. */
 	public MetronomePlayer player 					= null;
 	private final MyMouseListener myMouseListener 	= new MyMouseListener();
 	private final boolean LISTENER					= true;
 	private final boolean NO_LISTENER				= false;
+	public JLabel patternLabel						= null;
 	public JLabel beginLabel						= null;
     public JLabel endLabel							= null;
     public int beginTempo							= 0;
 	public int endTempo 							= 0;
     public int increment 							= 0;
 	public int numBeats 							= 0;
+	public Map<String, JLabel> timeLabels			= new HashMap<String, JLabel>();
+	public Map<String, JLabel> timeTypeLabels		= new HashMap<String, JLabel>();
     public Map<String, JLabel> tempoLabels			= new HashMap<String, JLabel>();
     public Map<String, JLabel> incrementLabels		= new HashMap<String, JLabel>();
     public Map<String, JLabel> numBeatsLabels		= new HashMap<String, JLabel>();
@@ -47,32 +50,30 @@ public class MetronomePanel extends JPanel {
     /**
      * @return singleton instance of this class
      */
-    public static MetronomePanel getInstance() {
+    public static TimePanel getInstance() {
         if (panel == null) {
-        	panel = new MetronomePanel();
+        	panel = new TimePanel();
     	}
     	return panel;
     }
 	
     /** Public constructor */
-    public MetronomePanel() {
+    public TimePanel() {
         setBackground(C[0]);
 		setLayout(null);
 		
-    	int tempoStart 	= 50;
-    	int tempoEnd 	= 250;
-    	int tempoInc 	= 10;
-    	int n = (tempoEnd - tempoStart) / tempoInc + 1;
-    	Integer[] tempos = new Integer[n];
-    	int index = 0;
-    	for (int i = tempoStart; i <= tempoEnd; i += tempoInc) {
-    		tempos[index++] = i;
+		int[] times = {2, 3, 4, 5, 6, 7};
+		String[] timeTypes = {"a", "b"};
+		
+    	// 50 - 250 in increment of 10
+    	int[] tempos = new int[21];
+    	for (int i = 0; i < 21; i++) {
+    		tempos[i] = (i + 5) * 10;
     	}
     	
-	    Integer[] numBeats		= {8, 16, 32};
+	    int[] numBeats = {8, 16, 32};
 	    
-	    int x = 0;
-	    int y = 0;
+	    int x = 0, y = 0, dx = 0, dy = 0;
 	    
 	    //String text, String name, Color bg, Color fg, int x, int y, int w, int h, boolean addListener
 	    // metronome label
@@ -84,15 +85,51 @@ public class MetronomePanel extends JPanel {
 	    add(playStopLabel);
 	    x += W[1] + 1;	    
 	    
+	    // time label
+	    add(getLabel("Time", null, C[6], C[16], x, y, W[2], W[1], NO_LISTENER));
+	    x += W[2] + 1;	    
+
+	    // time labels
+	    dx = 0;
+	    for (int i = 0; i < times.length; i++) {
+	    	int time = times[i];
+	    	String name = "time" + time;
+	    	JLabel label = getLabel("" + time, name, C[12], C[0], x + dx, y, 12, W[1], LISTENER);  
+	    	add(label);
+	    	dx += 12 + 1;
+	    	timeLabels.put(name, label);
+	    }
+	    x += dx;
+	    
+	    // timeType label
+	    add(getLabel("Type", null, C[6], C[16], x, y, W[2], W[1], NO_LISTENER));
+	    x += W[2] + 1;	    
+
+	    // time labels
+	    dx = 0;
+	    for (int i = 0; i < timeTypes.length; i++) {
+	    	String type = timeTypes[i];
+	    	String name = "type" + type;
+	    	JLabel label = getLabel(type, name, C[12], C[0], x + dx, y, 12, W[1], LISTENER);  
+	    	add(label);
+	    	dx += 12 + 1;
+	    	timeLabels.put(name, label);
+	    }
+	    x += dx;
+	    
+	    // pattern label
+	    patternLabel = getLabel("Pattern", null, C[6], C[16], x, y, W[3], W[1], NO_LISTENER); 
+	    add(patternLabel);
+	    x += W[3] + 1;	    
+
+	    
 	    // begin label
 	    beginLabel = getLabel("Begin", null, C[6], C[16], x, y, W[2], W[1], NO_LISTENER); 
 	    add(beginLabel);
 	    x += W[2] + 1;	    
-	    log.debug("x=" + x);
 	    
 	    // begin labels
-	    int dx = 0;
-	    int dy = 0;
+	    dx = 0;
 	    for (int tempo: tempos) {
 	    	String name = "begin" + tempo;
 	    	JLabel label = getLabel(null, name, C[8], null, x + dx, y + dy, 12, 12, LISTENER);  

@@ -41,11 +41,11 @@ import org.apache.log4j.Logger;
  * RFE: 6702956
  * 
  */
-public class GuiController extends JPanel {
+public class AudioController extends JPanel {
 	/** The generated serialVersionUID. */
 	private static final long serialVersionUID	= 1L;
 	/** The singleton instance of this class. */    
-	private static GuiController guiController 	= null;
+	private static AudioController controller 	= null;
 	/** The log. */
 	private Logger log 							= Logger.getLogger(this.getClass());
 	/** The synthesizer. */
@@ -60,18 +60,18 @@ public class GuiController extends JPanel {
     /**
      * @return singleton instance of this class
      */
-    public static GuiController getInstance() {
-        if (guiController == null) {
-        	guiController = new GuiController();
+    public static AudioController getInstance() {
+        if (controller == null) {
+        	controller = new AudioController();
     	}
-    	return guiController;
+    	return controller;
     }
 	
     /** Private constructor */
     /**
      * 
      */
-    private GuiController() {
+    private AudioController() {
     	this.setBackground(Color.black);
 		this.setSize(w, h);
 		
@@ -95,24 +95,24 @@ public class GuiController extends JPanel {
 		int x = 0;
 	    int y = 1;
 
-	    DronePanel dronePanel = DronePanel.getInstance();
-	    dronePanel.setBounds(x, y, w, W[1]);
-	    add(dronePanel);
-	    y += dronePanel.getHeight() + 1;
+	    KeyPanel keyPanel = KeyPanel.getInstance();
+	    keyPanel.setBounds(x, y, w, W[1]);
+	    add(keyPanel);
+	    y += W[1] + 1;
 	    
 	    // metronome panel
-	    MetronomePanel metronomePanel = MetronomePanel.getInstance();
-	    metronomePanel.setBounds(0, y, w, W[1]);
-	    add(metronomePanel);
-	    y += metronomePanel.getHeight() + 1;
+	    TimePanel timePanel = TimePanel.getInstance();
+	    timePanel.setBounds(0, y, w, W[1]);
+	    add(timePanel);
+	    y += W[1] + 1;
 	    
 	    // chord file panel - set bounds height to h - the combined height of all the other panels
-	    ChordFilePanel chordFilePanel = ChordFilePanel.getInstance();
-	    chordFilePanel.setBounds(0, y, w, h - (2 * (W[1] + 1)));
-	    add(chordFilePanel);
-	    y += chordFilePanel.getHeight() + 1;
+	    FilePanel filePanel = FilePanel.getInstance();
+	    filePanel.setBounds(0, y, w, h - (2 * (W[1] + 1)));
+	    add(filePanel);
+	    y += filePanel.getHeight() + 1;
 
-	    chordFilePanel.init();
+	    filePanel.init();
     }
 
 	public void close() {
@@ -152,7 +152,7 @@ public class GuiController extends JPanel {
         	 screenNum++;
          }
         
-		JFrame frame = new JFrame("GuiController");
+		JFrame frame = new JFrame("AudioController");
 
 		//Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		//int width = screenSize.width - DOCK_WIDTH; 
@@ -168,7 +168,7 @@ public class GuiController extends JPanel {
 
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-				guiController.close();
+				controller.close();
 				System.exit(0);
 			}
 		});
@@ -189,9 +189,9 @@ public class GuiController extends JPanel {
 		//h = frameDimension.height - insets.top - insets.bottom;
 		w = screenW - insets.left - insets.right; 
 		h = screenH - TOP_BAR_HEIGHT - insets.top - insets.bottom;
-		final GuiController guiController = GuiController.getInstance();
+		final AudioController controller = AudioController.getInstance();
 
-		frame.getContentPane().add("Center", guiController);
+		frame.getContentPane().add("Center", controller);
 
 		// call setVisible to display gui
 		frame.validate();
