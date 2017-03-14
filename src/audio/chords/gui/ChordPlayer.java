@@ -1,4 +1,4 @@
-package audio.chords.gui2;
+package audio.chords.gui;
 import static audio.Constants.ACOUSTIC_BASS;
 import static audio.Constants.DEFAULT_BEATS_PER_BAR;
 import static audio.Constants.DEFAULT_BEGIN_TEMPO;

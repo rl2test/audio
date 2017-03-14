@@ -1,4 +1,4 @@
-package audio.chords.gui2;
+package audio.chords.gui;
 
 import static audio.Constants.C;
 import static audio.Constants.CHORDS_FOLDER;
