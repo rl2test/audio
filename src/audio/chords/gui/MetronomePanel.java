@@ -150,7 +150,6 @@ public class MetronomePanel extends JPanel {
 	    	numBeatsLabels.put(name, label);
 	    }
 	    x += dx;
-
 	    
 	    // tempo label
 	    JLabel tempoLabel = getLabel("Tempo", "", C[6], C[16], x, y, W[2], W[1], NO_LISTENER);
@@ -235,14 +234,11 @@ public class MetronomePanel extends JPanel {
              		if (numBeats == 0) numBeats	= 8; setNumBeats();
              		beginLabel.setText("" + beginTempo);
              		endLabel.setText("" + endTempo);
-             		//tempoValueLabel.setText("" + beginTempo);
              	    player	= new MetronomePlayer(beginTempo, endTempo, increment, numBeats, panel);
             	    l.setText("||");
-            	    log.debug("metronomePlayer.getState()=" +player.getState());
            	    	player.start();
          		} else {
          			player.end();
-         			log.debug("metronomePlayer.getState()=" +player.getState());
          			player = null;
             	    l.setText(">");
          		}

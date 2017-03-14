@@ -12,10 +12,9 @@ import audio.MidiNote;
 public class MetronomePlayer extends Thread {
 	/** The log. */
 	protected Logger log 					= Logger.getLogger(this.getClass());
-	protected boolean runFlag 				= true;
-	private int PITCH 						= O[5];
+	protected volatile boolean runFlag 		= true;
+	private int PITCH 						= 42; // 35|37|42
 	private int CHANNEL 					= 9;
-	//private int PROGRAM 					= WOODBLOCK;
 	public int beginTempo;
 	public int endTempo;
 	public int numBeats;
@@ -28,19 +27,16 @@ public class MetronomePlayer extends Thread {
     	this.numBeats = numBeats;
     	this.increment = increment;
     	this.panel = panel;
-    }
+     }
 	
 	public void run() {
 		log.debug("run()");
-		
+ 		
 		// set channel
 		MidiChannel channel = GuiController.midiChannels[CHANNEL];
 		
 		// set stereo r/l
 		channel.controlChange(10, 127); 
-		
-		// set instrument
-		//channel.programChange(PROGRAM);
 		
 		// set initial tempo (bpm)
 		int tempo = beginTempo;
@@ -65,7 +61,7 @@ public class MetronomePlayer extends Thread {
 		panel.tempoValueLabel.setText("" + tempo);
 		
 		// the note to be played by the metronome
-		MidiNote midiNote1 = new MidiNote(CHANNEL, PITCH, 1, V[4]);
+		MidiNote midiNote1 = new MidiNote(CHANNEL, PITCH, 1, V[5]);
 		MidiNote midiNote2 = new MidiNote(CHANNEL, PITCH, 1, V[8]);
 		MidiNote midiNote = null;
 		while(runFlag){
