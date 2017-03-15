@@ -1,33 +1,28 @@
 package audio.chords.gui;
 
 import static audio.Constants.C;
-import static audio.Constants.FONT;
 import static audio.Constants.TRANSPOSE_KEYS;
 import static audio.Constants.W;
 
-import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
-public class KeyPanel extends JPanel { 
+public class KeyPanel extends AudioPanel { 
 	/** Default serialVersionUID. */
 	private static final long serialVersionUID 		= 1L;
 	/** The log. */
-	private Logger log								= Logger.getLogger(getClass());
+	//private Logger log								= Logger.getLogger(getClass());
 	/** The singleton instance of this class. */    
-	private static KeyPanel panel 				= null;
+	private static KeyPanel panel 					= null;
 	/** The drone player. */
 	public DronePlayer dronePlayer 					= null;
-	private final MyMouseListener myMouseListener 	= new MyMouseListener();
-	private final boolean LISTENER					= true;
-	private final boolean NO_LISTENER				= false;
+	private final MyMouseListener listener 			= new MyMouseListener();
 	public static String selectedKey				= "";
 	private Map<String, JLabel> keyMap				= new HashMap<String, JLabel>();
 	
@@ -50,37 +45,22 @@ public class KeyPanel extends JPanel {
 	    int y = 0;
 	    
 	    // drone label
-	    JLabel droneLabel = getLabel("Drone", C[6], C[16], x, y, W[2], NO_LISTENER);
-	    add(droneLabel);
+	    add(getLabel("Drone", null, C[6], C[16], x, y, W[2], W[1], null));
 	    x += W[2] + 1;
 
 	    for (String key: TRANSPOSE_KEYS) {
-	    	JLabel label = getLabel(key, C[12], C[0], x, y, W[1], LISTENER);
+	    	JLabel label = getLabel(key, key, C[12], C[0], x, y, W[1], W[1], listener);
 	    	add(label);
 	    	keyMap.put(key, label);
 	    	x += W[1] + 1;
 	    }
     }  
-    
-    public JLabel getLabel(String text, Color bg, Color fg, int x, int y, int w, boolean addListener) {
-    	JLabel label = new JLabel(text);
-        label.setBackground(bg);
-        label.setForeground(fg);
-        label.setOpaque(true);
-        label.setBounds(x, y, w, W[1]);
-        label.setFont(FONT);
-        label.setHorizontalAlignment(JLabel.CENTER);
-        if (addListener) {
-        	label.addMouseListener(myMouseListener);
-        }
-        return label;
-    }
 
     private class MyMouseListener extends MouseAdapter {
         @Override
         public void mouseClicked(MouseEvent e) {
              JLabel l = (JLabel) e.getSource();
-        	 String key = l.getText();
+        	 String key = l.getName();
         	 if (key.equals(selectedKey)) {
         		selectedKey = "";
         		unselect(l);
@@ -93,21 +73,22 @@ public class KeyPanel extends JPanel {
         		selectedKey = key;
         	 }
         }
+        /*
         @Override
         public void mouseEntered(MouseEvent e) {
         	JLabel l = (JLabel) e.getSource();
-        	if (!l.getText().equals(selectedKey)) {
+        	if (!l.getName().equals(selectedKey)) {
         		l.setBackground(C[14]);
         	}
         }
         @Override
         public void mouseExited(MouseEvent e) {
         	JLabel l = (JLabel) e.getSource();
-        	if (!l.getText().equals(selectedKey)) {
+        	if (!l.getName().equals(selectedKey)) {
         		l.setBackground(C[12]);
         	}
         }
-        
+        */
         public void select(JLabel l) {
 			dronePlayer = new DronePlayer(l.getText());
 			dronePlayer.start();        	

@@ -1,1 +1,4 @@
-C                   |Dm, G7-9            |C                   |C                   |
+Dm, F7              |Bb7                 |Gm7                 |A7                  |Dm, F7              |Bb7                 |Gm7, A7             |Dm                  |
+Gm, C7              |F                   |Gm, C7              |F, Dm               |A7                  |Dm                  |Bb7, A7             |Dm                  |
+Gm                  |Gm                  |Dm                  |Dm                  |Gm                  |Gm                  |C                   |A7, D7              |
+Gm                  |Gm                  |Dm                  |Dm                  |Gm                  |Gm                  |C                   |C7, C#dim7          |
