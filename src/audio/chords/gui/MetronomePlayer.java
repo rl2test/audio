@@ -1,6 +1,5 @@
 package audio.chords.gui;
 
-import static audio.Constants.O;
 import static audio.Constants.V;
 
 import javax.sound.midi.MidiChannel;
@@ -15,17 +14,9 @@ public class MetronomePlayer extends Thread {
 	protected volatile boolean runFlag 		= true;
 	private int PITCH 						= 42; // 35|37|42
 	private int CHANNEL 					= 9;
-	public int beginTempo;
-	public int endTempo;
-	public int numBeats;
-	public int increment;
 	public TimePanel panel	= null;
 
-    public MetronomePlayer(int beginTempo, int endTempo, int increment, int numBeats, TimePanel panel) {
-    	this.beginTempo = beginTempo;
-    	this.endTempo = endTempo;
-    	this.numBeats = numBeats;
-    	this.increment = increment;
+    public MetronomePlayer(TimePanel panel) {
     	this.panel = panel;
      }
 	
@@ -39,7 +30,7 @@ public class MetronomePlayer extends Thread {
 		channel.controlChange(10, 127); 
 		
 		// set initial tempo (bpm)
-		int tempo = beginTempo;
+		int tempo = panel.beginTempo;
 
 		// the interval between beats
 		int interval 			= (int) (1000d * 60d / tempo);
@@ -82,10 +73,10 @@ public class MetronomePlayer extends Thread {
 			endMidiNote(midiNote);
 
 			beatCount++;
-			if (beatCount > numBeats) {
+			if (beatCount > panel.numBeats) {
 				beatCount = 1;
-				if (tempo < endTempo) {
-					tempo += increment;
+				if (tempo < panel.endTempo) {
+					tempo += panel.increment;
 					interval = (int) (1000d * 60d / tempo);
 					log.debug(tempo);	
 					panel.tempoValueLabel.setText("" + tempo);
