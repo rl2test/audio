@@ -39,7 +39,7 @@ public class ChordPlayer extends Thread {
 	/** Flag indicating that default values are being used. */
 	private boolean usingDefaults			= true;
 	/** The genre. */
-	private String genre					= "";
+	//private String genre					= "";
 	/** The tune text. */
 	private String text						= null;
 	/** FilePanel reference. */
@@ -59,13 +59,14 @@ public class ChordPlayer extends Thread {
 	 * @param filePanel
 	 */
 	public ChordPlayer(
-			int beginTempo,
-			int endTempo,
-			int increment,
-			String genre,
+			//int beginTempo,
+			//int endTempo,
+			//int increment,
+			//String genre,
 			String text,
 			FilePanel filePanel,
 			DisplayPanel displayPanel) {
+		/*
 		if (beginTempo > 0) {
 			// use gui settings, otherwise retain default values
 			this.beginTempo		= beginTempo;
@@ -74,6 +75,7 @@ public class ChordPlayer extends Thread {
 			usingDefaults		= false;
 		}
 		this.genre			= genre;
+		*/
 		this.text			= text;
 		this.filePanel 		= filePanel;
 		this.displayPanel 	= displayPanel;
@@ -129,7 +131,7 @@ public class ChordPlayer extends Thread {
 
 			String transposeTo = filePanel.getTransposeTo();
 			
-			Tune tune = new Tune(genre, text, transposeTo);
+			Tune tune = new Tune(text, transposeTo); //genre, 
 			beatsPerBar	= tune.beatsPerBar;
 			Integer[] pattern = patterns.get(beatsPerBar);
 			

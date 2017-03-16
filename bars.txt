@@ -1,4 +1,7 @@
-Dm, F7              |Bb7                 |Gm7                 |A7                  |Dm, F7              |Bb7                 |Gm7, A7             |Dm                  |
-Gm, C7              |F                   |Gm, C7              |F, Dm               |A7                  |Dm                  |Bb7, A7             |Dm                  |
-Gm                  |Gm                  |Dm                  |Dm                  |Gm                  |Gm                  |C                   |A7, D7              |
-Gm                  |Gm                  |Dm                  |Dm                  |Gm                  |Gm                  |C                   |C7, C#dim7          |
+A Chorus
+Fm, Bbm             |Fm, C7              |Fm, Bbm             |C7, Fm              |Fm, Bbm             |Fm, C7              |Fm, Bbm             |C7, Fm              |
+Fm, Bbm             |Bbm                 |Eb7                 |Ab, C7              |Fm, Bbm             |Bbm                 |Fm, C7              |Fm                  |
+B Verse
+Fm                  |Bbm, C7             |Fm                  |G7, C7              |Fm                  |Bbm                 |G7                  |C                   |
+C
+Fm                  |Bbm, C7             |Fm                  |G7, C7              |Fm                  |Bbm                 |G7                  |C                   |

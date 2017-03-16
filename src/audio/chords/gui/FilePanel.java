@@ -46,9 +46,9 @@ public class FilePanel extends JPanel {
 	/** The singleton instance of this class. */    
 	private static FilePanel filePanel 				= null;
 	/** The update tempo label, which gets updated in real time. */
-	public JLabel updateTempoLabel 					= new JLabel("");
+	//public JLabel updateTempoLabel 					= new JLabel("");
     /** The message label */
-	public JLabel messageLabel 						= new JLabel("");
+	//public JLabel messageLabel 						= new JLabel("");
 	/** The player. */
 	public ChordPlayer chordPlayer 					= null;
 	private static final String[] UNPOPULATED_LIST  = {"----"};
@@ -91,22 +91,21 @@ public class FilePanel extends JPanel {
     private FilePanel() {
         setBackground(C[10]);
 		setLayout(null);
-		
+
+		/*
     	int tempoStart	= 40;
     	int tempoEnd 	= 250;
     	int tempoInc 	= 10;
-    	
     	int n = (tempoEnd - tempoStart) / tempoInc + 1;
     	Integer[] tempos = new Integer[n + 1]; // +1 allows for initial vale of 0
     	tempos[0] = 0; // if set to this value then ignore it
-    	
     	int index = 1;
     	for (int i = tempoStart; i <= tempoEnd; i += tempoInc) {
     		tempos[index++] = i;
     	}
-    	
 	    Integer[] increments = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-	    
+	    */
+		
 	    int x = 0;
 	    int y = 0;
 	    
@@ -116,11 +115,11 @@ public class FilePanel extends JPanel {
 	    // row 1 ///////////////////////////////////////////////////////////////	
 	    
 	    // chord label
-	    JLabel chordFileLabel = new JLabel("ChordFile");
-	    chordFileLabel.setBounds(x, y, W[3], W[1]);
-	    chordFileLabel.setFont(FONT);
-	    add(chordFileLabel);
-	    x += chordFileLabel.getWidth();
+	    //JLabel chordFileLabel = new JLabel("ChordFile");
+	    //chordFileLabel.setBounds(x, y, W[3], W[1]);
+	    //chordFileLabel.setFont(FONT);
+	    //add(chordFileLabel);
+	    //x += chordFileLabel.getWidth();
 	    
 	    // play button, in class declaration
 	    playButton.setBounds(x, y, W[4], W[1]);
@@ -135,6 +134,7 @@ public class FilePanel extends JPanel {
 	    stopButton.setEnabled(false);
 	    x += stopButton.getWidth();
 	    
+	    /*
 	    // begin tempo label
 	    JLabel beginTempoLabel = new JLabel("Begin:");
 	    beginTempoLabel.setBounds(x, y, W[2], W[1]);
@@ -191,6 +191,7 @@ public class FilePanel extends JPanel {
 	    updateTempoLabel.setFont(FONT);
 	    add(updateTempoLabel);
 	    x += updateTempoLabel.getWidth();
+	    */
 	    
 	    // save button
 	    final JButton saveButton = new JButton("Save");
@@ -206,6 +207,7 @@ public class FilePanel extends JPanel {
 	    add(saveAsButton);
 	    x += saveAsButton.getWidth();
 	    
+	    /*
 	    // message label
 	    messageLabel.setBounds(x, y, W[9] + 10, W[1]);
 	    messageLabel.setBackground(C[12]);
@@ -216,6 +218,7 @@ public class FilePanel extends JPanel {
 	    x += messageLabel.getWidth();
 	    
 	    log.debug("row 1 final x=" + x);
+	    */
 	    
 	    // row 2 ///////////////////////////////////////////////////////////////
 	    x = 0;
@@ -330,11 +333,11 @@ public class FilePanel extends JPanel {
 	    playButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// get current values
-			    int beginTempo		= (Integer) beginTempoBox.getSelectedItem();
-			    int endTempo 		= (Integer) endTempoBox.getSelectedItem();
-			    int increment 		= (Integer) incrementBox.getSelectedItem();
+			    //int beginTempo		= (Integer) beginTempoBox.getSelectedItem();
+			    //int endTempo 		= (Integer) endTempoBox.getSelectedItem();
+			    //int increment 		= (Integer) incrementBox.getSelectedItem();
 			    
-				String genre		= (String) genreBox.getSelectedItem();
+				//String genre		= (String) genreBox.getSelectedItem();
   
 				String text 		= textArea.getText();
 				
@@ -342,10 +345,10 @@ public class FilePanel extends JPanel {
 				stopButton.setEnabled(true);
 				
 				chordPlayer = new ChordPlayer(
-							beginTempo,
-							endTempo,
-							increment,
-							genre,
+							//beginTempo,
+							//endTempo,
+							//increment,
+							//genre,
 							text,
 							filePanel,
 							displayPanel);
@@ -430,12 +433,13 @@ public class FilePanel extends JPanel {
 	        public void keyReleased(KeyEvent keyEvent) {
 	        }
 	        public void keyTyped(KeyEvent keyEvent) {
-	        	setTuneUpdated();
+	        	//setTuneUpdated();
 	        }
 	    });
 
     }
     
+    /*
     public void setTuneUpdated() {
     	messageLabel.setBackground(Color.BLUE);
     	messageLabel.setText("The current tune has been updated");
@@ -445,6 +449,7 @@ public class FilePanel extends JPanel {
     	messageLabel.setBackground(C[12]);
     	messageLabel.setText("");    	
     }
+    */
     
     /**
      * This method is called when the chord player throws an exception.
@@ -540,7 +545,7 @@ public class FilePanel extends JPanel {
 	private void setTextArea(String genreName, String folderName, String tuneName) {
 		File tuneFile = getTuneFile(genreName, folderName, tuneName);
 		textArea.setText(Util.getText(tuneFile));
-		clearTuneUpdated();
+		//clearTuneUpdated();
 	} 
 	
 	/**
@@ -616,7 +621,7 @@ public class FilePanel extends JPanel {
 	 * @see audio.chords.gui.ChordPanel#updateTempo(java.lang.String)
 	 */
 	public void updateTempo(String tempo) {
-		updateTempoLabel.setText(tempo);
+		//updateTempoLabel.setText(tempo);
 	}
 
 	/* (non-Javadoc)
@@ -629,8 +634,8 @@ public class FilePanel extends JPanel {
 	 * @see audio.chords.gui.ChordPanel#updateTranspose(java.lang.String)
 	 */
 	public void updateMessage(String message) {
-    	messageLabel.setBackground(Color.BLUE);
-    	messageLabel.setText(message);
+    	//messageLabel.setBackground(Color.BLUE);
+    	//messageLabel.setText(message);
 	}
 
 	/* (non-Javadoc)

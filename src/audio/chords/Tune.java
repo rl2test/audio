@@ -48,7 +48,7 @@ import audio.Util;
 public class Tune {
 	/** The log. */
 	private Logger log 				= Logger.getLogger(getClass());
-	public String genre				= "";
+	//public String genre				= "";
 	/** The text of this tune. */
 	public String text 				= "";
 	public String errorMsg 			= "";
@@ -77,10 +77,10 @@ public class Tune {
 	 * @param genre
 	 * @param text
 	 */
-	public Tune(String genre, String text, String transposeTo) throws Exception {
+	public Tune(String text, String transposeTo) throws Exception { //String genre, 
 		Maps.bars.clear();
 		
-		this.genre 			= genre;
+		//this.genre 			= genre;
 		this.text 			= text;
 		this.transposeTo 	= transposeTo;
 
@@ -302,7 +302,7 @@ public class Tune {
 		StringBuffer sb  = new StringBuffer();
 		
 		sb.append(NL + "[Tune]" + NL);
-		sb.append("genre       = " + genre + NL);
+		//sb.append("genre       = " + genre + NL);
 		sb.append("text        = " + NL + text + NL);
 		sb.append("beatsPerBar = " + beatsPerBar + NL);
 		sb.append("beginTempo  = " + beginTempo + NL);
