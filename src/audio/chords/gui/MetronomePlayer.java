@@ -49,7 +49,7 @@ public class MetronomePlayer extends Thread {
 		int beatCount = 1;
 
 		// init tempo label
-		panel.tempoValueLabel.setText("" + tempo);
+		panel.labels.get("tempoValue").setText("" + tempo);
 		
 		// the note to be played by the metronome
 		MidiNote midiNote1 = new MidiNote(CHANNEL, PITCH, 1, V[5]);
@@ -79,7 +79,7 @@ public class MetronomePlayer extends Thread {
 					tempo += panel.increment;
 					interval = (int) (1000d * 60d / tempo);
 					log.debug(tempo);	
-					panel.tempoValueLabel.setText("" + tempo);
+					panel.labels.get("tempoValue").setText("" + tempo);
 				}
 			}
 			oversleptInterval = System.currentTimeMillis() - expectedWakeUpTime;

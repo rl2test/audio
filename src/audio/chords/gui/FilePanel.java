@@ -2,23 +2,28 @@ package audio.chords.gui;
 
 import static audio.Constants.C;
 import static audio.Constants.CHORDS_FOLDER;
-import static audio.Constants.COMMA;
 import static audio.Constants.EXT_CHORDS;
 import static audio.Constants.FONT;
 import static audio.Constants.FS;
+import static audio.Constants.GENRE_NAMES;
 import static audio.Constants.MUSIC_DIR;
 import static audio.Constants.NL;
 import static audio.Constants.TRANSPOSE_KEYS;
 import static audio.Constants.W;
+import static audio.Constants.GENRE_NAME;
+import static audio.Constants.FOLDER_NAME;
+import static audio.Constants.TUNE_NAME;
 
-import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
@@ -29,26 +34,18 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-import org.apache.log4j.Logger;
-
-import audio.Config;
+//import audio.Config;
 import audio.ExtensionFilter;
 import audio.Util;
 
-public class FilePanel extends JPanel { 
+public class FilePanel extends AudioPanel { 
 	/** Default serialVersionUID. */
 	private static final long serialVersionUID 		= 1L;
-	/** The log. */
-	private Logger log								= Logger.getLogger(getClass());
 	/** The singleton instance of this class. */    
 	private static FilePanel filePanel 				= null;
-	/** The update tempo label, which gets updated in real time. */
-	//public JLabel updateTempoLabel 					= new JLabel("");
-    /** The message label */
-	//public JLabel messageLabel 						= new JLabel("");
+	private final FileListener listener 			= new FileListener();
 	/** The player. */
 	public ChordPlayer chordPlayer 					= null;
 	private static final String[] UNPOPULATED_LIST  = {"----"};
@@ -64,23 +61,22 @@ public class FilePanel extends JPanel {
 	private final JComboBox<String> tuneBox 		= new JComboBox<String>();
 	/** The text area. */
 	public JTextArea textArea 						= null;
+	/** KeyPanel reference. */
+	public KeyPanel keyPanel 						= null;
+	/** TimePanel reference. */
+	public TimePanel timePanel 						= null;
 	/** DisplayPanel. */
 	public DisplayPanel displayPanel 				= null;
 	/** Transpose box. */
 	private final JComboBox<String> transposeBox 	= new JComboBox<String>();
 	/** Transpose checkBox. */
 	public JCheckBox transposeCheckBox 				= new JCheckBox("Transpose");
-	public static String[] genreNames				= null;
+	public boolean playing							= false;
 	
-	static {
-		String genreNamesProperty = Config.get("genreNames");
-		genreNames = genreNamesProperty.split(COMMA);
-	}
-    
 	/**
      * @return singleton instance of this class
      */
-    public static FilePanel getInstance() {
+    public static FilePanel getInstance() throws Exception {
         if (filePanel == null) {
         	filePanel = new FilePanel();
     	}
@@ -88,217 +84,69 @@ public class FilePanel extends JPanel {
     }
 	
     /** Private constructor */
-    private FilePanel() {
-        setBackground(C[10]);
-		setLayout(null);
+    private FilePanel() throws Exception {
+        super();
+	    
+		// genre
+		add(getLabel("Genre", null, C[6], C[16], x, y, W[2], W[1], null));
+	    x += W[2] + 1;
 
-		/*
-    	int tempoStart	= 40;
-    	int tempoEnd 	= 250;
-    	int tempoInc 	= 10;
-    	int n = (tempoEnd - tempoStart) / tempoInc + 1;
-    	Integer[] tempos = new Integer[n + 1]; // +1 allows for initial vale of 0
-    	tempos[0] = 0; // if set to this value then ignore it
-    	int index = 1;
-    	for (int i = tempoStart; i <= tempoEnd; i += tempoInc) {
-    		tempos[index++] = i;
-    	}
-	    Integer[] increments = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-	    */
-		
-	    int x = 0;
-	    int y = 0;
-	    
-	    final int FOLDER_WIDTH 	= 400;
-	    final int TUNE_WIDTH 	= 395;
-	    
-	    // row 1 ///////////////////////////////////////////////////////////////	
-	    
-	    // chord label
-	    //JLabel chordFileLabel = new JLabel("ChordFile");
-	    //chordFileLabel.setBounds(x, y, W[3], W[1]);
-	    //chordFileLabel.setFont(FONT);
-	    //add(chordFileLabel);
-	    //x += chordFileLabel.getWidth();
-	    
-	    // play button, in class declaration
-	    playButton.setBounds(x, y, W[4], W[1]);
-	    playButton.setFont(FONT);
-	    add(playButton);
-	    x += playButton.getWidth();
-	    
-	    // stop button, in class declaration
-	    stopButton.setBounds(x, y, W[4], W[1]);
-	    stopButton.setFont(FONT);
-	    add(stopButton);
-	    stopButton.setEnabled(false);
-	    x += stopButton.getWidth();
-	    
-	    /*
-	    // begin tempo label
-	    JLabel beginTempoLabel = new JLabel("Begin:");
-	    beginTempoLabel.setBounds(x, y, W[2], W[1]);
-	    beginTempoLabel.setFont(FONT);
-	    add(beginTempoLabel);
-	    x += beginTempoLabel.getWidth();
-	    
-	    // begin tempo combo box
-	    final JComboBox<Integer> beginTempoBox = new JComboBox<Integer>(tempos);
-	    beginTempoBox.setBounds(x, y, W[3], W[1]);
-	    beginTempoBox.setFont(FONT);
-	    add(beginTempoBox);
-	    x += beginTempoBox.getWidth();
-	    
-	    // end tempo label
-	    JLabel endTempoLabel = new JLabel("End:");
-	    endTempoLabel.setBounds(x, y, W[2], W[1]);
-	    endTempoLabel.setFont(FONT);
-	    add(endTempoLabel);
-	    x += endTempoLabel.getWidth();
-	    
-	    // end tempo combo box
-	    final JComboBox<Integer> endTempoBox = new JComboBox<Integer>(tempos);
-	    endTempoBox.setBounds(x, y, W[3], W[1]);
-	    endTempoBox.setFont(FONT);
-	    add(endTempoBox);
-	    x += endTempoBox.getWidth();
-	    
-	    // increment label
-	    JLabel incrementLabel = new JLabel("Increment:");
-	    incrementLabel.setBounds(x, y, W[3], W[1]);
-	    incrementLabel.setFont(FONT);
-	    add(incrementLabel);
-	    x += incrementLabel.getWidth();
-	    
-	    // increment tempo combo box
-	    final JComboBox<Integer> incrementBox = new JComboBox<Integer>(increments);
-	    incrementBox.setBounds(x, y, W[3], W[1]);
-	    incrementBox.setFont(FONT);
-	    add(incrementBox);
-	    x += incrementBox.getWidth();
-	    
-	    // tempo label
-	    JLabel tempoLabel = new JLabel("Tempo:");
-	    tempoLabel.setBounds(x, y, W[2], W[1]);
-	    tempoLabel.setFont(FONT);
-	    add(tempoLabel);
-	    x += tempoLabel.getWidth();
-	    
-	    // chord tempo label
-	    updateTempoLabel.setBounds(x, y, W[2], W[1]);
-	    updateTempoLabel.setBackground(C[12]);
-	    updateTempoLabel.setOpaque(true);
-	    updateTempoLabel.setFont(FONT);
-	    add(updateTempoLabel);
-	    x += updateTempoLabel.getWidth();
-	    */
-	    
-	    // save button
-	    final JButton saveButton = new JButton("Save");
-	    saveButton.setBounds(x, y, W[3], W[1]);
-	    saveButton.setFont(FONT);
-	    add(saveButton);
-	    x += saveButton.getWidth();
-
-	    // saveAs button
-	    final JButton saveAsButton = new JButton("Save As");
-	    saveAsButton.setBounds(x, y, W[4], W[1]);
-	    saveAsButton.setFont(FONT);
-	    add(saveAsButton);
-	    x += saveAsButton.getWidth();
-	    
-	    /*
-	    // message label
-	    messageLabel.setBounds(x, y, W[9] + 10, W[1]);
-	    messageLabel.setBackground(C[12]);
-	    messageLabel.setForeground(Color.WHITE);
-	    messageLabel.setOpaque(true);
-	    messageLabel.setFont(FONT);
-	    add(messageLabel);
-	    x += messageLabel.getWidth();
-	    
-	    log.debug("row 1 final x=" + x);
-	    */
-	    
-	    // row 2 ///////////////////////////////////////////////////////////////
-	    x = 0;
-		y += W[1];  
-	    
-	    // genre label
-	    JLabel genreLabel = new JLabel("Genre:");
-	    genreLabel.setBounds(x, y, W[3], W[1]);
-	    genreLabel.setFont(FONT);
-	    add(genreLabel);
-	    x += genreLabel.getWidth();
-		
 	    // genre combo box
-	    genreBox.setModel(new DefaultComboBoxModel<String>(genreNames));
-		// create and register genreBox listener
+	    genreBox.setModel(new DefaultComboBoxModel<String>(GENRE_NAMES));
 		genreBox.addItemListener(new GenreBoxListener());
 		genreBox.setBounds(x, y, W[4], W[1]);
 		genreBox.setFont(FONT);
 		add(genreBox);
-	    x += genreBox.getWidth();
+		// genre combo box bg label - note: paints BEFORE preceding element
+		add(getLabel(null, null, C[6], null, x, y, W[4], W[1], null));
+	    x += W[4] + 1;
 
-		// folder label
-	    JLabel folderLabel = new JLabel("Folder:");
-	    folderLabel.setBounds(x, y, W[2], W[1]);
-	    folderLabel.setFont(FONT);
-	    add(folderLabel);
-	    x += folderLabel.getWidth();
+	    // folder
+		add(getLabel("Folder", null, C[6], C[16], x, y, W[2], W[1], null));
+	    x += W[2] + 1;
 	    
 	    // init folder combo box with unpopulated list
-	    folderBox.setModel(new DefaultComboBoxModel<String>(UNPOPULATED_LIST)); // the default
-		// create and register folderBox listener
+	    folderBox.setModel(new DefaultComboBoxModel<String>(UNPOPULATED_LIST));
 	    folderBox.addItemListener(new FolderBoxListener());
-		folderBox.setBounds(x, y, FOLDER_WIDTH, W[1]);
+		folderBox.setBounds(x, y, W[16], W[1]);
 		folderBox.setFont(FONT);
 		add(folderBox);
-	    x += folderBox.getWidth();
+		// folder combo box bg label - note: paints BEFORE preceding element
+		add(getLabel(null, null, C[6], null, x, y, W[16], W[1], null));
+	    x += W[16] + 1;
 
 		// tune label
-	    JLabel tuneLabel = new JLabel("Tune:");
-	    tuneLabel.setBounds(x, y, W[2], W[1]);
-	    tuneLabel.setFont(FONT);
-	    add(tuneLabel);
-	    x += tuneLabel.getWidth(); 
+		add(getLabel("Tune", null, C[6], C[16], x, y, W[2], W[1], null));
+	    x += W[2] + 1;
 	    
 		// init tune combo box with unpopulated list
 		tuneBox.setModel(new DefaultComboBoxModel<String>(UNPOPULATED_LIST));
 		// create and register tuneBox listener
 	    tuneBox.addItemListener(new TuneBoxListener());
-		tuneBox.setBounds(x, y, TUNE_WIDTH, W[1]);
+		tuneBox.setBounds(x, y, W[16], W[1]);
 		tuneBox.setFont(FONT);
 		add(tuneBox);
-		x += tuneBox.getWidth();
+		// tune combo box bg label - note: paints BEFORE preceding element
+		add(getLabel(null, null, C[6], null, x, y, W[16], W[1], null));
+	    x += W[16] + 1;
 
-	    // refresh button
-	    final JButton refreshTuneButton = new JButton("Refresh");
-	    refreshTuneButton.setBounds(x, y, W[4], W[1]);
-	    refreshTuneButton.setFont(FONT);
-	    add(refreshTuneButton);
-	    x += refreshTuneButton.getWidth();
-
-	    // transpose combo box
-	    transposeBox.setModel(new DefaultComboBoxModel<String>(TRANSPOSE_KEYS));
-		// create and register folderBox listener
-	    transposeBox.setBounds(x, y, W[3], W[1]);
-	    transposeBox.setFont(FONT);
-		add(transposeBox);
-	    x += transposeBox.getWidth();
+	    // play/stop
+	    add(getLabel("Play", "playStop", C[6], C[16], x, y, W[2], W[1], listener));
+	    x += W[2] + 1;
 	    
-	    // transpose checkBox
-	    transposeCheckBox.setBounds(x, y, W[4], W[1]);
-	    transposeCheckBox.setOpaque(false);
-	    transposeCheckBox.setSelected(false);
-	    transposeCheckBox.setFont(FONT);
-	    add(transposeCheckBox);
-	    x += transposeCheckBox.getWidth();
-	    
-	    log.debug("row 2 final x=" + x);
-		
-	    // row 3 ///////////////////////////////////////////////////////////////
+	    // save
+	    add(getLabel("Save", "save", C[6], C[16], x, y, W[2], W[1], listener));
+	    x += W[2] + 1;
 
+	    // save as
+	    add(getLabel("Save as", "saveAs", C[6], C[16], x, y, W[3], W[1], listener));
+	    x += W[3] + 1;
+
+	    // refresh
+		add(getLabel("Refresh", "refresh", C[6], C[16], x, y, W[2], W[1], listener));
+	    x += W[2] + 1;
+
+	    // row 2 ///////////////////////////////////////////////////////////////
 		x = 0;
 		y += W[1];  
 		
@@ -326,107 +174,6 @@ public class FilePanel extends JPanel {
 		
 	    x += textArea.getWidth();
 	    
-	    
-	    /* action listeners */
-	    
-	    // play button listener
-	    playButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// get current values
-			    //int beginTempo		= (Integer) beginTempoBox.getSelectedItem();
-			    //int endTempo 		= (Integer) endTempoBox.getSelectedItem();
-			    //int increment 		= (Integer) incrementBox.getSelectedItem();
-			    
-				//String genre		= (String) genreBox.getSelectedItem();
-  
-				String text 		= textArea.getText();
-				
-				playButton.setEnabled(false);
-				stopButton.setEnabled(true);
-				
-				chordPlayer = new ChordPlayer(
-							//beginTempo,
-							//endTempo,
-							//increment,
-							//genre,
-							text,
-							filePanel,
-							displayPanel);
-				chordPlayer.start();
-			}
-		});
-
-	    // stop button listener
-	    stopButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				chordPlayer.destroyPlayer();
-				chordPlayer = null;
-
-				playButton.setEnabled(true);
-				stopButton.setEnabled(false);
-			}
-		});
-	    
-	    // refresh button listener
-	    refreshTuneButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String genre		= (String) genreBox.getSelectedItem();
-				String folderName	= (String) folderBox.getSelectedItem();
-				
-				updateTuneBox(genre, folderName);
-			}
-		});
-	    
-	    // save button listener
-	    saveButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String genre		= (String) genreBox.getSelectedItem();
-				String folderName	= (String) folderBox.getSelectedItem();
-				String tuneName		= (String) tuneBox.getSelectedItem();
-				String text 		= textArea.getText();
-				
-				//default icon, custom title
-				int n = JOptionPane.showConfirmDialog(
-				    null,
-				    "Overwrite existing file: " + tuneName + "?",
-				    "Warning",
-				    JOptionPane.YES_NO_OPTION);
-				if (n == 0) {
-					save(genre, folderName, tuneName, text);
-					log.debug("save " + genre + NL + folderName + NL + tuneName + NL + text);
-				}
-			}
-		});
-	    
-	    // save button listener
-	    saveAsButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String genre		= (String) genreBox.getSelectedItem();
-				String folderName	= (String) folderBox.getSelectedItem();
-				String tuneName		= (String) tuneBox.getSelectedItem();
-				String text 		= textArea.getText();
-
-			    String s = (String) JOptionPane.showInputDialog(
-						null,
-						"File Name",
-						"Save As ...",
-						JOptionPane.PLAIN_MESSAGE,
-						null,
-						null,
-						tuneName);
-
-				if ((s != null) && (s.length() > 0)) {
-					if (s.endsWith(EXT_CHORDS)) {
-						s.replace(EXT_CHORDS, "");
-					}
-				    save(	genre,
-				    		folderName,
-				    		s,
-				    		text);
-				} 
-			}
-		});
-	    
 	    textArea.addKeyListener( new KeyListener() {
 	        public void keyPressed(KeyEvent keyEvent) {
 	        }
@@ -437,6 +184,9 @@ public class FilePanel extends JPanel {
 	        }
 	    });
 
+		genreBox.setSelectedItem(GENRE_NAME);
+		folderBox.setSelectedItem(FOLDER_NAME);
+		tuneBox.setSelectedItem(TUNE_NAME);
     }
     
     /*
@@ -485,8 +235,6 @@ public class FilePanel extends JPanel {
 			folderNames[i++] = dirName;
 		}
 
-		
-		
 	    folderBox.setModel(new DefaultComboBoxModel<String>(folderNames));
 	    
 	    String folderName = folderNames[0];
@@ -494,7 +242,6 @@ public class FilePanel extends JPanel {
 	    
 	    updateTuneBox(genreName, folderName);
 	}
-    
     
 	/**
 	 * Update the tuneBox.
@@ -618,27 +365,6 @@ public class FilePanel extends JPanel {
 	}
 	
 	/* (non-Javadoc)
-	 * @see audio.chords.gui.ChordPanel#updateTempo(java.lang.String)
-	 */
-	public void updateTempo(String tempo) {
-		//updateTempoLabel.setText(tempo);
-	}
-
-	/* (non-Javadoc)
-	 * @see audio.chords.gui.ChordPanel#updateChord(java.lang.String)
-	 */
-	public void updateChord(String chord) {
-	}
-	
-	/* (non-Javadoc)
-	 * @see audio.chords.gui.ChordPanel#updateTranspose(java.lang.String)
-	 */
-	public void updateMessage(String message) {
-    	//messageLabel.setBackground(Color.BLUE);
-    	//messageLabel.setText(message);
-	}
-
-	/* (non-Javadoc)
 	 * @see audio.chords.gui.ChordPanel#getTransposeTo()
 	 */
 	public String getTransposeTo() {
@@ -652,9 +378,94 @@ public class FilePanel extends JPanel {
 	 * Init the drop-downs.
 	 */
 	public void init() {
-		genreBox.setSelectedItem(Config.get("chordFile.GenreName.default"));
-		folderBox.setSelectedItem(Config.get("chordFile.FolderName.default"));
-		tuneBox.setSelectedItem(Config.get("chordFile.TuneName.default"));
+		//genreBox.setSelectedItem(GENRE_NAME);
+		//folderBox.setSelectedItem(FOLDER_NAME);
+		//tuneBox.setSelectedItem(TUNE_NAME);
 	}
+	
+    private class FileListener extends MouseAdapter {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            JLabel l = (JLabel) e.getSource();
+            String name = l.getName();
+            log.debug("name=" + name);
+            
+            if (name.equals("playStop")) {
+            	if (playing) {
+    				chordPlayer.destroyPlayer();
+    				chordPlayer = null;
+    				playing = false;
+    				l.setText("Play");
+            	} else {
+					String text = textArea.getText();
+					chordPlayer = new ChordPlayer(
+								text,
+								keyPanel,
+								timePanel,
+								filePanel,
+								displayPanel);
+					chordPlayer.start();
+					playing = true;
+					l.setText("Stop");
+            	}	
+            } else if (name.equals("refresh")) {
+            	String genre		= (String) genreBox.getSelectedItem();
+            	String folderName	= (String) folderBox.getSelectedItem();
+            	updateTuneBox(genre, folderName);
+            } else if (name.equals("save")) {
+            	String genre		= (String) genreBox.getSelectedItem();
+				String folderName	= (String) folderBox.getSelectedItem();
+				String tuneName		= (String) tuneBox.getSelectedItem();
+				String text 		= textArea.getText();
+				
+				int n = JOptionPane.showConfirmDialog(
+				    null,
+				    "Overwrite existing file: " + tuneName + "?",
+				    "Warning",
+				    JOptionPane.YES_NO_OPTION);
+				if (n == 0) {
+					save(genre, folderName, tuneName, text);
+					log.debug("save " + NL + genre + NL + folderName + NL + tuneName + NL + text);
+				}
+            } else if (name.equals("saveAs")) {
+				String genre		= (String) genreBox.getSelectedItem();
+				String folderName	= (String) folderBox.getSelectedItem();
+				String tuneName		= (String) tuneBox.getSelectedItem();
+				String text 		= textArea.getText();
+
+			    String s = (String) JOptionPane.showInputDialog(
+						null,
+						"File Name",
+						"Save As ...",
+						JOptionPane.PLAIN_MESSAGE,
+						null,
+						null,
+						tuneName);
+				if ((s != null) && (s.length() > 0)) {
+					boolean save = false;	
+					if (s.endsWith(EXT_CHORDS)) {
+						s.replace(EXT_CHORDS, "");
+					}
+					if (s.equals(tuneName)) {
+						int n = JOptionPane.showConfirmDialog(
+							    null,
+							    "Overwrite existing file: " + tuneName + "?",
+							    "Warning",
+							    JOptionPane.YES_NO_OPTION);
+						if (n == 0) {
+							save = true;
+						}
+					} else {
+						save = true;
+					}
+					if (save) {
+					    save(genre, folderName, s, text);
+					    updateTuneBox(genre, folderName);
+					    log.debug("save " + NL + genre + NL + folderName + NL + s + NL + text);
+					}
+				} 
+            }
+        }
+    }
 }
 

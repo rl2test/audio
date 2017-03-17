@@ -112,9 +112,28 @@ public class Constants {
 	public static final String REST_4					= "z4";
 	public static final String ALPHABET					= "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	
-	public static final String[] TRANSPOSE_KEYS 		= {"C", "F", "Bb", "Eb", "Ab", "Db", "F#", "B", "E", "A", "D", "G"};
-	public static final int[] TRANSPOSE_KEY_INTERVALS	= { 0,   5,   10,   3,    8,    1,    6,    11,  4,   9,   2,   7 };
+	/*
+		C major:	C	Dm	Em	F	G	Am
+		G major:	G	Am	Bm	C	D	Em
+		D major:	D	Em	F♯m	G	A	Bm
+		A major:	A	Bm	C♯m	D	E	F♯m
+		E major:	E	F♯m	G♯m	A	B	C♯m
+		B major:	B	C♯m	D♯m	E	F♯	G♯m
+		F♯ major:	F♯	G♯m	A♯m	B	C♯	D♯m
+		G♭ major:	G♭	A♭m	B♭m	C♭	D♭	E♭m
+		D♭ major:	D♭	E♭m	Fm	G♭	A♭	B♭m
+		A♭ major:	A♭	B♭m	Cm	D♭	E♭	Fm
+		E♭ major:	E♭	Fm	Gm	A♭	B♭	Cm
+		B♭ major:	B♭	Cm	Dm	E♭	F	Gm
+		F major:	F	Gm	Am	B♭	C	Dm
 
+		C  F  Bb Eb    Ab Db Gb/F# B  E  A  D G
+		c  f  bb eb/d# g# c# f#    b  e  a  d g  
+	 */
+	
+	public static final String[] TRANSPOSE_KEYS 		= {"C", "F", "Bb", "Eb",    "Ab", "Db", "Gb/F#", "B", "E", "A", "D", "G"};
+	public static final String[] TRANSPOSE_KEYS_MINOR	= {"c", "f", "bb", "eb/d#", "g#", "c#", "f#",    "b", "e", "a", "d", "g"};
+	public static final int[] TRANSPOSE_KEY_INTERVALS	= { 0,   5,   10,   3,       8,    1,    6,       11,  4,   9,   2,   7 };
 	
 	/** The list of alphabetical tokens. */	
 	public static final String[] ALPHABET_TOKENS 		= {"C", "D", "E", "F", "G", "A", "B"};
@@ -126,10 +145,6 @@ public class Constants {
 	public static final int PERFECT_FIFTH				= 7;
 	/** Octave. */
 	public static final int OCTAVE 						= 12;
-	
-	/* Instrument definitions */
-	public static final String INSTRUMENT_VIOLIN		= "Violin";
-	public static final String INSTRUMENT_GUITAR		= "Guitar";
 	
 	/* MIDI instrument definitions */
 	public static final int PIANO_1 					= 0;
@@ -284,15 +299,6 @@ public class Constants {
 	public final String SYSTEM_MYMIT					= "mymit";
 	public final String SYSTEM_AEBERSOLD				= "aebersold";
 	public final String SCALE_SYSTEM					= SYSTEM_AEBERSOLD; //default setting 
-
-	/** The default beatsPerBar. */
-	public static final int DEFAULT_BEATS_PER_BAR		= 4;
-	/** The default beginTempo. */
-	public static final int DEFAULT_BEGIN_TEMPO			= 60;
-	/** The default endTempo. */	
-	public static final int DEFAULT_END_TEMPO			= 60;
-	/** The default increment. */
-	public static final int DEFAULT_INCREMENT			= 1;
 	
 	/* '.chords' file info field definitions, corresponding to '.abc' file definitions. */
 	public static final String INFO_TITLE 				= "T";
@@ -308,11 +314,31 @@ public class Constants {
 	
 	/** The default font. */
 	public static Font FONT 							= new Font("Arial", Font.PLAIN, 12);
+	/** The default font small. */
+	public static Font FONT_SM 							= new Font("Arial", Font.PLAIN, 10);
 	
 	/* start, end defs */
 	public static int START								= 0;
 	public static int END								= 1;
 
+	public static String[] GENRE_NAMES = {"country", "jazz", "jewish", "klezmer", "other"};
+	public static boolean GENERATE_CHORD_TYPES_HTML_FILE = false;
+	public static String GENRE_NAME = "jazz";
+	public static String FOLDER_NAME = "Aebersold - Jazz Handbook";
+	public static String TUNE_NAME = "01";
+	
+	/*
+		#
+		genreNames
+		generateChordTypesHtmlFile=false
+		#chordFilePanel
+		chordFile.GenreName.default=jazz
+		chordFile.FolderName.default=Aebersold - Jazz Handbook
+		chordFile.TuneName.default=01
+		#displayPanel
+		display.BarsPerLine.default=8
+	 */
+	
 	/*
 	0 0
 	1 15

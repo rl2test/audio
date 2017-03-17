@@ -5,31 +5,16 @@ import static audio.Constants.W;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.swing.JLabel;
-
-import org.apache.log4j.Logger;
-
 
 public class TimePanel extends AudioPanel { 
 	/** Default serialVersionUID. */
 	private static final long serialVersionUID 	= 1L;
-	/** The log. */
-	private Logger log							= Logger.getLogger(getClass());
 	/** The singleton instance of this class. */    
 	private static TimePanel panel 				= null;
 	/** The player. */
 	public MetronomePlayer player 				= null;
-	private final MyMouseListener listener 		= new MyMouseListener();
-	// labels that get updated 
-	public JLabel patternValueLabel				= null;
-	public JLabel beginLabel					= null;
-    public JLabel endLabel						= null;
-    public JLabel tempoValueLabel				= null;
-	// labels with listeners
-    public Map<String, JLabel> labels			= new HashMap<String, JLabel>();
+	private final TimeListener timeListener 	= new TimeListener();
     // set property defaults
     public int time								= 4;
 	public int timeType							= 1;
@@ -37,11 +22,13 @@ public class TimePanel extends AudioPanel {
 	public int endTempo							= 180;
     public int increment 						= 1;
 	public int numBeats 						= 8;
+	public boolean setTime						= false; // if true this will overide the tune settings
+	public boolean metronome					= false;
 
     /**
      * @return singleton instance of this class
      */
-    public static TimePanel getInstance() {
+    public static TimePanel getInstance() throws Exception {
         if (panel == null) {
         	panel = new TimePanel();
     	}
@@ -49,9 +36,8 @@ public class TimePanel extends AudioPanel {
     }
 	
     /** public constructor builds ui */
-    private TimePanel() {
-        setBackground(C[0]);
-		setLayout(null);
+    private TimePanel() throws Exception {
+    	super();
 		
 		int[] times = {2, 3, 4, 5, 6, 7};
 		int[] timeTypes = {1, 2};
@@ -62,33 +48,27 @@ public class TimePanel extends AudioPanel {
     		tempos[i] = (i + 5) * 10;
     	}
     	
-	    int[] numBeats = {8, 16, 32};
+	    int[] numBeatsArr = {8, 16, 32};
 	    
-	    int x = 0, y = 0, dx = 0, dy = 0;
+	    int dx = 0, dy = 0;
 	    
-	    //String text, String name, Color bg, Color fg, int x, int y, int w, int h, boolean addListener
-	    // metronome label
-	    add(getLabel("Metronome", null, C[6], C[16], x, y, W[3], W[1], null));
-	    x += W[3] + 1;	    
-	    
-	    // play/stop label
-	    JLabel playStopLabel = getLabel(">", "playStop", C[12], C[0], x, y, W[1], W[1], listener);
-	    add(playStopLabel);
-	    x += W[1] + 1;	    
+	    // getLabel(String text, String name, Color bg, Color fg, int x, int y, int w, int h, boolean addListener)
 	    
 	    // time label
 	    add(getLabel("Time", null, C[6], C[16], x, y, W[2], W[1], null));
 	    x += W[2] + 1;	    
 
+	    // setTime label
+	    add(getLabel("Set time", "setTime", C[12], C[0], x, y, W[3], W[1], timeListener));
+	    x += W[3] + 1;		    
+	    
 	    // time labels
 	    dx = 0;
 	    for (int i = 0; i < times.length; i++) {
 	    	int time = times[i];
 	    	String name = "time" + time;
-	    	JLabel label = getLabel("" + time, name, C[12], C[0], x + dx, y, 12, W[1], listener);  
-	    	add(label);
+	    	add(getLabel("" + time, name, C[12], C[0], x + dx, y, 12, W[1], timeListener));
 	    	dx += 12 + 1;
-	    	labels.put(name, label);
 	    }
 	    x += dx;
 	    
@@ -101,10 +81,8 @@ public class TimePanel extends AudioPanel {
 	    for (int i = 0; i < timeTypes.length; i++) {
 	    	int type = timeTypes[i];
 	    	String name = "type" + type;
-	    	JLabel label = getLabel("" + type, name, C[12], C[0], x + dx, y, 12, W[1], listener);  
-	    	add(label);
+	    	add(getLabel("" + type, name, C[12], C[0], x + dx, y, 12, W[1], timeListener));
 	    	dx += 12 + 1;
-	    	labels.put(name, label);
 	    }
 	    x += dx;
 	    
@@ -113,23 +91,19 @@ public class TimePanel extends AudioPanel {
 	    x += W[3] + 1;	    
 
 	    // pattern value label
-	    patternValueLabel = getLabel("", "patternValue", C[14], C[0], x, y, W[2], W[1], null);
-	    add(patternValueLabel);
+	    add(getLabel("", "patternValue", C[16], C[0], x, y, W[2], W[1], null));
 	    x += W[2] + 1;	 	    
 	    
 	    // begin label
-	    beginLabel = getLabel("Begin", null, C[6], C[16], x, y, W[2], W[1], null); 
-	    add(beginLabel);
+	    add(getLabel("Begin", "begin", C[6], C[16], x, y, W[2], W[1], null));
 	    x += W[2] + 1;	    
 	    
 	    // begin labels
 	    dx = 0;
 	    for (int tempo: tempos) {
 	    	String name = "begin" + tempo;
-	    	JLabel label = getLabel(null, name, C[12], null, x + dx, y + dy, 12, 12, listener);  
-	    	add(label);
+	    	add(getLabel(null, name, C[12], null, x + dx, y + dy, 12, 12, timeListener));
 	    	dx += 12 + 1;
-	    	labels.put(name, label);
 	    }
 	    dx = 0;
 	    dy += 12 + 1;
@@ -137,16 +111,13 @@ public class TimePanel extends AudioPanel {
 	    // end labels
 	    for (int tempo: tempos) {
 	    	String name = "end" + tempo;
-	    	JLabel label = getLabel(null, name, C[12], null, x + dx, y + dy, 12, 12, listener);  
-	    	add(label);
+	    	add(getLabel(null, name, C[12], null, x + dx, y + dy, 12, 12, timeListener));
 	    	dx += 12 + 1;
-	    	labels.put(name, label);
 	    }
 	    x += dx;
 	    
 	    // end label
-	    endLabel = getLabel("End", null, C[6], C[16], x, y, W[2], W[1], null);
-	    add(endLabel);
+	    add(getLabel("End", "end", C[6], C[16], x, y, W[2], W[1], null));
 	    x += W[2] + 1;
 	    
 	    // increment label
@@ -158,10 +129,8 @@ public class TimePanel extends AudioPanel {
 	    for (int i = 1; i <= 10; i++) {
 	    	String name = "inc" + i;
 	    	int w = (i == 10) ? W[1] : 12;
-	    	JLabel label = getLabel("" + i, name, C[12], C[0], x + dx, y, w, W[1], listener);  
-	    	add(label);
+	    	add(getLabel("" + i, name, C[12], C[0], x + dx, y, w, W[1], timeListener));
 	    	dx += w + 1;
-	    	labels.put(name, label);
 	    }
 	    x += dx;
 	    
@@ -171,107 +140,87 @@ public class TimePanel extends AudioPanel {
 
 	    // numBeats labels
 	    dx = 0;
-	    for (int i = 0; i < numBeats.length; i++) {
-	    	int val = numBeats[i];
+	    for (int i = 0; i < numBeatsArr.length; i++) {
+	    	int val = numBeatsArr[i];
 	    	String name = "num" + val;
 	    	int w = (val < 10) ? 12 : W[1];
-	    	JLabel label = getLabel("" + val, name, C[12], C[0], x + dx, y, w, W[1], listener);  
-	    	add(label);
+	    	add(getLabel("" + val, name, C[12], C[0], x + dx, y, w, W[1], timeListener));
 	    	dx += w + 1;
-	    	labels.put(name, label);
 	    }
 	    x += dx;
 	    
 	    // tempo label
-	    JLabel tempoLabel = getLabel("Tempo", "", C[6], C[16], x, y, W[2], W[1], null);
-	    add(tempoLabel);
+	    add(getLabel("Tempo", "", C[6], C[16], x, y, W[2], W[1], null));
 	    x += W[2] + 1;
 
 	    // tempo value label
-	    tempoValueLabel = getLabel("", "tempoValue", C[14], C[0], x, y, W[2], W[1], null);
-	    add(tempoValueLabel);
+	    add(getLabel("", "tempoValue", C[16], C[0], x, y, W[2], W[1], null));
 	    x += W[2] + 1;	    
 	    
+	    // metronome label
+	    add(getLabel("Metronome", "metronome", C[12], C[0], x, y, W[3], W[1], timeListener));
+	    x += W[3] + 1;	    
+	    
 	    // set to defaults
-		setLabel("time" + time);
-		setLabel("type" + timeType);
-		setLabel("begin" + beginTempo);
-		setLabel("end" + endTempo);
-		setLabel("inc" + increment);
-		setLabel("num" + numBeats);
+		set("time" + time);
+		set("type" + timeType);
+		set("begin" + beginTempo);
+		set("end" + endTempo);
+		set("inc" + increment);
+		set("num" + numBeats);
     }
     
-    public void setLabel(String name) {
-    	JLabel l = labels.get(name);
-    	if (l == null) {
-      		log.warn("unhandled click: name=" + name);
-      	} else {
-      		set(l);	
-      	}
-    }    
-    public void unsetLabel(String name) {
-    	JLabel l = labels.get(name);
-    	if (l == null) {
-      		log.warn("unhandled click: name=" + name);
-      	} else {
-      		unset(l);	
-      	}
-    } 
-    public void set(JLabel l) {
-    	l.setBackground(C[4]);
-    	l.setForeground(C[16]);
-    }
-    public void unset(JLabel l) {
-    	l.setBackground(C[12]);
-    	l.setForeground(C[0]);
-    }
-    
-    private class MyMouseListener extends MouseAdapter {
+    private class TimeListener extends MouseAdapter {
         @Override
         public void mouseClicked(MouseEvent e) {
             JLabel l = (JLabel) e.getSource();
         	String name = l.getName();
         	log.debug("name=" + name);
         	
-        	// play/stop
-        	if (name.equals("playStop")) {
-         		String text = l.getText();
-         		if (text.equals(">")) {
-             		beginLabel.setText("" + beginTempo);
-             		endLabel.setText("" + endTempo);
-             	    player	= new MetronomePlayer(panel);
-            	    l.setText("||");
-           	    	player.start();
-         		} else {
+        	// setTime
+        	if (name.equals("setTime")) {
+        		if (setTime) {
+        			unset(l);
+           	 	} else {
+           	 		set(l);
+           	 	}
+    			setTime = !setTime;
+        	} else if (name.equals("metronome")) {
+         		if (metronome) {
          			player.end();
          			player = null;
-            	    l.setText(">");
+            	    unset(l);
+         		} else {
+             	    player = new MetronomePlayer(panel);
+           	    	player.start();
+           	    	set(l);
          		}
+         		metronome = !metronome;
          	} else {
          		// time
          		if (name.startsWith("time")) {
-             		if (time > 0) unsetLabel("time" + time);
+             		if (time > 0) unset("time" + time);
             		time = Integer.parseInt(name.replace("time", ""));
             	// timeType	
     	     	} else if (name.startsWith("type")) {
-    	     		if (timeType > 0) unsetLabel("type" + timeType);
+    	     		if (timeType > 0) unset("type" + timeType);
     	     		timeType = Integer.parseInt(name.replace("type", ""));
              	// begin/end tempo	
              	} else if (name.startsWith("begin")) {
-             		if (beginTempo > 0) unsetLabel("begin" + beginTempo);
+             		if (beginTempo > 0) unset("begin" + beginTempo);
             		beginTempo = Integer.parseInt(name.replace("begin", ""));
-            		beginLabel.setText("" + beginTempo);
+            		labels.get("begin").setText("" + beginTempo);
             	} else if (name.startsWith("end")) {
-            		if (endTempo > 0) unsetLabel("end" + endTempo);
+            		if (endTempo > 0) unset("end" + endTempo);
               		endTempo = Integer.parseInt(name.replace("end", "")); 
-            		endLabel.setText("" + endTempo);
+              		labels.get("end").setText("" + endTempo);
             	// increment
             	} else if (name.startsWith("inc")) {
-            		if (increment > 0) unsetLabel("inc" + increment);
+            		if (increment > 0) unset("inc" + increment);
             		increment = Integer.parseInt(name.replace("inc", ""));
              	// num beats	
              	} else if (name.startsWith("num")) {
-            		if (numBeats > 0) unsetLabel("num" + numBeats);
+            		if (numBeats > 0) unset("num" + numBeats);
             		numBeats = Integer.parseInt(name.replace("num", ""));
              	}	
         		set(l);

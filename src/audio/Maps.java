@@ -8,6 +8,7 @@ import static audio.Constants.C_SCALES_FILE;
 import static audio.Constants.DATA_DIR;
 import static audio.Constants.EXT_HTML;
 import static audio.Constants.EXT_TXT;
+import static audio.Constants.GENERATE_CHORD_TYPES_HTML_FILE;
 import static audio.Constants.INTEGER_NOTES_ABC_FILE;
 import static audio.Constants.INTEGER_NOTES_FILE;
 import static audio.Constants.KEYS_FILE;
@@ -98,8 +99,7 @@ public class Maps {
 		//     - note: alphabetTokenToNumericDegree must be initialized prior to this
 		initScalesMap();
 		
-		log.debug(Config.getBoolean("generateChordTypesHtmlFile"));
-		if (Config.getBoolean("generateChordTypesHtmlFile")) {
+		if (GENERATE_CHORD_TYPES_HTML_FILE) {
 			// generate chordTypes html file
 			generateChordTypesHtmlFile();
 		}

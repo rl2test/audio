@@ -1,7 +1,1 @@
-A Chorus
-Fm, Bbm             |Fm, C7              |Fm, Bbm             |C7, Fm              |Fm, Bbm             |Fm, C7              |Fm, Bbm             |C7, Fm              |
-Fm, Bbm             |Bbm                 |Eb7                 |Ab, C7              |Fm, Bbm             |Bbm                 |Fm, C7              |Fm                  |
-B Verse
-Fm                  |Bbm, C7             |Fm                  |G7, C7              |Fm                  |Bbm                 |G7                  |C                   |
-C
-Fm                  |Bbm, C7             |Fm                  |G7, C7              |Fm                  |Bbm                 |G7                  |C                   |
+Bb                  |Cm                  |Bb                  |Bb                  |F                   |

@@ -3,7 +3,7 @@ package audio.chords.gui;
 //import static audio.Constants.BANDONEON;
 import static audio.Constants.CLARINET;
 import static audio.Constants.O;
-import static audio.Constants.TRANSPOSE_KEYS;
+import static audio.Constants.PERFECT_FIFTH;
 import static audio.Constants.TRANSPOSE_KEY_INTERVALS;
 import static audio.Constants.V;
 
@@ -21,10 +21,10 @@ public class DronePlayer extends Thread {
 	protected Logger log 					= Logger.getLogger(this.getClass());
 	protected boolean runFlag 				= true;
 	protected List<MidiNote> midiNotes		= new ArrayList<MidiNote>();
-	private String key 						= "";
+	private int interval 					= 0;
 	
-	public DronePlayer(String key) {
-		this.key = key;
+	public DronePlayer(int keyIndex) {
+		interval = TRANSPOSE_KEY_INTERVALS[keyIndex];
 	}
 	
 	public void run() {
@@ -39,35 +39,17 @@ public class DronePlayer extends Thread {
 		// set instrument
 		channel.programChange(CLARINET); //CLARINET
 		
-		MidiNote rootNote 	= null;
-		MidiNote fifthNote 	= null;
+		MidiNote rootNote = null;
+		MidiNote fifthNote = null;
 
-		int gInterval		= getKeyInterval("G");
-		int keyInterval 	= getKeyInterval(key);
+		int root = (interval >= PERFECT_FIFTH) ? O[2] + interval: O[3] + interval;
+		int fifth = root + PERFECT_FIFTH;
 		
-		int oct = (keyInterval >= gInterval) ? O[2] : O[3];
-		
-		int root = oct + keyInterval;
-		int fifth = root + 7;
-		
-		rootNote 			= new MidiNote(0, root, 1, V[8]);
-		fifthNote 			= new MidiNote(0, fifth, 1, V[6]);
+		rootNote = new MidiNote(0, root, 1, V[8]);
+		fifthNote = new MidiNote(0, fifth, 1, V[6]);
 			
 		beginMidiNote(rootNote);
 		beginMidiNote(fifthNote);
-	}
-	
-	/**
-	 * @param key
-	 * @return the numeric interval of this key relative to C
-	 */
-	private int getKeyInterval(String key) {
-		for (int i = 0; i < TRANSPOSE_KEYS.length; i++) {
-			if (TRANSPOSE_KEYS[i].equals(key)) {
-				return TRANSPOSE_KEY_INTERVALS[i];
-			}
-		}
-		return 0;
 	}
 	
 	/**

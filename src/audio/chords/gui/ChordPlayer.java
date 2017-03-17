@@ -1,10 +1,7 @@
 package audio.chords.gui;
 import static audio.Constants.ACOUSTIC_BASS;
-import static audio.Constants.DEFAULT_BEATS_PER_BAR;
-import static audio.Constants.DEFAULT_BEGIN_TEMPO;
-import static audio.Constants.DEFAULT_END_TEMPO;
-import static audio.Constants.DEFAULT_INCREMENT;
 import static audio.Constants.NYLON_STRING_GUITAR;
+import static audio.Constants.TRANSPOSE_KEYS;
 import static audio.Constants.OCTAVE;
 import static audio.Constants.V;
 
@@ -28,20 +25,12 @@ public class ChordPlayer extends Thread {
 	protected boolean runFlag 				= true;
 	protected List<MidiNote> midiNotes		= new ArrayList<MidiNote>();
 	protected List<MidiNote> endMidiNotes	= new ArrayList<MidiNote>();
-	/** The number of beats per bar. */
-	public int beatsPerBar 					= DEFAULT_BEATS_PER_BAR;
-	/** The beginTempo. */
-	private int beginTempo					= DEFAULT_BEGIN_TEMPO;
-	/** The endTempo. */
-	private int endTempo					= DEFAULT_END_TEMPO;
-	/** The increment used to change from beginTempo to endTempo. */
-	private int increment					= DEFAULT_INCREMENT;
-	/** Flag indicating that default values are being used. */
-	private boolean usingDefaults			= true;
-	/** The genre. */
-	//private String genre					= "";
 	/** The tune text. */
 	private String text						= null;
+	/** KeyPanel reference. */
+	public KeyPanel keyPanel 				= null;
+	/** TimePanel reference. */
+	public TimePanel timePanel 				= null;
 	/** FilePanel reference. */
 	public FilePanel filePanel 				= null;
 	/** DisplayPanel reference. */
@@ -59,24 +48,14 @@ public class ChordPlayer extends Thread {
 	 * @param filePanel
 	 */
 	public ChordPlayer(
-			//int beginTempo,
-			//int endTempo,
-			//int increment,
-			//String genre,
 			String text,
+			KeyPanel keyPanel,
+			TimePanel timePanel,
 			FilePanel filePanel,
 			DisplayPanel displayPanel) {
-		/*
-		if (beginTempo > 0) {
-			// use gui settings, otherwise retain default values
-			this.beginTempo		= beginTempo;
-			this.endTempo 		= endTempo;
-			this.increment 		= increment;
-			usingDefaults		= false;
-		}
-		this.genre			= genre;
-		*/
 		this.text			= text;
+		this.keyPanel 		= keyPanel;
+		this.timePanel 		= timePanel;
 		this.filePanel 		= filePanel;
 		this.displayPanel 	= displayPanel;
 		
@@ -85,8 +64,12 @@ public class ChordPlayer extends Thread {
 				"3 1-5",
 				"4 1-5-",
 				"5 1--5-",
-				"6 1--5--",
-				"7 1-1-5--",};
+				// TODO
+				//"61 1--5--",
+				//"62 1-5-5-",
+				//"71 1-1-5--",
+				//"72 1--5-5-",
+		};
 		int n = 0;
 		for(String str: patternStrs) {
 			int len = str.length();
@@ -129,14 +112,20 @@ public class ChordPlayer extends Thread {
 			chordChannel.controlChange(10, V[8]); // set pan
 			chordChannel.programChange(NYLON_STRING_GUITAR);	
 
-			String transposeTo = filePanel.getTransposeTo();
+			String transposeTo = (keyPanel.selectedKeyIndex != -1) ? TRANSPOSE_KEYS[keyPanel.selectedKeyIndex] : "";
+			log.debug("transposeTo=" + transposeTo);
 			
-			Tune tune = new Tune(text, transposeTo); //genre, 
-			beatsPerBar	= tune.beatsPerBar;
+			Tune tune = new Tune(text, transposeTo); 
+			int beatsPerBar	= tune.beatsPerBar;
+			int beginTempo	= tune.beginTempo;
+			int endTempo 	= tune.endTempo;
+			int increment 	= tune.increment;
+
 			Integer[] pattern = patterns.get(beatsPerBar);
 			
 			if (tune.transposed) {
-				filePanel.updateMessage("transposed from " + tune.transposeFrom + " to " + tune.transposeTo);
+				log.debug("transposed from " + tune.transposeFrom + " to " + tune.transposeTo);
+				//filePanel.updateMessage("transposed from " + tune.transposeFrom + " to " + tune.transposeTo);
 			}
 			
 			if (displayPanel != null) {
@@ -149,21 +138,14 @@ public class ChordPlayer extends Thread {
 			// increment feature
 			boolean doIncrement = false;
 			
-			if (usingDefaults) {
-				// override defaults with tune values (which may also be defaults)
-				beginTempo	= tune.beginTempo;
-				endTempo 	= tune.endTempo;
-				increment 	= tune.increment;
-			}
 
 			if (endTempo > beginTempo) {
 				doIncrement = true;
 			}
 			
 			tempo = beginTempo;
-			filePanel.updateTempo("" + tempo);
+			//filePanel.updateTempo("" + tempo);
 			
-			log.debug("usingDefaults=" + usingDefaults);
 			log.debug("beatsPerBar=" + beatsPerBar);
 			log.debug("beginTempo=" + beginTempo);
 			log.debug("endTempo=" + endTempo);
@@ -251,7 +233,7 @@ public class ChordPlayer extends Thread {
 						// increase tempo
 						if (tempo < endTempo && (tempo + increment) <= endTempo) {
 							tempo += increment;
-							filePanel.updateTempo("" + tempo);
+							//filePanel.updateTempo("" + tempo);
 							pulseLen = (int) (1000d * 60d / tempo);	
 						}
 					}

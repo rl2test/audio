@@ -1,10 +1,6 @@
 package audio.chords;
 
 import static audio.Constants.PARENS_CLOSE;
-import static audio.Constants.DEFAULT_BEATS_PER_BAR;
-import static audio.Constants.DEFAULT_BEGIN_TEMPO;
-import static audio.Constants.DEFAULT_END_TEMPO;
-import static audio.Constants.DEFAULT_INCREMENT;
 import static audio.Constants.NL;
 import static audio.Constants.PARENS_OPEN;
 import static audio.Constants.PIPE;
@@ -52,10 +48,10 @@ public class Tune {
 	/** The text of this tune. */
 	public String text 				= "";
 	public String errorMsg 			= "";
-	public int beatsPerBar 			= DEFAULT_BEATS_PER_BAR;
-	public int beginTempo			= DEFAULT_BEGIN_TEMPO;
-	public int endTempo				= DEFAULT_END_TEMPO;
-	public int increment    		= DEFAULT_INCREMENT;    
+	public int beatsPerBar 			= 0;
+	public int beginTempo			= 0;
+	public int endTempo				= 0;
+	public int increment    		= 0;    
 	public List<Bar> bars			= new ArrayList<Bar>();
 	/** The actual key, if specified in the tune info section. Empty if not specified. */
 	public String key 				= "";
@@ -107,6 +103,7 @@ public class Tune {
 							endTempo	= Integer.parseInt(tempos[1]);
 						} else {
 							beginTempo	= Integer.parseInt(tempo);
+							endTempo	= beginTempo;
 						}
 					}
 					if (len > 2) {
@@ -120,9 +117,7 @@ public class Tune {
 					// ! K: F
 					if (line.startsWith("!K:"))  {
 						key = line.substring(3);
-						transposeFrom = key.replace("maj", "");
-						transposeFrom = transposeFrom.replace("min", "");
-						transposeFrom = transposeFrom.replace("m", "");
+						transposeFrom = key.replace("maj", "").replace("min", "").replace("m", "");
 					}
 				}  else if (line.startsWith("%"))  {
 					// annotation

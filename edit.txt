@@ -1,3 +1,21 @@
+        /*
+        @Override
+        public void mouseEntered(MouseEvent e) {
+        	JLabel l = (JLabel) e.getSource();
+        	if (!l.getName().equals(selectedKey)) {
+        		l.setBackground(C[14]);
+        	}
+        }
+        @Override
+        public void mouseExited(MouseEvent e) {
+        	JLabel l = (JLabel) e.getSource();
+        	if (!l.getName().equals(selectedKey)) {
+        		l.setBackground(C[12]);
+        	}
+        }
+        */
+
+
 	/** Violin tuning. */
 	public static final int[] VIOLIN_STRINGS			= {55, 62, 69, 76}; 
 

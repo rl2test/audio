@@ -56,11 +56,14 @@ public class AudioController extends JPanel {
 	public static int w							= 0;
 	/** The height of the gui, not including the frame objects. */
 	public static int h							= 0;
+	public KeyPanel keyPanel 					= null;
+	public TimePanel timePanel 					= null;
+	public FilePanel filePanel 					= null;
 	
     /**
      * @return singleton instance of this class
      */
-    public static AudioController getInstance() {
+    public static AudioController getInstance() throws Exception {
         if (controller == null) {
         	controller = new AudioController();
     	}
@@ -71,7 +74,7 @@ public class AudioController extends JPanel {
     /**
      * 
      */
-    private AudioController() {
+    private AudioController() throws Exception {
     	this.setBackground(Color.black);
 		this.setSize(w, h);
 		
@@ -95,24 +98,25 @@ public class AudioController extends JPanel {
 		int x = 0;
 	    int y = 1;
 
-	    KeyPanel keyPanel = KeyPanel.getInstance();
+	    keyPanel = KeyPanel.getInstance();
 	    keyPanel.setBounds(x, y, w, W[1]);
 	    add(keyPanel);
 	    y += W[1] + 1;
 	    
 	    // metronome panel
-	    TimePanel timePanel = TimePanel.getInstance();
+	    timePanel = TimePanel.getInstance();
 	    timePanel.setBounds(0, y, w, W[1]);
 	    add(timePanel);
 	    y += W[1] + 1;
 	    
 	    // chord file panel - set bounds height to h - the combined height of all the other panels
-	    FilePanel filePanel = FilePanel.getInstance();
+	    filePanel = FilePanel.getInstance();
 	    filePanel.setBounds(0, y, w, h - (2 * (W[1] + 1)));
 	    add(filePanel);
-	    y += filePanel.getHeight() + 1;
 
-	    filePanel.init();
+	    //filePanel.init();
+	    filePanel.keyPanel = keyPanel;
+	    filePanel.timePanel = timePanel;
     }
 
 	public void close() {
@@ -189,12 +193,16 @@ public class AudioController extends JPanel {
 		//h = frameDimension.height - insets.top - insets.bottom;
 		w = screenW - insets.left - insets.right; 
 		h = screenH - TOP_BAR_HEIGHT - insets.top - insets.bottom;
-		final AudioController controller = AudioController.getInstance();
+		AudioController controller;
+		try {
+			controller = AudioController.getInstance();
+			frame.getContentPane().add("Center", controller);
 
-		frame.getContentPane().add("Center", controller);
-
-		// call setVisible to display gui
-		frame.validate();
-		frame.repaint();
+			// call setVisible to display gui
+			frame.validate();
+			frame.repaint();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 } 
