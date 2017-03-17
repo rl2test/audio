@@ -59,6 +59,7 @@ public class AudioController extends JPanel {
 	public KeyPanel keyPanel 					= null;
 	public TimePanel timePanel 					= null;
 	public FilePanel filePanel 					= null;
+	public DisplayPanel displayPanel 			= null;
 	
     /**
      * @return singleton instance of this class
@@ -98,25 +99,23 @@ public class AudioController extends JPanel {
 		int x = 0;
 	    int y = 1;
 
-	    keyPanel = KeyPanel.getInstance();
+	    keyPanel = KeyPanel.getInstance(this);
 	    keyPanel.setBounds(x, y, w, W[1]);
 	    add(keyPanel);
 	    y += W[1] + 1;
 	    
 	    // metronome panel
-	    timePanel = TimePanel.getInstance();
+	    timePanel = TimePanel.getInstance(this);
 	    timePanel.setBounds(0, y, w, W[1]);
 	    add(timePanel);
 	    y += W[1] + 1;
 	    
 	    // chord file panel - set bounds height to h - the combined height of all the other panels
-	    filePanel = FilePanel.getInstance();
+	    filePanel = FilePanel.getInstance(this);
 	    filePanel.setBounds(0, y, w, h - (2 * (W[1] + 1)));
 	    add(filePanel);
 
 	    //filePanel.init();
-	    filePanel.keyPanel = keyPanel;
-	    filePanel.timePanel = timePanel;
     }
 
 	public void close() {

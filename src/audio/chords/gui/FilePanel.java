@@ -8,16 +8,12 @@ import static audio.Constants.FS;
 import static audio.Constants.GENRE_NAMES;
 import static audio.Constants.MUSIC_DIR;
 import static audio.Constants.NL;
-import static audio.Constants.TRANSPOSE_KEYS;
 import static audio.Constants.W;
 import static audio.Constants.GENRE_NAME;
 import static audio.Constants.FOLDER_NAME;
 import static audio.Constants.TUNE_NAME;
 
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
@@ -30,7 +26,6 @@ import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -61,31 +56,21 @@ public class FilePanel extends AudioPanel {
 	private final JComboBox<String> tuneBox 		= new JComboBox<String>();
 	/** The text area. */
 	public JTextArea textArea 						= null;
-	/** KeyPanel reference. */
-	public KeyPanel keyPanel 						= null;
-	/** TimePanel reference. */
-	public TimePanel timePanel 						= null;
-	/** DisplayPanel. */
-	public DisplayPanel displayPanel 				= null;
-	/** Transpose box. */
-	private final JComboBox<String> transposeBox 	= new JComboBox<String>();
-	/** Transpose checkBox. */
-	public JCheckBox transposeCheckBox 				= new JCheckBox("Transpose");
 	public boolean playing							= false;
 	
 	/**
      * @return singleton instance of this class
      */
-    public static FilePanel getInstance() throws Exception {
+    public static FilePanel getInstance(AudioController ac) throws Exception {
         if (filePanel == null) {
-        	filePanel = new FilePanel();
+        	filePanel = new FilePanel(ac);
     	}
     	return filePanel;
     }
 	
     /** Private constructor */
-    private FilePanel() throws Exception {
-        super();
+    private FilePanel(AudioController ac) throws Exception {
+        super(ac);
 	    
 		// genre
 		add(getLabel("Genre", null, C[6], C[16], x, y, W[2], W[1], null));
@@ -164,13 +149,14 @@ public class FilePanel extends AudioPanel {
 		textArea.setFont(new Font("Courier New", Font.PLAIN, 12));
 		add(textArea);
 		
-	    displayPanel = new DisplayPanel();
+		DisplayPanel displayPanel = new DisplayPanel();
 	    displayPanel.setBounds(
 				x + textAreaWidth, 
 				y, 
 				displayPanelWidth, 
 				displayPanelHeight);
 	    add(displayPanel);
+	    ac.displayPanel = displayPanel;
 		
 	    x += textArea.getWidth();
 	    
@@ -367,12 +353,12 @@ public class FilePanel extends AudioPanel {
 	/* (non-Javadoc)
 	 * @see audio.chords.gui.ChordPanel#getTransposeTo()
 	 */
-	public String getTransposeTo() {
+	/*public String getTransposeTo() {
 		if (transposeCheckBox.isSelected()) {
 			return (String) transposeBox.getSelectedItem();
 		}
 		return "";
-	}
+	}*/
 	
 	/**
 	 * Init the drop-downs.
@@ -398,12 +384,7 @@ public class FilePanel extends AudioPanel {
     				l.setText("Play");
             	} else {
 					String text = textArea.getText();
-					chordPlayer = new ChordPlayer(
-								text,
-								keyPanel,
-								timePanel,
-								filePanel,
-								displayPanel);
+					chordPlayer = new ChordPlayer(text, ac);
 					chordPlayer.start();
 					playing = true;
 					l.setText("Stop");

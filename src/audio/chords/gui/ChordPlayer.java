@@ -27,14 +27,7 @@ public class ChordPlayer extends Thread {
 	protected List<MidiNote> endMidiNotes	= new ArrayList<MidiNote>();
 	/** The tune text. */
 	private String text						= null;
-	/** KeyPanel reference. */
-	public KeyPanel keyPanel 				= null;
-	/** TimePanel reference. */
-	public TimePanel timePanel 				= null;
-	/** FilePanel reference. */
-	public FilePanel filePanel 				= null;
-	/** DisplayPanel reference. */
-	public DisplayPanel displayPanel 		= null;
+	private AudioController ac				= null;
 	public Map<Integer, Integer[]> patterns = new HashMap<Integer, Integer[]>();
 
 	/**
@@ -47,17 +40,9 @@ public class ChordPlayer extends Thread {
 	 * @param tuneFile
 	 * @param filePanel
 	 */
-	public ChordPlayer(
-			String text,
-			KeyPanel keyPanel,
-			TimePanel timePanel,
-			FilePanel filePanel,
-			DisplayPanel displayPanel) {
-		this.text			= text;
-		this.keyPanel 		= keyPanel;
-		this.timePanel 		= timePanel;
-		this.filePanel 		= filePanel;
-		this.displayPanel 	= displayPanel;
+	public ChordPlayer(String text, AudioController ac) {
+		this.text = text;
+		this.ac = ac;
 		
 		String[] patternStrs = {
 				"2 1-",
@@ -112,7 +97,7 @@ public class ChordPlayer extends Thread {
 			chordChannel.controlChange(10, V[8]); // set pan
 			chordChannel.programChange(NYLON_STRING_GUITAR);	
 
-			String transposeTo = (keyPanel.selectedKeyIndex != -1) ? TRANSPOSE_KEYS[keyPanel.selectedKeyIndex] : "";
+			String transposeTo = (ac.keyPanel.selectedKeyIndex != -1) ? TRANSPOSE_KEYS[ac.keyPanel.selectedKeyIndex] : "";
 			log.debug("transposeTo=" + transposeTo);
 			
 			Tune tune = new Tune(text, transposeTo); 
@@ -128,9 +113,9 @@ public class ChordPlayer extends Thread {
 				//filePanel.updateMessage("transposed from " + tune.transposeFrom + " to " + tune.transposeTo);
 			}
 			
-			if (displayPanel != null) {
-				displayPanel.init(tune.bars);
-				displayPanel.repaint();
+			if (ac.displayPanel != null) {
+				ac.displayPanel.init(tune.bars);
+				ac.displayPanel.repaint();
 			}
 			
 			int tempo = 0;
@@ -189,8 +174,8 @@ public class ChordPlayer extends Thread {
 					// get next bar
 					bar = tune.bars.get(barCount);
 					
-					if (displayPanel != null) {
-						displayPanel.updateBars(barCount);
+					if (ac.displayPanel != null) {
+						ac.displayPanel.updateBars(barCount);
 					}
 					
 					barCount++;
@@ -241,7 +226,7 @@ public class ChordPlayer extends Thread {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			filePanel.stop("Exception thrown in ChordPlayer.run(): " + e.toString());
+			ac.filePanel.stop("Exception thrown in ChordPlayer.run(): " + e.toString());
 		}
 	}
 	

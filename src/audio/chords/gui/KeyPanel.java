@@ -25,16 +25,16 @@ public class KeyPanel extends AudioPanel {
     /**
      * @return singleton instance of this class
      */
-    public static KeyPanel getInstance()  throws Exception {
+    public static KeyPanel getInstance(AudioController ac)  throws Exception {
         if (panel == null) {
-        	panel = new KeyPanel();
+        	panel = new KeyPanel(ac);
     	}
     	return panel;
     }
 	
     /** Public constructor */
-    public KeyPanel() throws Exception {
-    	super();
+    private KeyPanel(AudioController ac) throws Exception {
+    	super(ac);
 	    
 	    // key label
 	    add(getLabel("Key", null, C[6], C[16], x, y, W[2], W[1], null));

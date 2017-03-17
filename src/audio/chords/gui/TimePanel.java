@@ -14,7 +14,7 @@ public class TimePanel extends AudioPanel {
 	private static TimePanel panel 				= null;
 	/** The player. */
 	public MetronomePlayer player 				= null;
-	private final TimeListener timeListener 	= new TimeListener();
+	private final TimeListener listener 		= new TimeListener();
     // set property defaults
     public int time								= 4;
 	public int timeType							= 1;
@@ -28,16 +28,16 @@ public class TimePanel extends AudioPanel {
     /**
      * @return singleton instance of this class
      */
-    public static TimePanel getInstance() throws Exception {
+    public static TimePanel getInstance(AudioController ac) throws Exception {
         if (panel == null) {
-        	panel = new TimePanel();
+        	panel = new TimePanel(ac);
     	}
     	return panel;
     }
 	
     /** public constructor builds ui */
-    private TimePanel() throws Exception {
-    	super();
+    private TimePanel(AudioController ac) throws Exception {
+    	super(ac);
 		
 		int[] times = {2, 3, 4, 5, 6, 7};
 		int[] timeTypes = {1, 2};
@@ -59,7 +59,7 @@ public class TimePanel extends AudioPanel {
 	    x += W[2] + 1;	    
 
 	    // setTime label
-	    add(getLabel("Set time", "setTime", C[12], C[0], x, y, W[3], W[1], timeListener));
+	    add(getLabel("Set time", "setTime", C[12], C[0], x, y, W[3], W[1], listener));
 	    x += W[3] + 1;		    
 	    
 	    // time labels
@@ -67,7 +67,7 @@ public class TimePanel extends AudioPanel {
 	    for (int i = 0; i < times.length; i++) {
 	    	int time = times[i];
 	    	String name = "time" + time;
-	    	add(getLabel("" + time, name, C[12], C[0], x + dx, y, 12, W[1], timeListener));
+	    	add(getLabel("" + time, name, C[12], C[0], x + dx, y, 12, W[1], listener));
 	    	dx += 12 + 1;
 	    }
 	    x += dx;
@@ -81,7 +81,7 @@ public class TimePanel extends AudioPanel {
 	    for (int i = 0; i < timeTypes.length; i++) {
 	    	int type = timeTypes[i];
 	    	String name = "type" + type;
-	    	add(getLabel("" + type, name, C[12], C[0], x + dx, y, 12, W[1], timeListener));
+	    	add(getLabel("" + type, name, C[12], C[0], x + dx, y, 12, W[1], listener));
 	    	dx += 12 + 1;
 	    }
 	    x += dx;
@@ -102,7 +102,7 @@ public class TimePanel extends AudioPanel {
 	    dx = 0;
 	    for (int tempo: tempos) {
 	    	String name = "begin" + tempo;
-	    	add(getLabel(null, name, C[12], null, x + dx, y + dy, 12, 12, timeListener));
+	    	add(getLabel(null, name, C[12], null, x + dx, y + dy, 12, 12, listener));
 	    	dx += 12 + 1;
 	    }
 	    dx = 0;
@@ -111,7 +111,7 @@ public class TimePanel extends AudioPanel {
 	    // end labels
 	    for (int tempo: tempos) {
 	    	String name = "end" + tempo;
-	    	add(getLabel(null, name, C[12], null, x + dx, y + dy, 12, 12, timeListener));
+	    	add(getLabel(null, name, C[12], null, x + dx, y + dy, 12, 12, listener));
 	    	dx += 12 + 1;
 	    }
 	    x += dx;
@@ -129,7 +129,7 @@ public class TimePanel extends AudioPanel {
 	    for (int i = 1; i <= 10; i++) {
 	    	String name = "inc" + i;
 	    	int w = (i == 10) ? W[1] : 12;
-	    	add(getLabel("" + i, name, C[12], C[0], x + dx, y, w, W[1], timeListener));
+	    	add(getLabel("" + i, name, C[12], C[0], x + dx, y, w, W[1], listener));
 	    	dx += w + 1;
 	    }
 	    x += dx;
@@ -144,7 +144,7 @@ public class TimePanel extends AudioPanel {
 	    	int val = numBeatsArr[i];
 	    	String name = "num" + val;
 	    	int w = (val < 10) ? 12 : W[1];
-	    	add(getLabel("" + val, name, C[12], C[0], x + dx, y, w, W[1], timeListener));
+	    	add(getLabel("" + val, name, C[12], C[0], x + dx, y, w, W[1], listener));
 	    	dx += w + 1;
 	    }
 	    x += dx;
@@ -158,7 +158,7 @@ public class TimePanel extends AudioPanel {
 	    x += W[2] + 1;	    
 	    
 	    // metronome label
-	    add(getLabel("Metronome", "metronome", C[12], C[0], x, y, W[3], W[1], timeListener));
+	    add(getLabel("Metronome", "metronome", C[12], C[0], x, y, W[3], W[1], listener));
 	    x += W[3] + 1;	    
 	    
 	    // set to defaults

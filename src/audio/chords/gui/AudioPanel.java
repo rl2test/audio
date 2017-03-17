@@ -22,8 +22,10 @@ public class AudioPanel extends JPanel {
     public Map<String, JLabel> labels = new HashMap<String, JLabel>();	
     public int x = 0;
     public int y = 0;
+    public AudioController ac;
     
-    public AudioPanel() {
+    public AudioPanel(AudioController ac) {
+    	this.ac = ac;
         setBackground(C[0]);
 		setLayout(null);
     }
