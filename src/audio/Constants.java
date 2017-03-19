@@ -326,7 +326,7 @@ public class Constants {
 	public static String GENRE_NAME = "jazz";
 	public static String FOLDER_NAME = "Aebersold - Jazz Handbook";
 	public static String TUNE_NAME = "01";
-	
+	public static int BARS_PER_LINE = 8;
 	/*
 		#
 		genreNames

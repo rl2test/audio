@@ -1,6 +1,7 @@
 package audio.chords.gui;
 
 import static audio.Constants.BARS_FILE;
+import static audio.Constants.BARS_PER_LINE;
 import static audio.Constants.C;
 import static audio.Constants.END;
 import static audio.Constants.NL;
@@ -18,7 +19,6 @@ import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
 
-import audio.Config;
 import audio.Util;
 import audio.chords.Bar;
 
@@ -33,7 +33,7 @@ public class DisplayPanel extends JPanel {
 	/** The log. */
 	private Logger log							= Logger.getLogger(getClass());	
 	private List<JLabel> labels					= new ArrayList<JLabel>();
-	private int barsPerLine						= Config.getInt("display.BarsPerLine.default");
+	
 	
     /** Public constructor */
     public DisplayPanel() {
@@ -48,7 +48,7 @@ public class DisplayPanel extends JPanel {
 		this.removeAll();
 		labels.clear();
 
-		int labelWidth = (int) (this.getWidth() / barsPerLine) - 1;
+		int labelWidth = (int) (this.getWidth() / BARS_PER_LINE) - 1;
 		
 		int x = 1;
     	int y = 1;
@@ -86,7 +86,7 @@ public class DisplayPanel extends JPanel {
     	    x += label.getWidth() + 1;
     	    barCount++;
     	    
-    	    if (barCount % barsPerLine == 0) {
+    	    if (barCount % BARS_PER_LINE == 0) {
     	    	sb.append(NL);
     	    	x = 1;
     	    	y += W[1] + 1;

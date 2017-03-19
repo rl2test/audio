@@ -44,10 +44,6 @@ public class FilePanel extends AudioPanel {
 	/** The player. */
 	public ChordPlayer chordPlayer 					= null;
 	private static final String[] UNPOPULATED_LIST  = {"----"};
-    /** Play button. */
-	private final JButton playButton 				= new JButton("Play");
-    /** Stop button. */
-	private final JButton stopButton 				= new JButton("Stop");
 	/** Genre box. */
 	private final JComboBox<String> genreBox 		= new JComboBox<String>();
 	/** Folder box. */
@@ -195,9 +191,6 @@ public class FilePanel extends AudioPanel {
     public void stop(String msg) {
 		chordPlayer.destroyPlayer();
 		chordPlayer = null;
-
-		playButton.setEnabled(true);
-		stopButton.setEnabled(false);
 
 		log.debug("msg=" + msg);
     }

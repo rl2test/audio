@@ -1,6 +1,5 @@
 package audio.chords.gui;
 
-//import static audio.Constants.BANDONEON;
 import static audio.Constants.CLARINET;
 import static audio.Constants.O;
 import static audio.Constants.PERFECT_FIFTH;
