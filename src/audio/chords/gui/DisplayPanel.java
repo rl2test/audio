@@ -29,7 +29,7 @@ public class DisplayPanel extends AudioPanel {
 	private static final long serialVersionUID 	= 1L;
 	/** The singleton instance of this class. */    
 	private static DisplayPanel displayPanel 	= null;	
-	List<JLabel> myLabels = new ArrayList<JLabel>();
+	//List<JLabel> myLabels = new ArrayList<JLabel>();
 	
 	/**
      * @return singleton instance of this class
@@ -47,56 +47,27 @@ public class DisplayPanel extends AudioPanel {
         setBackground(C[6]);
     }    
 
-    public void init(List<Bar> bars) {
+    public void init(List<Bar> bars) throws Exception {
     	log.debug("bars.size()=" + bars.size());
     	StringBuffer sb = new StringBuffer();
 
 		this.removeAll();
-		myLabels.clear();
-
-		int labelWidth = (int) (this.getWidth() / BARS_PER_LINE) - 1;
-		
-		int x = 1;
-    	int y = 1;
-    	int barCount = 0;
+		//myLabels.clear();
+		labels.clear();
+		x = 0;
+		y = 0;    	int barCount = 0;
     	for (Bar bar: bars) {
-    		if (bar.annotation != null) {
-    			if (x != 1) {
-    				// annotation is in a bar that is not the first of a standard 4-bar phrase
-        	    	x = 1;
-        	    	y += W[1] + 1;
-        	    	barCount = 0;
-    			}
-    			String text = bar.annotation.replace(US, SPACE);
-    			sb.append(text + NL);
-        	    JLabel label = new JLabel(text);
-        	    label.setBounds(x, y, labelWidth, W[1]);
-        	    add(label);
-    	    	y += W[1] + 1;
-    		}
-    		
-    		// text label
-    	    JLabel label = new JLabel(); //bar.sequence
-    	    label.setBackground(C[12]);
-    	    label.setOpaque(true);
-    	    label.setFont(new Font("Arial", Font.PLAIN, 12));
-    	    
-    	    label.setBounds(x, y, labelWidth, W[1]);
     	    String text = bar.cleanBarStr.replace(",", ", ");
     	    sb.append(Util.pad(text, " ", 20, END) + PIPE);
-    	    label.setText(text);
-    	    add(label);
     	    
-    	    myLabels.add(label);
-    	    
-    	    x += label.getWidth() + 1;
+    		add(getLabel(text, "bar" + barCount, C[12], C[0], x, y, ac.barWidth, W[1], null));
+    	    x += ac.barWidth + 1;
     	    barCount++;
     	    
     	    if (barCount % BARS_PER_LINE == 0) {
     	    	sb.append(NL);
-    	    	x = 1;
+    	    	x = 0;
     	    	y += W[1] + 1;
-    	    	barCount = 0;
     	    }
     	}
     	Util.writeToFile(BARS_FILE, sb.toString());
@@ -104,13 +75,29 @@ public class DisplayPanel extends AudioPanel {
     }
     
     public void updateBars(int barCount) {
-    	int prevBarCount = (barCount > 0) ? barCount - 1 : myLabels.size() - 1;   
-    	myLabels.get(prevBarCount).setBackground(C[12]);
-    	myLabels.get(prevBarCount).setForeground(C[0]);
-    	myLabels.get(barCount).setBackground(C[6]);
-    	myLabels.get(barCount).setForeground(C[16]);
+    	int prevBarCount = (barCount > 0) ? barCount - 1 : labels.size() - 1;
+    	unset(labels.get("bar" + prevBarCount));
+    	set(labels.get("bar" + barCount));
     }
 }
+
+
+/*
+if (bar.annotation != null) {
+	if (x != 1) {
+		// annotation is in a bar that is not the first of a standard 4-bar phrase
+    	x = 1;
+    	y += W[1] + 1;
+    	barCount = 0;
+	}
+	String text = bar.annotation.replace(US, SPACE);
+	sb.append(text + NL);
+    JLabel label = new JLabel(text);
+    label.setBounds(x, y, labelWidth, W[1]);
+    add(label);
+	y += W[1] + 1;
+}
+*/
 
 /*
 Component[] components = this.getComponents();

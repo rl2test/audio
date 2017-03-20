@@ -48,12 +48,12 @@ public class TunePlayer extends Thread {
 				"2 1-",
 				"3 1-5",
 				"4 1-5-",
-				"5 1--5-",
-				// TODO
-				//"61 1--5--",
-				//"62 1-5-5-",
-				//"71 1-1-5--",
-				//"72 1--5-5-",
+				"51 1--5-",
+				"52 1-5--",
+				"61 1--5--",
+				"62 1-5-5-",
+				"71 1-1-5--",
+				"72 1--5-5-",
 		};
 		int n = 0;
 		for(String str: patternStrs) {
@@ -99,13 +99,16 @@ public class TunePlayer extends Thread {
 
 			String transposeTo = (ac.keyPanel.selectedKeyIndex != -1) ? TRANSPOSE_KEYS[ac.keyPanel.selectedKeyIndex] : "";
 			log.debug("transposeTo=" + transposeTo);
-			
-			Tune tune = new Tune(text, transposeTo); 
-			int beatsPerBar	= tune.beatsPerBar;
-			int beginTempo	= tune.beginTempo;
-			int endTempo 	= tune.endTempo;
-			int increment 	= tune.increment;
 
+			TimePanel timePanel =  ac.timePanel;
+			log.debug("timePanel: set=" + timePanel.set + ", beginTempo=" + timePanel.beginTempo);
+
+			Tune tune = new Tune(text, transposeTo); 
+			int beatsPerBar	= (timePanel.set) ? timePanel.time : tune.beatsPerBar;
+			int beginTempo	= (timePanel.set) ? timePanel.beginTempo : tune.beginTempo;
+			int endTempo 	= (timePanel.set) ? timePanel.endTempo : tune.endTempo;
+			int increment 	= (timePanel.set) ? timePanel.increment : tune.increment;			
+			
 			Integer[] pattern = patterns.get(beatsPerBar);
 			
 			if (tune.transposed) {
@@ -118,18 +121,16 @@ public class TunePlayer extends Thread {
 				ac.displayPanel.repaint();
 			}
 			
-			int tempo = 0;
+			int tempo = beginTempo;
+			log.debug(tempo);
+			timePanel.setTempoValue(tempo);
 			
 			// increment feature
 			boolean doIncrement = false;
-			
 
 			if (endTempo > beginTempo) {
 				doIncrement = true;
 			}
-			
-			tempo = beginTempo;
-			//filePanel.updateTempo("" + tempo);
 			
 			log.debug("beatsPerBar=" + beatsPerBar);
 			log.debug("beginTempo=" + beginTempo);
@@ -218,7 +219,7 @@ public class TunePlayer extends Thread {
 						// increase tempo
 						if (tempo < endTempo && (tempo + increment) <= endTempo) {
 							tempo += increment;
-							//filePanel.updateTempo("" + tempo);
+							timePanel.setTempoValue(tempo);
 							pulseLen = (int) (1000d * 60d / tempo);	
 						}
 					}

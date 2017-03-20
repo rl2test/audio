@@ -1,5 +1,6 @@
 package audio.chords.gui;
 
+import static audio.Constants.BARS_PER_LINE;
 import static audio.Constants.ENV;
 import static audio.Constants.RUNTIME_VERSION;
 import static audio.Constants.TOP_BAR_HEIGHT;
@@ -62,6 +63,7 @@ public class AudioController extends JPanel {
 	public TextPanel textPanel 					= null;
 	public DisplayPanel displayPanel 			= null;
 	public boolean init							= false;
+	public int barWidth							= 0;
 	
     /**
      * @return singleton instance of this class
@@ -122,12 +124,16 @@ public class AudioController extends JPanel {
 	    
 	    int height = h - (3 * (W[1] + 1));
 	    
-	    textPanel = TextPanel.getInstance(this, W[16], height);
-	    textPanel.setBounds(0, y, W[16], height);
+	    barWidth = (w - (W[16] + 1)) / BARS_PER_LINE;
+	    int displayPanelWidth = BARS_PER_LINE * (barWidth + 1) - 1;
+	    int textPanelWidth = w - (displayPanelWidth + 1); 
+	    
+	    textPanel = TextPanel.getInstance(this, textPanelWidth, height);
+	    textPanel.setBounds(0, y, textPanelWidth, height);
 	    add(textPanel);
 
 	    displayPanel = DisplayPanel.getInstance(this);
-	    displayPanel.setBounds(W[16] + 1, y, w - (W[16] + 1), height);
+	    displayPanel.setBounds(textPanelWidth + 1, y, displayPanelWidth, height);
 	    add(displayPanel);
 
 	    filePanel.setTextArea();

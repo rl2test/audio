@@ -22,7 +22,7 @@ public class TimePanel extends AudioPanel {
 	public int endTempo							= 180;
     public int increment 						= 1;
 	public int numBeats 						= 8;
-	public boolean setTime						= false; // if true this will overide the tune settings
+	public boolean set							= false; // if true this will overide the tune settings
 	public boolean metronome					= false;
 
     /**
@@ -50,60 +50,67 @@ public class TimePanel extends AudioPanel {
     	
 	    int[] numBeatsArr = {8, 16, 32};
 	    
+	    h = W[1];
 	    int dx = 0, dy = 0;
 	    
-	    // getLabel(String text, String name, Color bg, Color fg, int x, int y, int w, int h, boolean addListener)
-	    
 	    // time label
-	    add(getLabel("Time", null, C[6], C[16], x, y, W[2], W[1], null));
-	    x += W[2] + 1;	    
+	    w = W[2];
+	    add(getLabel("Time", null, C[6], C[16], x, y, w, h, null));
+	    x += w + 1;	    
 
-	    // setTime label
-	    add(getLabel("Set time", "setTime", C[12], C[0], x, y, W[3], W[1], listener));
-	    x += W[3] + 1;		    
+	    // set label
+	    w = W[2];
+	    add(getLabel("Set", "set", C[12], C[0], x, y, w, h, listener));
+	    x += w + 1;		    
 	    
 	    // time labels
+	    w = 12;
 	    dx = 0;
 	    for (int i = 0; i < times.length; i++) {
 	    	int time = times[i];
 	    	String name = "time" + time;
-	    	add(getLabel("" + time, name, C[12], C[0], x + dx, y, 12, W[1], listener));
-	    	dx += 12 + 1;
+	    	add(getLabel("" + time, name, C[12], C[0], x + dx, y, w, h, listener));
+	    	dx += w + 1;
 	    }
 	    x += dx;
 	    
 	    // timeType label
-	    add(getLabel("Type", null, C[6], C[16], x, y, W[2], W[1], null));
-	    x += W[2] + 1;	    
+	    w = W[2];
+	    add(getLabel("Type", null, C[6], C[16], x, y, w, h, null));
+	    x += w + 1;	    
 
 	    // timeType labels
+	    w = 12;
 	    dx = 0;
 	    for (int i = 0; i < timeTypes.length; i++) {
 	    	int type = timeTypes[i];
 	    	String name = "type" + type;
-	    	add(getLabel("" + type, name, C[12], C[0], x + dx, y, 12, W[1], listener));
-	    	dx += 12 + 1;
+	    	add(getLabel("" + type, name, C[12], C[0], x + dx, y, w, h, listener));
+	    	dx += w + 1;
 	    }
 	    x += dx;
 	    
 	    // pattern label
-	    add(getLabel("Pattern", null, C[6], C[16], x, y, W[3], W[1], null));
-	    x += W[3] + 1;	    
+	    w = W[3];
+	    add(getLabel("Pattern", null, C[6], C[16], x, y, w, h, null));
+	    x += w + 1;	    
 
 	    // pattern value label
-	    add(getLabel("", "patternValue", C[16], C[0], x, y, W[2], W[1], null));
-	    x += W[2] + 1;	 	    
+	    w = W[2];
+	    add(getLabel("", "patternValue", C[16], C[0], x, y, w, h, null));
+	    x += w + 1;	 	    
 	    
 	    // begin label
-	    add(getLabel("Begin", "begin", C[6], C[16], x, y, W[2], W[1], null));
-	    x += W[2] + 1;	    
+	    add(getLabel("Begin", "begin", C[6], C[16], x, y, w, h, null));
+	    x += w + 1;	    
 	    
 	    // begin labels
+	    w = 12;
 	    dx = 0;
 	    for (int tempo: tempos) {
 	    	String name = "begin" + tempo;
-	    	add(getLabel(null, name, C[12], null, x + dx, y + dy, 12, 12, listener));
-	    	dx += 12 + 1;
+	    	add(getLabel(null, name, C[12], null, x + dx, y + dy, w, 12, listener));
+	    	dx += w + 1;
 	    }
 	    dx = 0;
 	    dy += 12 + 1;
@@ -111,63 +118,74 @@ public class TimePanel extends AudioPanel {
 	    // end labels
 	    for (int tempo: tempos) {
 	    	String name = "end" + tempo;
-	    	add(getLabel(null, name, C[12], null, x + dx, y + dy, 12, 12, listener));
-	    	dx += 12 + 1;
+	    	add(getLabel(null, name, C[12], null, x + dx, y + dy, w, 12, listener));
+	    	dx += w + 1;
 	    }
 	    x += dx;
 	    
 	    // end label
-	    add(getLabel("End", "end", C[6], C[16], x, y, W[2], W[1], null));
-	    x += W[2] + 1;
+	    w = W[2];
+	    add(getLabel("End", "end", C[6], C[16], x, y, w, h, null));
+	    x += w + 1;
 	    
 	    // increment label
-	    add(getLabel("Increment", null, C[6], C[16], x, y, W[3], W[1], null));
-	    x += W[3] + 1;
+	    w = W[3];
+	    add(getLabel("Increment", null, C[6], C[16], x, y, w, h, null));
+	    x += w + 1;
 
 	    // increment labels
 	    dx = 0;
 	    for (int i = 1; i <= 10; i++) {
 	    	String name = "inc" + i;
-	    	int w = (i == 10) ? W[1] : 12;
-	    	add(getLabel("" + i, name, C[12], C[0], x + dx, y, w, W[1], listener));
+	    	w = (i == 10) ? W[1] : 12;
+	    	add(getLabel("" + i, name, C[12], C[0], x + dx, y, w, h, listener));
 	    	dx += w + 1;
 	    }
 	    x += dx;
 	    
 	    // numBeats label
-	    add(getLabel("NumBeats", null, C[6], C[16], x, y, W[3], W[1], null));
-	    x += W[3] + 1;
+	    w = W[3];
+	    add(getLabel("NumBeats", null, C[6], C[16], x, y, w, h, null));
+	    x += w + 1;
 
 	    // numBeats labels
 	    dx = 0;
 	    for (int i = 0; i < numBeatsArr.length; i++) {
 	    	int val = numBeatsArr[i];
 	    	String name = "num" + val;
-	    	int w = (val < 10) ? 12 : W[1];
-	    	add(getLabel("" + val, name, C[12], C[0], x + dx, y, w, W[1], listener));
+	    	w = (val < 10) ? 12 : W[1];
+	    	add(getLabel("" + val, name, C[12], C[0], x + dx, y, w,h, listener));
 	    	dx += w + 1;
 	    }
 	    x += dx;
 	    
 	    // tempo label
-	    add(getLabel("Tempo", "", C[6], C[16], x, y, W[2], W[1], null));
-	    x += W[2] + 1;
+	    w = W[2];
+	    add(getLabel("Tempo", "", C[6], C[16], x, y, w, h, null));
+	    x += w + 1;
 
 	    // tempo value label
-	    add(getLabel("", "tempoValue", C[16], C[0], x, y, W[2], W[1], null));
-	    x += W[2] + 1;	    
+	    add(getLabel("", "tempoValue", C[16], C[0], x, y, w, h, null));
+	    x += w + 1;	    
 	    
 	    // metronome label
-	    add(getLabel("Metronome", "metronome", C[12], C[0], x, y, W[3], W[1], listener));
-	    x += W[3] + 1;	    
+	    w = W[3];
+	    add(getLabel("Metronome", "metronome", C[12], C[0], x, y, w, h, listener));
+	    x += w + 1;	    
 	    
 	    // set to defaults
 		set("time" + time);
 		set("type" + timeType);
 		set("begin" + beginTempo);
+		labels.get("begin").setText("" + beginTempo);
 		set("end" + endTempo);
+		labels.get("end").setText("" + endTempo);
 		set("inc" + increment);
 		set("num" + numBeats);
+    }
+    
+    public void setTempoValue(int tempo) {
+    	labels.get("tempoValue").setText("" + tempo);
     }
     
     private class TimeListener extends MouseAdapter {
@@ -178,13 +196,13 @@ public class TimePanel extends AudioPanel {
         	log.debug("name=" + name);
         	
         	// setTime
-        	if (name.equals("setTime")) {
-        		if (setTime) {
+        	if (name.equals("set")) {
+        		if (set) {
         			unset(l);
            	 	} else {
            	 		set(l);
            	 	}
-    			setTime = !setTime;
+    			set = !set;
         	} else if (name.equals("metronome")) {
          		if (metronome) {
          			player.end();

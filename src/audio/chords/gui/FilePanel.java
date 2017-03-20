@@ -36,7 +36,7 @@ public class FilePanel extends AudioPanel {
 	/** Default serialVersionUID. */
 	private static final long serialVersionUID 	= 1L;
 	/** The singleton instance of this class. */    
-	private static FilePanel filePanel 			= null;
+	private static FilePanel panel 			= null;
 	private final FileListener listener 		= new FileListener();
 	/** The player. */
 	public TunePlayer player 					= null;
@@ -56,10 +56,10 @@ public class FilePanel extends AudioPanel {
      * @return singleton instance of this class
      */
     public static FilePanel getInstance(AudioController ac) throws Exception {
-        if (filePanel == null) {
-        	filePanel = new FilePanel(ac);
+        if (panel == null) {
+        	panel = new FilePanel(ac);
     	}
-    	return filePanel;
+    	return panel;
     }
 	
     /** Private constructor */

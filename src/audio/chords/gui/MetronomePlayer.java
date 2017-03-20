@@ -14,11 +14,11 @@ public class MetronomePlayer extends Thread {
 	protected volatile boolean runFlag 		= true;
 	private int PITCH 						= 42; // 35|37|42
 	private int CHANNEL 					= 9;
-	public TimePanel panel					= null;
+	public TimePanel timePanel					= null;
 	private AudioController ac				= null;
 
     public MetronomePlayer(TimePanel panel, AudioController ac) {
-    	this.panel = panel;
+    	this.timePanel = panel;
     	this.ac = ac;
      }
 	
@@ -32,7 +32,7 @@ public class MetronomePlayer extends Thread {
 		channel.controlChange(10, 127); 
 		
 		// set initial tempo (bpm)
-		int tempo = panel.beginTempo;
+		int tempo = timePanel.beginTempo;
 
 		// the interval between beats
 		int interval 			= (int) (1000d * 60d / tempo);
@@ -51,7 +51,7 @@ public class MetronomePlayer extends Thread {
 		int beatCount = 1;
 
 		// init tempo label
-		panel.labels.get("tempoValue").setText("" + tempo);
+		timePanel.setTempoValue(tempo);
 		
 		// the note to be played by the metronome
 		MidiNote midiNote1 = new MidiNote(CHANNEL, PITCH, 1, V[5]);
@@ -75,13 +75,13 @@ public class MetronomePlayer extends Thread {
 			endMidiNote(midiNote);
 
 			beatCount++;
-			if (beatCount > panel.numBeats) {
+			if (beatCount > timePanel.numBeats) {
 				beatCount = 1;
-				if (tempo < panel.endTempo) {
-					tempo += panel.increment;
+				if (tempo < timePanel.endTempo) {
+					tempo += timePanel.increment;
 					interval = (int) (1000d * 60d / tempo);
 					log.debug(tempo);	
-					panel.labels.get("tempoValue").setText("" + tempo);
+					timePanel.setTempoValue(tempo);
 				}
 			}
 			oversleptInterval = System.currentTimeMillis() - expectedWakeUpTime;

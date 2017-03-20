@@ -19,7 +19,7 @@ public class KeyPanel extends AudioPanel {
 	public DronePlayer dronePlayer 			= null;
 	private final KeyListener keyListener 	= new KeyListener();
 	public int selectedKeyIndex				= -1;
-	public boolean transpose				= false; // if true this will overide the tune settings
+	//public boolean transpose				= false; // if true this will overide the tune settings
 	public boolean drone					= false;
 	
     /**
@@ -37,12 +37,15 @@ public class KeyPanel extends AudioPanel {
     	super(ac);
 	    
 	    // key label
-	    add(getLabel("Key", null, C[6], C[16], x, y, W[2], W[1], null));
-	    x += W[2] + 1;
+    	w = W[2];
+    	h = W[1];
+    	
+	    add(getLabel("Key", null, C[6], C[16], x, y, w, h, null));
+	    x += w + 1;
 
 	    // transpose label
-	    add(getLabel("Transpose", "transpose", C[12], C[0], x, y, W[3], W[1], keyListener));
-	    x += W[3] + 1;
+	    //add(getLabel("Transpose", "transpose", C[12], C[0], x, y, W[3], W[1], keyListener));
+	    //x += W[3] + 1;
 	    
 	    // transpose key labels
 	    for (int i = 0, n = TRANSPOSE_KEYS.length; i < n; i++) {
@@ -50,12 +53,12 @@ public class KeyPanel extends AudioPanel {
 	    	String keyMinor = TRANSPOSE_KEYS_MINOR[i];
 	    	String text = "<html>" + key + "<br>" + keyMinor + "</html>";
 	    	int width = (i == 3 || i == 6) ? W[2] : W[1];
-	    	add(getLabel(text, "key" + i, C[12], C[0], x, y, width, W[1], keyListener));
+	    	add(getLabel(text, "key" + i, C[12], C[0], x, y, width, h, keyListener));
 	    	x += width + 1;
 	    }
 
 	    // drone label
-	    add(getLabel("Drone", "drone", C[12], C[0], x, y, W[2], W[1], keyListener));
+	    add(getLabel("Drone", "drone", C[12], C[0], x, y, w, h, keyListener));
     }  
 
     private class KeyListener extends MouseAdapter {
@@ -78,13 +81,13 @@ public class KeyPanel extends AudioPanel {
              		selectedKeyIndex = keyIndex;
              	 }
             	 //log.debug("selectedKey=" + selectedKey);
-            } else if (name.equals("transpose")) {
-            	 if (transpose) {
-            		 unset(l);
-            	 } else {
-            		 set(l);
-            	 }
-        		 transpose = !transpose;
+            //} else if (name.equals("transpose")) {
+            //	 if (transpose) {
+            //		 unset(l);
+            //	 } else {
+            //		 set(l);
+            //	 }
+        	//	 transpose = !transpose;
             } else if (name.equals("drone")) {
             	if (drone) {
             		unset(l);
