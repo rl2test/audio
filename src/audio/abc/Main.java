@@ -1,5 +1,6 @@
 package audio.abc;
 
+import static audio.Constants.ABC_FILTER;
 import static audio.Constants.COMMA;
 import static audio.Constants.DQ;
 import static audio.Constants.NL;
@@ -13,7 +14,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import audio.ExtensionFilter;
 import audio.Util;
 
 public class Main {
@@ -23,7 +23,7 @@ public class Main {
 			? new File("/Users/rlowe/rob/music/jazz")			// wk
 			: new File("/Volumes/IOMEGA-1000/Rob/music/jazz");	// hm
 	public static final File ABC_DIR = new File(JAZZ_DIR, "abc/aebersold");
-	public final File CHORDS_DIR = new File(JAZZ_DIR, "chords/Aebersold-Excersies");
+	public final File CHORDS_DIR = new File(JAZZ_DIR, "chords/Aebersold-Exercises");
 	public final String[] majorKeys = {"C", "F", "Bb", "Eb", "Ab", "Db", "F#", "B",  "E",  "A",  "D", "G"}; // used for looping thru all maj keys
 	public final String[] minorKeys = {"A", "D", "G",  "C",  "F",  "Bb", "Eb", "G#", "C#", "F#", "B", "E"}; // used for looping thru all min keys
 	public Transposer transposer = new Transposer();
@@ -273,12 +273,10 @@ public class Main {
 	
 	public static void main(String args[]) {
 		Main main = new Main();
-		List<String> filenames = Util.getFileNames(ABC_DIR, new ExtensionFilter("abc"));
+		List<String> filenames = Util.getFileNames(ABC_DIR, ABC_FILTER);
 		for(String filename: filenames) {
 			try {
-				if(!filename.startsWith(".")) {
-					main.run(filename);	
-				}	
+				main.run(filename);	
 			} catch (Exception e) {
 				e.printStackTrace();
 			}	

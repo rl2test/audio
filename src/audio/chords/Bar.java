@@ -16,7 +16,7 @@ public class Bar {
 	/** The original string representing this bar. */
 	public String barStr 				=  "";
 	/** The clean version of the barStr, with any annotation removed. */
-	public String cleanBarStr 				=  "";
+	public String cleanBarStr 			=  "";
 	/** The chord sequence of the bar. */
 	public String sequence 				=  "";
 	/** The number of beats per bar. */

@@ -26,7 +26,7 @@ public class TextPanel extends AudioPanel {
     }
 	
     /** Private constructor */
-    private TextPanel(AudioController ac, int w, int h) throws Exception {
+    private TextPanel(final AudioController ac, int w, int h) throws Exception {
         super(ac);
 		
 		textArea = new JTextArea();
@@ -35,12 +35,10 @@ public class TextPanel extends AudioPanel {
 		add(textArea);
 		
 	    textArea.addKeyListener( new KeyListener() {
-	        public void keyPressed(KeyEvent keyEvent) {
-	        }
-	        public void keyReleased(KeyEvent keyEvent) {
-	        }
+	        public void keyPressed(KeyEvent keyEvent) {}
+	        public void keyReleased(KeyEvent keyEvent) {}
 	        public void keyTyped(KeyEvent keyEvent) {
-	        	//setTuneUpdated();
+	        	ac.filePanel.setUpdated();
 	        }
 	    });
     }

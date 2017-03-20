@@ -44,7 +44,7 @@ public class DisplayPanel extends AudioPanel {
     /** Public constructor */
     private DisplayPanel(AudioController ac) {
     	super(ac);
-        setBackground(C[10]);
+        setBackground(C[6]);
     }    
 
     public void init(List<Bar> bars) {

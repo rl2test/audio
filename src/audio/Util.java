@@ -2,7 +2,7 @@ package audio;
 
 import static audio.Constants.COMMA;
 import static audio.Constants.DATA_DIR;
-import static audio.Constants.DIR_FILE_FILTER;
+import static audio.Constants.DIR_FILTER;
 import static audio.Constants.END;
 import static audio.Constants.EXT_TXT;
 import static audio.Constants.NL;
@@ -13,10 +13,10 @@ import static audio.Constants.UNDEF;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
@@ -179,7 +179,7 @@ public class Util {
      * @return a list of dir names in dir
      */
     public static List<String> getDirNames(File dir) {
-        return getFileNames(dir, DIR_FILE_FILTER);
+        return getFileNames(dir, DIR_FILTER);
     }
     
     /**
@@ -195,7 +195,7 @@ public class Util {
      * @param filter
      * @return a list of files in File dir using filter filter
      */
-    public static List<File> getFiles(File dir, FileFilter filter) {
+    public static List<File> getFiles(File dir, FilenameFilter filter) {
     	List<File> list = new ArrayList<File>();
 
     	if(dir.isDirectory()) {
@@ -213,7 +213,7 @@ public class Util {
      * @param filter
      * @return a list of file names in File dir using filter filter
      */
-    public static List<String> getFileNames(File dir, FileFilter filter) {
+    public static List<String> getFileNames(File dir, FilenameFilter filter) {
     	List<String> list = new ArrayList<String>();
 
     	if(dir.isDirectory()) {

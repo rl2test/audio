@@ -130,7 +130,8 @@ public class AudioController extends JPanel {
 	    displayPanel.setBounds(W[16] + 1, y, w - (W[16] + 1), height);
 	    add(displayPanel);
 
-	    filePanel.init();
+	    filePanel.setTextArea();
+		init = true;
     }
 
 	public void close() {

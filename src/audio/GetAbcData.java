@@ -8,6 +8,8 @@
 
 package audio;
 
+import static audio.Constants.ABC_FILTER;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
@@ -158,8 +160,7 @@ public class GetAbcData {
 	 * Prepare my-tunes folder for db insert - parse files and copy to tune-type dirs
 	 */	
 	protected void runMyTunes() {
-		ExtensionFilter abcFilter = new ExtensionFilter("abc");
-		List<File> files = Util.getFiles(new File("/Users/rlowe/rob/abc/my-tunes"), abcFilter);
+		List<File> files = Util.getFiles(new File("/Users/rlowe/rob/abc/my-tunes"), ABC_FILTER);
 		for(File file: files) {
 			String fileName = file.getName().replace(".abc", "");
 			log.debug(fileName);
