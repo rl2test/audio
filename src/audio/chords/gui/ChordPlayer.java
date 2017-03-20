@@ -88,12 +88,12 @@ public class ChordPlayer extends Thread {
 			final int CHORD_VOL 	= V[3];
 			
 			//bass
-			MidiChannel bassChannel = AudioController.midiChannels[CHANNEL_BASS];
+			MidiChannel bassChannel = ac.midiChannels[CHANNEL_BASS];
 			bassChannel.controlChange(10, V[0]); // set pan
 			bassChannel.programChange(ACOUSTIC_BASS);
 
 			//chord
-			MidiChannel chordChannel = AudioController.midiChannels[CHANNEL_CHORD];
+			MidiChannel chordChannel = ac.midiChannels[CHANNEL_CHORD];
 			chordChannel.controlChange(10, V[8]); // set pan
 			chordChannel.programChange(NYLON_STRING_GUITAR);	
 
@@ -226,7 +226,7 @@ public class ChordPlayer extends Thread {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			ac.filePanel.stop("Exception thrown in ChordPlayer.run(): " + e.toString());
+			ac.filePanel.stop("Exception thrown in TunePlayer.run(): " + e.toString());
 		}
 	}
 	
@@ -235,14 +235,14 @@ public class ChordPlayer extends Thread {
 	 */
 	private void beginMidiNote(MidiNote midiNote) {
 		midiNotes.add(midiNote);
-		AudioController.midiChannels[midiNote.channel].noteOn(midiNote.pitch, midiNote.vol);
+		ac.midiChannels[midiNote.channel].noteOn(midiNote.pitch, midiNote.vol);
 	}
 	
 	/**
 	 * @param midiNote
 	 */
 	private void endMidiNote(MidiNote midiNote) {
-		AudioController.midiChannels[midiNote.channel].noteOff(midiNote.pitch);
+		ac.midiChannels[midiNote.channel].noteOff(midiNote.pitch);
 	}
 
 	/**

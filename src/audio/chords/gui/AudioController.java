@@ -51,22 +51,24 @@ public class AudioController extends JPanel {
 	/** The synthesizer. */
 	private Synthesizer synthesizer 			= null;
 	/** The midiChannels. */
-	public static MidiChannel[] midiChannels 	= null;
+	public MidiChannel[] midiChannels 	= null;
 	/** The width of the gui, not including the frame objects. */
-	public static int w							= 0;
+	public int w								= 0;
 	/** The height of the gui, not including the frame objects. */
-	public static int h							= 0;
+	public int h								= 0;
 	public KeyPanel keyPanel 					= null;
 	public TimePanel timePanel 					= null;
 	public FilePanel filePanel 					= null;
+	public TextPanel textPanel 					= null;
 	public DisplayPanel displayPanel 			= null;
+	public boolean init							= false;
 	
     /**
      * @return singleton instance of this class
      */
-    public static AudioController getInstance() throws Exception {
+    public static AudioController getInstance(int w, int h) throws Exception {
         if (controller == null) {
-        	controller = new AudioController();
+        	controller = new AudioController(w, h);
     	}
     	return controller;
     }
@@ -75,8 +77,10 @@ public class AudioController extends JPanel {
     /**
      * 
      */
-    private AudioController() throws Exception {
+    private AudioController(int w, int h) throws Exception {
     	this.setBackground(Color.black);
+    	this.w = w;
+    	this.h = h;
 		this.setSize(w, h);
 		
 		log.debug("gui w x h = " + w + " x " + h);
@@ -112,10 +116,21 @@ public class AudioController extends JPanel {
 	    
 	    // chord file panel - set bounds height to h - the combined height of all the other panels
 	    filePanel = FilePanel.getInstance(this);
-	    filePanel.setBounds(0, y, w, h - (2 * (W[1] + 1)));
+	    filePanel.setBounds(0, y, w, W[1]);
 	    add(filePanel);
+	    y += W[1] + 1;
+	    
+	    int height = h - (3 * (W[1] + 1));
+	    
+	    textPanel = TextPanel.getInstance(this, W[16], height);
+	    textPanel.setBounds(0, y, W[16], height);
+	    add(textPanel);
 
-	    //filePanel.init();
+	    displayPanel = DisplayPanel.getInstance(this);
+	    displayPanel.setBounds(W[16] + 1, y, w - (W[16] + 1), height);
+	    add(displayPanel);
+
+	    filePanel.init();
     }
 
 	public void close() {
@@ -190,11 +205,11 @@ public class AudioController extends JPanel {
 
 		//w = frameDimension.width - insets.left - insets.right; 
 		//h = frameDimension.height - insets.top - insets.bottom;
-		w = screenW - insets.left - insets.right; 
-		h = screenH - TOP_BAR_HEIGHT - insets.top - insets.bottom;
+		int w = screenW - insets.left - insets.right; 
+		int h = screenH - TOP_BAR_HEIGHT - insets.top - insets.bottom;
 		AudioController controller;
 		try {
-			controller = AudioController.getInstance();
+			controller = AudioController.getInstance(w, h);
 			frame.getContentPane().add("Center", controller);
 
 			// call setVisible to display gui

@@ -17,7 +17,6 @@ public class Constants {
 
 	public static final File APP_DIR					= new File("/Users/rlowe/rob/apps/audio"); 
 	
-	public static final File PROPERTIES_FILE			= new File(APP_DIR, "audio.properties");
 	public static final File BARS_FILE					= new File(APP_DIR, "bars.txt");
 
 	/* dir definitions */
@@ -25,9 +24,10 @@ public class Constants {
 	public static final File DATA_DIR					= new File(APP_DIR, "data");
 	
 	/** The top-level music dir. */
-	public static final File MUSIC_DIR					= (ENV.equals(WK))
-			? new File("/Users/rlowe/rob/music")
-			: new File("/Volumes/IOMEGA-1000/Rob/music");
+	//public static final File MUSIC_DIR					= (ENV.equals(WK))
+	//		? new File("/Users/rlowe/rob/music")
+	//		: new File("/Volumes/IOMEGA-1000/Rob/music");
+	public static final File MUSIC_DIR					= new File("/Users/rlowe/rob/apps/audio/data/music");
 
 	/** The abc output dir. */
 	public static final File ABC_DIR					= new File(MUSIC_DIR, "rlp-abc/files");
@@ -324,8 +324,8 @@ public class Constants {
 	public static String[] GENRE_NAMES = {"country", "jazz", "jewish", "klezmer", "other"};
 	public static boolean GENERATE_CHORD_TYPES_HTML_FILE = false;
 	public static String GENRE_NAME = "jazz";
-	public static String FOLDER_NAME = "Aebersold - Jazz Handbook";
-	public static String TUNE_NAME = "01";
+	public static String FOLDER_NAME = "Aebersold-Exercises";
+	public static String TUNE_NAME = "003-05-g-minor-blues-with-bridge";
 	public static int BARS_PER_LINE = 8;
 	/*
 		#

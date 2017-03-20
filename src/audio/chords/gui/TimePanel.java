@@ -191,7 +191,7 @@ public class TimePanel extends AudioPanel {
          			player = null;
             	    unset(l);
          		} else {
-             	    player = new MetronomePlayer(panel);
+             	    player = new MetronomePlayer(panel, ac);
            	    	player.start();
            	    	set(l);
          		}

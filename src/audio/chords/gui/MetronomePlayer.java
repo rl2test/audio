@@ -14,17 +14,19 @@ public class MetronomePlayer extends Thread {
 	protected volatile boolean runFlag 		= true;
 	private int PITCH 						= 42; // 35|37|42
 	private int CHANNEL 					= 9;
-	public TimePanel panel	= null;
+	public TimePanel panel					= null;
+	private AudioController ac				= null;
 
-    public MetronomePlayer(TimePanel panel) {
+    public MetronomePlayer(TimePanel panel, AudioController ac) {
     	this.panel = panel;
+    	this.ac = ac;
      }
 	
 	public void run() {
 		log.debug("run()");
  		
 		// set channel
-		MidiChannel channel = AudioController.midiChannels[CHANNEL];
+		MidiChannel channel = ac.midiChannels[CHANNEL];
 		
 		// set stereo r/l
 		channel.controlChange(10, 127); 
@@ -92,14 +94,14 @@ public class MetronomePlayer extends Thread {
 	 * @param midiNote
 	 */
 	private void beginMidiNote(MidiNote midiNote) {
-		AudioController.midiChannels[midiNote.channel].noteOn(midiNote.pitch, midiNote.vol);
+		ac.midiChannels[midiNote.channel].noteOn(midiNote.pitch, midiNote.vol);
 	}
 	
 	/**
 	 * @param midiNote
 	 */
 	private void endMidiNote(MidiNote midiNote) {
-		AudioController.midiChannels[midiNote.channel].noteOff(midiNote.pitch);
+		ac.midiChannels[midiNote.channel].noteOff(midiNote.pitch);
 	}
 
 	/**

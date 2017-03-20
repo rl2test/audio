@@ -95,7 +95,7 @@ public class KeyPanel extends AudioPanel {
             		if (selectedKeyIndex != -1) {
     					set(l);
     					drone = true;
-    					dronePlayer = new DronePlayer(selectedKeyIndex);
+    					dronePlayer = new DronePlayer(selectedKeyIndex, ac);
     					dronePlayer.start();        	
             		} else {
             			log.warn("no key selected for drone");

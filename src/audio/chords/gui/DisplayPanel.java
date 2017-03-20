@@ -15,9 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JLabel;
-import javax.swing.JPanel;
-
-import org.apache.log4j.Logger;
 
 import audio.Util;
 import audio.chords.Bar;
@@ -27,17 +24,26 @@ import audio.chords.Bar;
  * Display bars and indicate the current bar, also output bars to file.
  *
  */
-public class DisplayPanel extends JPanel { 
+public class DisplayPanel extends AudioPanel { 
 	/** Default serialVersionUID. */
 	private static final long serialVersionUID 	= 1L;
-	/** The log. */
-	private Logger log							= Logger.getLogger(getClass());	
-	private List<JLabel> labels					= new ArrayList<JLabel>();
+	/** The singleton instance of this class. */    
+	private static DisplayPanel displayPanel 	= null;	
+	List<JLabel> myLabels = new ArrayList<JLabel>();
 	
+	/**
+     * @return singleton instance of this class
+     */
+    public static DisplayPanel getInstance(AudioController ac) throws Exception {
+        if (displayPanel == null) {
+        	displayPanel = new DisplayPanel(ac);
+    	}
+    	return displayPanel;
+    }
 	
     /** Public constructor */
-    public DisplayPanel() {
-    	setLayout(null);
+    private DisplayPanel(AudioController ac) {
+    	super(ac);
         setBackground(C[10]);
     }    
 
@@ -46,7 +52,7 @@ public class DisplayPanel extends JPanel {
     	StringBuffer sb = new StringBuffer();
 
 		this.removeAll();
-		labels.clear();
+		myLabels.clear();
 
 		int labelWidth = (int) (this.getWidth() / BARS_PER_LINE) - 1;
 		
@@ -81,7 +87,7 @@ public class DisplayPanel extends JPanel {
     	    label.setText(text);
     	    add(label);
     	    
-    	    labels.add(label);
+    	    myLabels.add(label);
     	    
     	    x += label.getWidth() + 1;
     	    barCount++;
@@ -98,11 +104,11 @@ public class DisplayPanel extends JPanel {
     }
     
     public void updateBars(int barCount) {
-    	int prevBarCount = (barCount > 0) ? barCount - 1 : labels.size() - 1;   
-   		labels.get(prevBarCount).setBackground(C[12]);
-   		labels.get(prevBarCount).setForeground(C[0]);
-   		labels.get(barCount).setBackground(C[6]);
-    	labels.get(barCount).setForeground(C[16]);
+    	int prevBarCount = (barCount > 0) ? barCount - 1 : myLabels.size() - 1;   
+    	myLabels.get(prevBarCount).setBackground(C[12]);
+    	myLabels.get(prevBarCount).setForeground(C[0]);
+    	myLabels.get(barCount).setBackground(C[6]);
+    	myLabels.get(barCount).setForeground(C[16]);
     }
 }
 

@@ -17,20 +17,21 @@ import audio.MidiNote;
 
 public class DronePlayer extends Thread {
 	/** The log. */
-	protected Logger log 					= Logger.getLogger(this.getClass());
-	protected boolean runFlag 				= true;
-	protected List<MidiNote> midiNotes		= new ArrayList<MidiNote>();
-	private int interval 					= 0;
+	private Logger log 					= Logger.getLogger(this.getClass());
+	private List<MidiNote> midiNotes	= new ArrayList<MidiNote>();
+	private int interval 				= 0;
+	private AudioController ac			= null;
 	
-	public DronePlayer(int keyIndex) {
+	public DronePlayer(int keyIndex, AudioController ac) {
 		interval = TRANSPOSE_KEY_INTERVALS[keyIndex];
+		this.ac = ac;
 	}
 	
 	public void run() {
 		log.debug("run()");
 		
 		// set channel
-		MidiChannel channel = AudioController.midiChannels[0];
+		MidiChannel channel = ac.midiChannels[0];
 		
 		// set stereo r/l
 		channel.controlChange(10, 64); 
@@ -56,21 +57,20 @@ public class DronePlayer extends Thread {
 	 */
 	private void beginMidiNote(MidiNote midiNote) {
 		midiNotes.add(midiNote);
-		AudioController.midiChannels[midiNote.channel].noteOn(midiNote.pitch, midiNote.vol);
+		ac.midiChannels[midiNote.channel].noteOn(midiNote.pitch, midiNote.vol);
 	}
 	
 	/**
 	 * @param midiNote
 	 */
 	private void endMidiNote(MidiNote midiNote) {
-		AudioController.midiChannels[midiNote.channel].noteOff(midiNote.pitch);
+		ac.midiChannels[midiNote.channel].noteOff(midiNote.pitch);
 	}
 
 	/**
 	 * 
 	 */
 	public void end() {
-		runFlag = false;
 		for (MidiNote midiNote: midiNotes) {
 			endMidiNote(midiNote);
 		}

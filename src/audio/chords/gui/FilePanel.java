@@ -13,11 +13,8 @@ import static audio.Constants.GENRE_NAME;
 import static audio.Constants.FOLDER_NAME;
 import static audio.Constants.TUNE_NAME;
 
-import java.awt.Font;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -25,11 +22,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
 
 //import audio.Config;
 import audio.ExtensionFilter;
@@ -37,22 +32,23 @@ import audio.Util;
 
 public class FilePanel extends AudioPanel { 
 	/** Default serialVersionUID. */
-	private static final long serialVersionUID 		= 1L;
+	private static final long serialVersionUID 	= 1L;
 	/** The singleton instance of this class. */    
-	private static FilePanel filePanel 				= null;
-	private final FileListener listener 			= new FileListener();
+	private static FilePanel filePanel 			= null;
+	private final FileListener listener 		= new FileListener();
 	/** The player. */
-	public ChordPlayer chordPlayer 					= null;
-	private static final String[] UNPOPULATED_LIST  = {"----"};
+	public TunePlayer tunePlayer 				= null;
+	private final String[] UNPOPULATED_LIST  	= {"----"};
 	/** Genre box. */
-	private final JComboBox<String> genreBox 		= new JComboBox<String>();
+	private final JComboBox<String> genreBox 	= new JComboBox<String>();
 	/** Folder box. */
-	private final JComboBox<String> folderBox 		= new JComboBox<String>();
+	private final JComboBox<String> folderBox 	= new JComboBox<String>();
 	/** Tune box. */
-	private final JComboBox<String> tuneBox 		= new JComboBox<String>();
-	/** The text area. */
-	public JTextArea textArea 						= null;
-	public boolean playing							= false;
+	private final JComboBox<String> tuneBox 	= new JComboBox<String>();
+	public boolean playing						= false;
+	public String genreName						= GENRE_NAME;
+	public String folderName					= FOLDER_NAME;
+	public String tuneName						= TUNE_NAME;	
 	
 	/**
      * @return singleton instance of this class
@@ -78,6 +74,7 @@ public class FilePanel extends AudioPanel {
 		genreBox.setBounds(x, y, W[4], W[1]);
 		genreBox.setFont(FONT);
 		add(genreBox);
+		genreBox.setSelectedItem(genreName);
 		// genre combo box bg label - note: paints BEFORE preceding element
 		add(getLabel(null, null, C[6], null, x, y, W[4], W[1], null));
 	    x += W[4] + 1;
@@ -92,6 +89,8 @@ public class FilePanel extends AudioPanel {
 		folderBox.setBounds(x, y, W[16], W[1]);
 		folderBox.setFont(FONT);
 		add(folderBox);
+		updateFolderBox();
+		folderBox.setSelectedItem(folderName);
 		// folder combo box bg label - note: paints BEFORE preceding element
 		add(getLabel(null, null, C[6], null, x, y, W[16], W[1], null));
 	    x += W[16] + 1;
@@ -107,6 +106,8 @@ public class FilePanel extends AudioPanel {
 		tuneBox.setBounds(x, y, W[16], W[1]);
 		tuneBox.setFont(FONT);
 		add(tuneBox);
+		updateTuneBox(GENRE_NAME, FOLDER_NAME);
+		tuneBox.setSelectedItem(TUNE_NAME);
 		// tune combo box bg label - note: paints BEFORE preceding element
 		add(getLabel(null, null, C[6], null, x, y, W[16], W[1], null));
 	    x += W[16] + 1;
@@ -126,49 +127,6 @@ public class FilePanel extends AudioPanel {
 	    // refresh
 		add(getLabel("Refresh", "refresh", C[6], C[16], x, y, W[2], W[1], listener));
 	    x += W[2] + 1;
-
-	    // row 2 ///////////////////////////////////////////////////////////////
-		x = 0;
-		y += W[1];  
-		
-		int textAreaHeight 		= (int) ((AudioController.h - (2 * (W[1] + 1) + y)));
-		int textAreaWidth		= (int) (AudioController.w  * 0.3);
-		int displayPanelHeight 	= textAreaHeight;
-		int displayPanelWidth 	= (int) (AudioController.w  * 0.7);
-		
-		textArea = new JTextArea();
-		textArea.setBounds(
-				x, 
-				y, 
-				textAreaWidth, 
-				textAreaHeight);
-		textArea.setFont(new Font("Courier New", Font.PLAIN, 12));
-		add(textArea);
-		
-		DisplayPanel displayPanel = new DisplayPanel();
-	    displayPanel.setBounds(
-				x + textAreaWidth, 
-				y, 
-				displayPanelWidth, 
-				displayPanelHeight);
-	    add(displayPanel);
-	    ac.displayPanel = displayPanel;
-		
-	    x += textArea.getWidth();
-	    
-	    textArea.addKeyListener( new KeyListener() {
-	        public void keyPressed(KeyEvent keyEvent) {
-	        }
-	        public void keyReleased(KeyEvent keyEvent) {
-	        }
-	        public void keyTyped(KeyEvent keyEvent) {
-	        	//setTuneUpdated();
-	        }
-	    });
-
-		genreBox.setSelectedItem(GENRE_NAME);
-		folderBox.setSelectedItem(FOLDER_NAME);
-		tuneBox.setSelectedItem(TUNE_NAME);
     }
     
     /*
@@ -189,62 +147,12 @@ public class FilePanel extends AudioPanel {
      * @param msg
      */
     public void stop(String msg) {
-		chordPlayer.destroyPlayer();
-		chordPlayer = null;
+		tunePlayer.destroyPlayer();
+		tunePlayer = null;
 
 		log.debug("msg=" + msg);
     }
     
-	/**
-	 * Update the folderBox.
-	 * 
-	 * @param genreName
-	 * @param folderName
-	 */
-	public void updateFolderBox(String genreName) {
-		log.debug("genreName=" + genreName);
-		File f = getGenreDir(genreName);
-		log.debug("f.getpath()=" + f.getPath());
-		
-		List<String> dirNames = Util.getDirNames(getGenreDir(genreName));
-		
-		String[] folderNames = new String[dirNames.size()];
-		int i = 0;
-		for(String dirName: dirNames) {
-			folderNames[i++] = dirName;
-		}
-
-	    folderBox.setModel(new DefaultComboBoxModel<String>(folderNames));
-	    
-	    String folderName = folderNames[0];
-	    log.debug("folderName " + folderName + " selected");
-	    
-	    updateTuneBox(genreName, folderName);
-	}
-    
-	/**
-	 * Update the tuneBox.
-	 * 
-	 * @param genreName
-	 * @param folderName
-	 */
-	public void updateTuneBox(String genreName, String folderName) {
-		File dir = new File(MUSIC_DIR, genreName + CHORDS_FOLDER + FS + folderName);
-		File[] files = dir.listFiles(new ExtensionFilter(EXT_CHORDS));
-		
-		String[] tuneNames = new String[files.length];
-		
-		int i = 0;
-		for (File file: files) {
-			tuneNames[i++] = file.getName().replace(EXT_CHORDS, "");
-		}
-
-		Arrays.sort(tuneNames);
-		
-		tuneBox.setModel(new DefaultComboBoxModel<String>(tuneNames));
-		setTextArea(genreName, folderName, tuneNames[0]);
-	}
-
 	/**
 	 * @param genre
 	 * @return the genreDir based on the genre name
@@ -270,7 +178,7 @@ public class FilePanel extends AudioPanel {
 	 */
 	private void setTextArea(String genreName, String folderName, String tuneName) {
 		File tuneFile = getTuneFile(genreName, folderName, tuneName);
-		textArea.setText(Util.getText(tuneFile));
+		ac.textPanel.textArea.setText(Util.getText(tuneFile));
 		//clearTuneUpdated();
 	} 
 	
@@ -294,11 +202,12 @@ public class FilePanel extends AudioPanel {
 	class GenreBoxListener implements ItemListener {
 	    // this method is called only if a new item has been selected.
 	    public void itemStateChanged(ItemEvent event) {
+	    	log.debug("GenreBoxListener");	
 	        if (event.getStateChange() == ItemEvent.SELECTED) {
 	        	String genreName = event.getItem().toString();
 	        	log.debug("GenreBoxListener: genre " + genreName + " selected");
 
-	        	updateFolderBox(genreName);
+	        	if (ac.init) updateFolderBox();
 	        }
 	    }
 	}
@@ -310,6 +219,7 @@ public class FilePanel extends AudioPanel {
 	class FolderBoxListener implements ItemListener {
 	    // this method is called only if a new item has been selected.
 	    public void itemStateChanged(ItemEvent event) {
+	    	log.debug("FolderBoxListener");
 	        if (event.getStateChange() == ItemEvent.SELECTED) {
 	        	String genre	= (String) genreBox.getSelectedItem();
 	        	log.debug("FolderBoxListener: genre " + genre + " selected");
@@ -317,7 +227,7 @@ public class FilePanel extends AudioPanel {
 	        	String folderName = event.getItem().toString();
 	        	log.debug("FolderBoxListener: folderName " + folderName + " selected");
 
-	    	    updateTuneBox(genre, folderName);
+	        	if (ac.init) updateTuneBox(genre, folderName);
 	        }
 	    }
 	}
@@ -329,6 +239,7 @@ public class FilePanel extends AudioPanel {
 	class TuneBoxListener implements ItemListener {
 	    // this method is called only if a new item has been selected.
 	    public void itemStateChanged(ItemEvent event) {
+	    	log.debug("TuneBoxListener");
 	        if (event.getStateChange() == ItemEvent.SELECTED) {
 	        	String genreName = (String) genreBox.getSelectedItem();
 	        	log.debug("TuneBoxListener: genre " + genreName + " selected");
@@ -338,28 +249,84 @@ public class FilePanel extends AudioPanel {
 
 	        	String tuneName = event.getItem().toString();
 	        	log.debug("TuneBoxListener: tuneName " + tuneName + " selected");
-        		setTextArea(genreName, folderName, tuneName);	
+	        	if (ac.init) setTextArea(genreName, folderName, tuneName);	
 	        }
 	    }
 	}
-	
-	/* (non-Javadoc)
-	 * @see audio.chords.gui.ChordPanel#getTransposeTo()
+
+	/**
+	 * Update the folderBox.
+	 * 
+	 * @param genreName
+	 * @param folderName
 	 */
-	/*public String getTransposeTo() {
-		if (transposeCheckBox.isSelected()) {
-			return (String) transposeBox.getSelectedItem();
+	public void updateFolderBox() {
+		log.debug("genreName=" + genreName);
+		
+		List<String> dirNames = Util.getDirNames(getGenreDir(genreName));
+		
+		String[] folderNames = new String[dirNames.size()];
+		int i = 0;
+		for(String dirName: dirNames) {
+			folderNames[i++] = dirName;
 		}
-		return "";
-	}*/
+
+	    folderBox.setModel(new DefaultComboBoxModel<String>(folderNames));
+	    
+	    //String folderName = folderNames[0];
+	    //log.debug("folderName " + folderName + " selected");
+	    
+	    //updateTuneBox(genreName, folderName);
+	}
+    
+	public String[] getDirNames() {
+		//Util.getDirNames(getGenreDir(genreName));
+		return null;
+	}
 	
+	
+	/**
+	 * Update the tuneBox.
+	 * 
+	 * @param genreName
+	 * @param folderName
+	 */
+	public void updateTuneBox(String genreName, String folderName) {
+		log.debug("updateTuneBox: genreName=" + genreName + ", folderName=" + folderName);
+		File dir = new File(MUSIC_DIR, genreName + CHORDS_FOLDER + FS + folderName);
+		log.debug(dir.getPath());
+		File[] files = dir.listFiles(new ExtensionFilter(EXT_CHORDS));
+		
+		String[] tuneNames = new String[files.length];
+		
+		int i = 0;
+		for (File file: files) {
+			tuneNames[i++] = file.getName().replace(EXT_CHORDS, "");
+		}
+
+		Arrays.sort(tuneNames);
+		
+		tuneBox.setModel(new DefaultComboBoxModel<String>(tuneNames));
+		
+		//String tuneName = tuneNames[0];
+		//log.debug("tuneName " + tuneName + " selected");
+		
+		//setTextArea(genreName, folderName, tuneName);
+	}
+
 	/**
 	 * Init the drop-downs.
 	 */
 	public void init() {
+		log.debug("init");
+		log.debug("setting " + GENRE_NAME);
 		//genreBox.setSelectedItem(GENRE_NAME);
+		//log.debug("setting " + FOLDER_NAME);
 		//folderBox.setSelectedItem(FOLDER_NAME);
+		//log.debug("setting " + TUNE_NAME);
 		//tuneBox.setSelectedItem(TUNE_NAME);
+		setTextArea(genreName, folderName, tuneName);
+		ac.init = true;
 	}
 	
     private class FileListener extends MouseAdapter {
@@ -371,14 +338,14 @@ public class FilePanel extends AudioPanel {
             
             if (name.equals("playStop")) {
             	if (playing) {
-    				chordPlayer.destroyPlayer();
-    				chordPlayer = null;
+    				tunePlayer.destroyPlayer();
+    				tunePlayer = null;
     				playing = false;
     				l.setText("Play");
             	} else {
-					String text = textArea.getText();
-					chordPlayer = new ChordPlayer(text, ac);
-					chordPlayer.start();
+					String text = ac.textPanel.textArea.getText();
+					tunePlayer = new TunePlayer(text, ac);
+					tunePlayer.start();
 					playing = true;
 					l.setText("Stop");
             	}	
@@ -390,7 +357,7 @@ public class FilePanel extends AudioPanel {
             	String genre		= (String) genreBox.getSelectedItem();
 				String folderName	= (String) folderBox.getSelectedItem();
 				String tuneName		= (String) tuneBox.getSelectedItem();
-				String text 		= textArea.getText();
+				String text 		= ac.textPanel.textArea.getText();
 				
 				int n = JOptionPane.showConfirmDialog(
 				    null,
@@ -405,7 +372,7 @@ public class FilePanel extends AudioPanel {
 				String genre		= (String) genreBox.getSelectedItem();
 				String folderName	= (String) folderBox.getSelectedItem();
 				String tuneName		= (String) tuneBox.getSelectedItem();
-				String text 		= textArea.getText();
+				String text 		= ac.textPanel.textArea.getText();
 
 			    String s = (String) JOptionPane.showInputDialog(
 						null,
