@@ -48,7 +48,7 @@ public class Tune {
 	/** The text of this tune. */
 	public String text 				= "";
 	public String errorMsg 			= "";
-	public int beatsPerBar 			= 0;
+	public int time 				= 0;
 	public int beginTempo			= 0;
 	public int endTempo				= 0;
 	public int increment    		= 0;    
@@ -93,7 +93,7 @@ public class Tune {
 					String[] tokens = line.split(PIPE_DELIM);
 					int len = tokens.length;
 
-					beatsPerBar = Integer.parseInt(tokens[0]);
+					time = Integer.parseInt(tokens[0]);
 					
 					if (len > 1) {
 						String tempo = tokens[1];
@@ -150,7 +150,7 @@ public class Tune {
 			transposed = true;
 		}
 
-		setBars(beatsPerBar, barStrs);
+		setBars(time, barStrs);
 	}
 	
 	/**
@@ -299,7 +299,7 @@ public class Tune {
 		sb.append(NL + "[Tune]" + NL);
 		//sb.append("genre       = " + genre + NL);
 		sb.append("text        = " + NL + text + NL);
-		sb.append("beatsPerBar = " + beatsPerBar + NL);
+		sb.append("beatsPerBar = " + time + NL);
 		sb.append("beginTempo  = " + beginTempo + NL);
 		sb.append("endTempo    = " + endTempo + NL);
 		sb.append("increment   = " + increment + NL);    

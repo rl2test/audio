@@ -1,19 +1,19 @@
 package audio.chords.gui;
 
 import static audio.Constants.C;
+import static audio.Constants.CHORDS_FILTER;
 import static audio.Constants.CHORDS_FOLDER;
 import static audio.Constants.DIR_FILTER;
-import static audio.Constants.CHORDS_FILTER;
 import static audio.Constants.EXT_CHORDS;
+import static audio.Constants.FOLDER_NAME;
 import static audio.Constants.FONT;
 import static audio.Constants.FS;
+import static audio.Constants.GENRE_NAME;
 import static audio.Constants.GENRE_NAMES;
 import static audio.Constants.MUSIC_DIR;
 import static audio.Constants.NL;
-import static audio.Constants.W;
-import static audio.Constants.GENRE_NAME;
-import static audio.Constants.FOLDER_NAME;
 import static audio.Constants.TUNE_NAME;
+import static audio.Constants.W;
 
 import java.awt.Color;
 import java.awt.event.ItemEvent;
@@ -22,7 +22,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.Arrays;
-import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;

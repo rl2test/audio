@@ -6,19 +6,12 @@ import static audio.Constants.C;
 import static audio.Constants.END;
 import static audio.Constants.NL;
 import static audio.Constants.PIPE;
-import static audio.Constants.SPACE;
-import static audio.Constants.US;
 import static audio.Constants.W;
 
-import java.awt.Font;
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.JLabel;
 
 import audio.Util;
 import audio.chords.Bar;
-
 
 /**
  * Display bars and indicate the current bar, also output bars to file.

@@ -1,14 +1,13 @@
 package audio.chords.gui;
 import static audio.Constants.ACOUSTIC_BASS;
 import static audio.Constants.NYLON_STRING_GUITAR;
-import static audio.Constants.TRANSPOSE_KEYS;
 import static audio.Constants.OCTAVE;
+import static audio.Constants.PATTERNS;
+import static audio.Constants.TRANSPOSE_KEYS;
 import static audio.Constants.V;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.sound.midi.MidiChannel;
 
@@ -28,7 +27,6 @@ public class TunePlayer extends Thread {
 	/** The tune text. */
 	private String text						= null;
 	private AudioController ac				= null;
-	public Map<Integer, Integer[]> patterns = new HashMap<Integer, Integer[]>();
 
 	/**
 	 * Called from playButton.
@@ -43,36 +41,6 @@ public class TunePlayer extends Thread {
 	public TunePlayer(String text, AudioController ac) {
 		this.text = text;
 		this.ac = ac;
-		
-		String[] patternStrs = {
-				"2 1-",
-				"3 1-5",
-				"4 1-5-",
-				//"51 1--5-",
-				//"52 1-5--",
-				//"61 1--5--",
-				//"62 1-5-5-",
-				//"71 1-1-5--",
-				//"72 1--5-5-",
-		};
-		int n = 0;
-		for(String str: patternStrs) {
-			int len = str.length();
-			for (int i = 0; i < len; i++) {
-				String s = String.valueOf(str.charAt(i));
-				if (i == 0) {
-					n = Integer.parseInt(s);	
-					patterns.put(n, new Integer[len - 2]);
-				} else {
-					if (s.equals(" ")) {
-					} else if (s.equals("-")) {
-						patterns.get(n)[i - 2] = 0;
-					} else {
-						patterns.get(n)[i - 2] = Integer.parseInt(s);
-					}
-				}
-			}	
-		}
 	}
 
 	/* (non-Javadoc)
@@ -104,12 +72,12 @@ public class TunePlayer extends Thread {
 			log.debug("timePanel: set=" + timePanel.set + ", beginTempo=" + timePanel.beginTempo);
 
 			Tune tune = new Tune(text, transposeTo); 
-			int beatsPerBar	= (timePanel.set) ? timePanel.time : tune.beatsPerBar;
+			int time		= (timePanel.set) ? timePanel.time : tune.time;
 			int beginTempo	= (timePanel.set) ? timePanel.beginTempo : tune.beginTempo;
 			int endTempo 	= (timePanel.set) ? timePanel.endTempo : tune.endTempo;
 			int increment 	= (timePanel.set) ? timePanel.increment : tune.increment;			
 			
-			Integer[] pattern = patterns.get(beatsPerBar);
+			Integer[] pattern = PATTERNS.get(time);
 			
 			if (tune.transposed) {
 				log.debug("transposed from " + tune.transposeFrom + " to " + tune.transposeTo);
@@ -132,7 +100,7 @@ public class TunePlayer extends Thread {
 				doIncrement = true;
 			}
 			
-			log.debug("beatsPerBar=" + beatsPerBar);
+			log.debug("time=" + time);
 			log.debug("beginTempo=" + beginTempo);
 			log.debug("endTempo=" + endTempo);
 			log.debug("increment=" + increment);
@@ -170,7 +138,7 @@ public class TunePlayer extends Thread {
 					break;
 				}
 
-				beatCount = pulseCount % beatsPerBar; 
+				beatCount = pulseCount % time; 
 				if (beatCount == 0) {
 					// get next bar
 					bar = tune.bars.get(barCount);
@@ -186,7 +154,7 @@ public class TunePlayer extends Thread {
 				}
 
 				Chord chord = bar.chords.get(beatCount);
-				Chord nextChord = (beatCount == beatsPerBar - 1) ? null : bar.chords.get(beatCount + 1);
+				Chord nextChord = (beatCount == time - 1) ? null : bar.chords.get(beatCount + 1);
 				if (!chord.name.equals(lastChordName) || beatCount == 0) {
 					chordBeatCount = 0;
 				}
@@ -210,7 +178,7 @@ public class TunePlayer extends Thread {
 				pulseCount++;
 				chordBeatCount++;
 				lastChordName = chord.name;
-				if (pulseCount == tune.bars.size() * beatsPerBar) {
+				if (pulseCount == tune.bars.size() * time) {
 					// reached the end of the bars array, so reset pulseCount to 0
 					pulseCount = 0;
 

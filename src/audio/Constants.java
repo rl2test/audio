@@ -3,6 +3,8 @@ package audio;
 import java.awt.Color;
 import java.awt.Font;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -16,7 +18,6 @@ public class Constants {
 	public static final String ENV						= (RUNTIME_VERSION.equals("1.7.0_79-b15")) ? WK : HM;
 
 	public static final File APP_DIR					= new File("/Users/rlowe/rob/apps/audio");
-
 	public static final File BARS_FILE					= new File(APP_DIR, "bars.txt");
 
 	/* dir definitions */
@@ -24,10 +25,9 @@ public class Constants {
 	public static final File DATA_DIR					= new File(APP_DIR, "data");
 
 	/** The top-level music dir. */
-	//public static final File MUSIC_DIR					= (ENV.equals(WK))
-	//		? new File("/Users/rlowe/rob/music")
-	//		: new File("/Volumes/IOMEGA-1000/Rob/music");
-	public static final File MUSIC_DIR					= new File("/Users/rlowe/rob/apps/audio/data/music");
+	public static final File MUSIC_DIR					= (ENV.equals(WK))
+			? new File("/Users/rlowe/rob/apps/audio/data/music") //"/Users/rlowe/rob/music"
+			: new File("/Volumes/IOMEGA-1000/Rob/music");
 
 	/** The abc output dir. */
 	public static final File ABC_DIR					= new File(MUSIC_DIR, "rlp-abc/files");
@@ -55,8 +55,6 @@ public class Constants {
 	public static final String LT 						= "<";
 	public static final String HASH						= "#";
 
-	public static final String DIVIDER_40				= "========================================";
-
 	/** un-transposable elements: :><|-/() z0-9 */
 	public static final String UNTRANSPOSABLE_ABC_ELEMENTS = COLON + GT + LT + PIPE + DASH + FS + PARENS_OPEN + PARENS_CLOSE + SPACE + REST + DIGITS;
 
@@ -80,7 +78,6 @@ public class Constants {
 	public static final String EXT_HTML					= ".html";
 	/** The '.txt' extension. */
 	public static final String EXT_TXT					= ".txt";
-
 
 	/* data definition files */
 	/** The chord-types definition file. */
@@ -114,25 +111,7 @@ public class Constants {
 	public static final String REST_4					= "z4";
 	public static final String ALPHABET					= "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-	/*
-		C major:	C	Dm	Em	F	G	Am
-		G major:	G	Am	Bm	C	D	Em
-		D major:	D	Em	F#m	G	A	Bm
-		A major:	A	Bm	C#m	D	E	F#m
-		E major:	E	F#m	G#m	A	B	C#m
-		B major:	B	C#m	D#m	E	F#	G#m
-		F# major:	F#	G#m	A#m	B	C#	D#m
-		Gb major:	Gb	Abm	Bbm	Cb	Db	Ebm
-		Db major:	Db	Ebm	Fm	Gb	Ab	Bbm
-		Ab major:	Ab	Bbm	Cm	Db	Eb	Fm
-		Eb major:	Eb	Fm	Gm	Ab	Bb	Cm
-		Bb major:	Bb	Cm	Dm	Eb	F	Gm
-		F major:	F	Gm	Am	Bb	C	Dm
-
-		C  F  Bb Eb    Ab Db Gb/F# B  E  A  D G
-		c  f  bb eb/d# g# c# f#    b  e  a  d g
-	 */
-
+	// see https://en.wikipedia.org/wiki/Circle_of_fifths#Modulation_and_chord_progression
 	public static final String[] TRANSPOSE_KEYS 		= {"C", "F", "Bb", "Eb",    "Ab", "Db", "Gb/F#", "B", "E", "A", "D", "G"};
 	public static final String[] TRANSPOSE_KEYS_MINOR	= {"c", "f", "bb", "eb/d#", "g#", "c#", "f#",    "b", "e", "a", "d", "g"};
 	public static final int[] TRANSPOSE_KEY_INTERVALS	= { 0,   5,   10,   3,       8,    1,    6,       11,  4,   9,   2,   7 };
@@ -148,135 +127,10 @@ public class Constants {
 	/** Octave. */
 	public static final int OCTAVE 						= 12;
 
-	/* MIDI instrument definitions */
-	public static final int PIANO_1 					= 0;
-	public static final int PIANO_2 					= 1;
-	public static final int PIANO_3 					= 2;
-	public static final int HONKY_TONK 					= 3;
-	public static final int ELECTRIC_PIANO_1 			= 4;
-	public static final int ELECTRIC_PIANO_2 			= 5;
-	public static final int HARPSICHORD 				= 6;
-	public static final int CLAVICHORD					= 7;
-	public static final int CELESTA 					= 8;
-	public static final int GLOCKENSPIEL 				= 9;
-	public static final int MUSIC_BOX 					= 10;
-	public static final int VIBRAPHONE 					= 11;
-	public static final int MARIMBA 					= 12;
-	public static final int XYLOPHONE 					= 13;
-	public static final int TUBULAR_BELL 				= 14;
-	public static final int SANTUR 						= 15;
-	public static final int ORGAN_1 					= 16;
-	public static final int ORGAN_2				 		= 17;
-	public static final int ORGAN_3 					= 18;
-	public static final int CHURCH_ORG_1 				= 19;
-	public static final int REED_ORGAN 					= 20;
-	public static final int ACCORDION_FR 				= 21;
-	public static final int HARMONICA 					= 22;
-	public static final int BANDONEON 					= 23;
 	public static final int NYLON_STRING_GUITAR			= 24;
-	public static final int STEEL_STRING_GUITAR			= 25;
-	public static final int JAZZ_GUITAR					= 26;
-	public static final int CLEAN_GUITAR				= 27;
-	public static final int MUTED_GUITAR				= 28;
-	public static final int OVERDRIVE_GUITAR			= 29;
-	public static final int DISTORTION_GUITAR			= 30;
-	public static final int GUITAR_HARMONICS 			= 31;
 	public static final int ACOUSTIC_BASS 				= 32;
-	public static final int FINGERED_BASS				= 33;
-	public static final int PICKED_BASS 				= 34;
-	public static final int FRETLESS_BASS				= 35;
-	public static final int SLAP_BASS_1 				= 36;
-	public static final int SLAP_BASS_2 				= 37;
-	public static final int SYNTH_BASS_1 				= 38;
-	public static final int SYNTH_BASS_2 				= 39;
-	public static final int VIOLIN 						= 40;
-	public static final int VIOLA 						= 41;
-	public static final int CELLO 						= 42;
-	public static final int CONTRABASS 					= 43;
-	public static final int TREMOLO_STRINGS				= 44;
-	public static final int PIZZICATO_STRINGS			= 45;
-	public static final int HARP 						= 46;
-	public static final int TIMPANI 					= 47;
-	public static final int STRINGS 					= 48;
-	public static final int SLOW_STRINGS 				= 49;
-	public static final int SYN_STRINGS1 				= 50;
-	public static final int SYN_STRINGS2 				= 51;
-	public static final int CHOIR_AAHS 					= 52;
-	public static final int VOICE_OOHS 					= 53;
-	public static final int SYNVOX 						= 54;
-	public static final int ORCHESTRAHIT 				= 55;
-	public static final int TRUMPET 					= 56;
-	public static final int TROMBONE 					= 57;
-	public static final int TUBA 						= 58;
-	public static final int MUTEDTRUMPET 				= 59;
-	public static final int FRENCH_HORNS 				= 60;
-	public static final int BRASS_1 					= 61;
-	public static final int SYNTH_BRASS_1				= 62;
-	public static final int SYNTH_BRASS_2				= 63;
-	public static final int SOPRANO_SAX 				= 64;
-	public static final int ALTO_SAX 					= 65;
-	public static final int TENOR_SAX 					= 66;
-	public static final int BARITONE_SAX 				= 67;
-	public static final int OBOE 						= 68;
-	public static final int ENGLISH_HORN 				= 69;
-	public static final int BASSOON 					= 70;
 	public static final int CLARINET 					= 71;
-	public static final int PICCOLO 					= 72;
-	public static final int FLUTE 						= 73;
-	public static final int RECORDER 					= 74;
-	public static final int PAN_FLUTE 					= 75;
-	public static final int BOTTLE_BLOW 				= 76;
-	public static final int SHAKUHACHI 					= 77;
-	public static final int WHISTLE 					= 78;
-	public static final int OCARINA 					= 79;
-	public static final int SQUARE_WAVE 				= 80;
-	public static final int SAW_WAVE 					= 81;
-	public static final int SYN_CALLIOPE 				= 82;
-	public static final int CHIFFER_LEAD 				= 83;
-	public static final int CHARANG 					= 84;
-	public static final int SOLO_VOX 					= 85;
-	public static final int FIFTH_SAW_WAVE 				= 86;
-	public static final int BASS_AND_LEAD 				= 87;
-	public static final int FANTASIA 					= 88;
-	public static final int WARM_PAD 					= 89;
-	public static final int POLYSYNTH 					= 90;
-	public static final int SPACE_VOICE 				= 91;
-	public static final int BOWED_GLASS 				= 92;
-	public static final int METAL_PAD 					= 93;
-	public static final int HALO_PAD 					= 94;
-	public static final int SWEEP_PAD 					= 95;
-	public static final int ICE_RAIN 					= 96;
-	public static final int SOUNDTRACK 					= 97;
-	public static final int CRYSTAL 					= 98;
-	public static final int ATMOSPHERE 					= 99;
-	public static final int BRIGHTNESS 					= 100;
-	public static final int GOBLIN 						= 101;
-	public static final int ECHO_DROPS 					= 102;
-	public static final int STAR_THEME 					= 103;
-	public static final int SITAR 						= 104;
-	public static final int BANJO 						= 105;
-	public static final int SHAMISEN 					= 106;
-	public static final int KOTO 						= 107;
-	public static final int KALIMBA 					= 108;
-	public static final int BAGPIPE 					= 109;
-	public static final int FIDDLE 						= 110;
-	public static final int SHANAI 						= 111;
-	public static final int TINKLE_BELL 				= 112;
-	public static final int AGOGO 						= 113;
-	public static final int STEEL_DRUMS 				= 114;
-	public static final int WOODBLOCK 					= 115;
-	public static final int TAIKO 						= 116;
-	public static final int MELO_TOM_1 					= 117;
-	public static final int SYNTH_DRUM 					= 118;
-	public static final int REVERSE_CYM 				= 119;
-	public static final int GUITAR_FRETNOISE			= 120;
-	public static final int BREATH_NOISE 				= 121;
-	public static final int SEASHORE 					= 122;
-	public static final int BIRD 						= 123;
-	public static final int TELEPHONE_1 				= 124;
-	public static final int HELICOPTER 					= 125;
-	public static final int APPLAUSE 					= 126;
-	public static final int GUN_SHOT 					= 127;
+	
 
 	/* *********************** Chords constants ***************************** */
 
@@ -317,43 +171,18 @@ public class Constants {
 	public static int START								= 0;
 	public static int END								= 1;
 
-	public static String[] GENRE_NAMES = {"country", "jazz", "jewish", "klezmer", "other"};
-	public static boolean GENERATE_CHORD_TYPES_HTML_FILE = false;
-	public static String GENRE_NAME = "jazz";
-	public static String FOLDER_NAME = "Aebersold-Exercises";
-	public static String TUNE_NAME = "003-05-g-minor-blues-with-bridge";
-	public static int BARS_PER_LINE = 8;
-	/*
-		#
-		genreNames
-		generateChordTypesHtmlFile=false
-		#chordFilePanel
-		chordFile.GenreName.default=jazz
-		chordFile.FolderName.default=Aebersold - Jazz Handbook
-		chordFile.TuneName.default=01
-		#displayPanel
-		display.BarsPerLine.default=8
-	 */
+	public static String[] GENRE_NAMES 					= {"country", "jazz", "jewish", "klezmer", "other"};
+	public static boolean GENERATE_CHORD_TYPES_HTML_FILE 
+														= false;
+	// defaults for time panel
+	public static String GENRE_NAME 					= "jazz";
+	public static String FOLDER_NAME 					= "Aebersold-Exercises";
+	public static String TUNE_NAME 						= "003-05-g-minor-blues-with-bridge";
+	// for display panel 
+	public static int BARS_PER_LINE 					= 8;
+	public static Map<Integer, Integer[]> PATTERNS 		= new HashMap<Integer, Integer[]>();
+	public static Map<Integer, String> PATTERN_STRS 	= new HashMap<Integer, String>();
 
-	/*
-	0 0
-	1 15
-	2 31
-	3 47
-	4 63
-	5 79
-	6 95
-	7 111
-	8 127
-	9 143
-	10 159
-	11 175
-	12 191
-	13 207
-	14 223
-	15 239
-	16 255
-	*/
 	/* Preset values between 0 and 255 used for vol and pan. */
 	public static final int[] V 						= new int[17];
 	/* Preset widths in multiples of 25. */
@@ -370,9 +199,8 @@ public class Constants {
 			log.debug(i + " " + v);
 			V[i] = v;
 			W[i] = i * 25;
-			//C[i] = new Color(v, v, v);
 		}
-		Color[] colors = new Color[17];
+		// from /Users/rlowe/rob/apps/gifgenerator/dtg_17_1.25-1.25-0.75.txt
 		i = 16;
 		C[i--] = new Color(255, 255, 255);
 		C[i--] = new Color(235, 235, 243);
@@ -395,7 +223,162 @@ public class Constants {
 		for (i = 0; i < 10; i++) {
 			O[i] = i * 12 + 12;
 		}
+		
+		String[] patternStrs = {
+				"2 1-",
+				"3 1-5",
+				"4 1-5-",
+				"51 1--5-",
+				"52 1-5--",
+				"61 1--5--",
+				"62 1-5-5-",
+				"71 1-1-5--",
+				"72 1--5-5-",
+		};
+		for(String str: patternStrs) {
+			String[] arr = str.split(" ");
+			int key = Integer.parseInt(arr[0]);
+			String pattern = arr[1];
+			PATTERN_STRS.put(key, pattern);
+			pattern = pattern.replaceAll("-", "0");
+			int len = pattern.length();
+			Integer[] ints = new Integer[len];
+			for (i = 0; i < len; i++) {
+				ints[i] = Integer.parseInt(pattern.substring(i, i + 1));
+			}	
+			PATTERNS.put(key, ints);
+		}
 	}
 }
 
-
+/* MIDI instrument definitions */
+/*
+public static final int PIANO_1 					= 0;
+public static final int PIANO_2 					= 1;
+public static final int PIANO_3 					= 2;
+public static final int HONKY_TONK 					= 3;
+public static final int ELECTRIC_PIANO_1 			= 4;
+public static final int ELECTRIC_PIANO_2 			= 5;
+public static final int HARPSICHORD 				= 6;
+public static final int CLAVICHORD					= 7;
+public static final int CELESTA 					= 8;
+public static final int GLOCKENSPIEL 				= 9;
+public static final int MUSIC_BOX 					= 10;
+public static final int VIBRAPHONE 					= 11;
+public static final int MARIMBA 					= 12;
+public static final int XYLOPHONE 					= 13;
+public static final int TUBULAR_BELL 				= 14;
+public static final int SANTUR 						= 15;
+public static final int ORGAN_1 					= 16;
+public static final int ORGAN_2				 		= 17;
+public static final int ORGAN_3 					= 18;
+public static final int CHURCH_ORG_1 				= 19;
+public static final int REED_ORGAN 					= 20;
+public static final int ACCORDION_FR 				= 21;
+public static final int HARMONICA 					= 22;
+public static final int BANDONEON 					= 23;
+public static final int NYLON_STRING_GUITAR			= 24;
+public static final int STEEL_STRING_GUITAR			= 25;
+public static final int JAZZ_GUITAR					= 26;
+public static final int CLEAN_GUITAR				= 27;
+public static final int MUTED_GUITAR				= 28;
+public static final int OVERDRIVE_GUITAR			= 29;
+public static final int DISTORTION_GUITAR			= 30;
+public static final int GUITAR_HARMONICS 			= 31;
+public static final int ACOUSTIC_BASS 				= 32;
+public static final int FINGERED_BASS				= 33;
+public static final int PICKED_BASS 				= 34;
+public static final int FRETLESS_BASS				= 35;
+public static final int SLAP_BASS_1 				= 36;
+public static final int SLAP_BASS_2 				= 37;
+public static final int SYNTH_BASS_1 				= 38;
+public static final int SYNTH_BASS_2 				= 39;
+public static final int VIOLIN 						= 40;
+public static final int VIOLA 						= 41;
+public static final int CELLO 						= 42;
+public static final int CONTRABASS 					= 43;
+public static final int TREMOLO_STRINGS				= 44;
+public static final int PIZZICATO_STRINGS			= 45;
+public static final int HARP 						= 46;
+public static final int TIMPANI 					= 47;
+public static final int STRINGS 					= 48;
+public static final int SLOW_STRINGS 				= 49;
+public static final int SYN_STRINGS1 				= 50;
+public static final int SYN_STRINGS2 				= 51;
+public static final int CHOIR_AAHS 					= 52;
+public static final int VOICE_OOHS 					= 53;
+public static final int SYNVOX 						= 54;
+public static final int ORCHESTRAHIT 				= 55;
+public static final int TRUMPET 					= 56;
+public static final int TROMBONE 					= 57;
+public static final int TUBA 						= 58;
+public static final int MUTEDTRUMPET 				= 59;
+public static final int FRENCH_HORNS 				= 60;
+public static final int BRASS_1 					= 61;
+public static final int SYNTH_BRASS_1				= 62;
+public static final int SYNTH_BRASS_2				= 63;
+public static final int SOPRANO_SAX 				= 64;
+public static final int ALTO_SAX 					= 65;
+public static final int TENOR_SAX 					= 66;
+public static final int BARITONE_SAX 				= 67;
+public static final int OBOE 						= 68;
+public static final int ENGLISH_HORN 				= 69;
+public static final int BASSOON 					= 70;
+public static final int CLARINET 					= 71;
+public static final int PICCOLO 					= 72;
+public static final int FLUTE 						= 73;
+public static final int RECORDER 					= 74;
+public static final int PAN_FLUTE 					= 75;
+public static final int BOTTLE_BLOW 				= 76;
+public static final int SHAKUHACHI 					= 77;
+public static final int WHISTLE 					= 78;
+public static final int OCARINA 					= 79;
+public static final int SQUARE_WAVE 				= 80;
+public static final int SAW_WAVE 					= 81;
+public static final int SYN_CALLIOPE 				= 82;
+public static final int CHIFFER_LEAD 				= 83;
+public static final int CHARANG 					= 84;
+public static final int SOLO_VOX 					= 85;
+public static final int FIFTH_SAW_WAVE 				= 86;
+public static final int BASS_AND_LEAD 				= 87;
+public static final int FANTASIA 					= 88;
+public static final int WARM_PAD 					= 89;
+public static final int POLYSYNTH 					= 90;
+public static final int SPACE_VOICE 				= 91;
+public static final int BOWED_GLASS 				= 92;
+public static final int METAL_PAD 					= 93;
+public static final int HALO_PAD 					= 94;
+public static final int SWEEP_PAD 					= 95;
+public static final int ICE_RAIN 					= 96;
+public static final int SOUNDTRACK 					= 97;
+public static final int CRYSTAL 					= 98;
+public static final int ATMOSPHERE 					= 99;
+public static final int BRIGHTNESS 					= 100;
+public static final int GOBLIN 						= 101;
+public static final int ECHO_DROPS 					= 102;
+public static final int STAR_THEME 					= 103;
+public static final int SITAR 						= 104;
+public static final int BANJO 						= 105;
+public static final int SHAMISEN 					= 106;
+public static final int KOTO 						= 107;
+public static final int KALIMBA 					= 108;
+public static final int BAGPIPE 					= 109;
+public static final int FIDDLE 						= 110;
+public static final int SHANAI 						= 111;
+public static final int TINKLE_BELL 				= 112;
+public static final int AGOGO 						= 113;
+public static final int STEEL_DRUMS 				= 114;
+public static final int WOODBLOCK 					= 115;
+public static final int TAIKO 						= 116;
+public static final int MELO_TOM_1 					= 117;
+public static final int SYNTH_DRUM 					= 118;
+public static final int REVERSE_CYM 				= 119;
+public static final int GUITAR_FRETNOISE			= 120;
+public static final int BREATH_NOISE 				= 121;
+public static final int SEASHORE 					= 122;
+public static final int BIRD 						= 123;
+public static final int TELEPHONE_1 				= 124;
+public static final int HELICOPTER 					= 125;
+public static final int APPLAUSE 					= 126;
+public static final int GUN_SHOT 					= 127;
+*/

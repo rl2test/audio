@@ -1,10 +1,12 @@
 package audio.chords.gui;
 
 import static audio.Constants.C;
+import static audio.Constants.PATTERN_STRS;
 import static audio.Constants.W;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import javax.swing.JLabel;
 
 public class TimePanel extends AudioPanel { 
@@ -101,7 +103,7 @@ public class TimePanel extends AudioPanel {
 	    x += w + 1;	 	    
 	    
 	    // begin label
-	    add(getLabel("Begin", "begin", C[6], C[16], x, y, w, h, null));
+	    add(getLabel("", "begin", C[6], C[16], x, y, w, h, null));
 	    x += w + 1;	    
 	    
 	    // begin labels
@@ -125,7 +127,7 @@ public class TimePanel extends AudioPanel {
 	    
 	    // end label
 	    w = W[2];
-	    add(getLabel("End", "end", C[6], C[16], x, y, w, h, null));
+	    add(getLabel("", "end", C[6], C[16], x, y, w, h, null));
 	    x += w + 1;
 	    
 	    // increment label
@@ -177,15 +179,23 @@ public class TimePanel extends AudioPanel {
 		set("time" + time);
 		set("type" + timeType);
 		set("begin" + beginTempo);
-		labels.get("begin").setText("" + beginTempo);
 		set("end" + endTempo);
-		labels.get("end").setText("" + endTempo);
 		set("inc" + increment);
 		set("num" + numBeats);
+
+		setPatternValue();
+		labels.get("begin").setText("" + beginTempo);
+		labels.get("end").setText("" + endTempo);
+
     }
     
     public void setTempoValue(int tempo) {
     	labels.get("tempoValue").setText("" + tempo);
+    }
+    
+    public void setPatternValue() {
+    	int patternKey = (time < 5) ? time : time * 10 + timeType;
+    	labels.get("patternValue").setText(PATTERN_STRS.get(patternKey));
     }
     
     private class TimeListener extends MouseAdapter {
@@ -219,10 +229,12 @@ public class TimePanel extends AudioPanel {
          		if (name.startsWith("time")) {
              		if (time > 0) unset("time" + time);
             		time = Integer.parseInt(name.replace("time", ""));
+            		setPatternValue();
             	// timeType	
     	     	} else if (name.startsWith("type")) {
     	     		if (timeType > 0) unset("type" + timeType);
     	     		timeType = Integer.parseInt(name.replace("type", ""));
+    	     		setPatternValue();
              	// begin/end tempo	
              	} else if (name.startsWith("begin")) {
              		if (beginTempo > 0) unset("begin" + beginTempo);

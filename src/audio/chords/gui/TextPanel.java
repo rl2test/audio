@@ -1,7 +1,5 @@
 package audio.chords.gui;
 
-import static audio.Constants.C;
-
 import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;

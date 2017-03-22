@@ -1,8 +1,8 @@
 package audio.chords.gui;
 
+import static audio.Constants.C;
 import static audio.Constants.FONT;
 import static audio.Constants.FONT_SM;
-import static audio.Constants.C;
 
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
