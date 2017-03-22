@@ -25,6 +25,11 @@ public class MetronomePlayer extends Thread {
 	public void run() {
 		log.debug("run()");
  		
+		int beginTempo = timePanel.beginTempo,
+			endTempo = timePanel.beginTempo,
+			increment = timePanel.increment,
+			numBeats = timePanel.numBeats;
+		
 		// set channel
 		MidiChannel channel = ac.midiChannels[CHANNEL];
 		
@@ -32,7 +37,7 @@ public class MetronomePlayer extends Thread {
 		channel.controlChange(10, 127); 
 		
 		// set initial tempo (bpm)
-		int tempo = timePanel.beginTempo;
+		int tempo = beginTempo;
 
 		// the interval between beats
 		int interval 			= (int) (1000d * 60d / tempo);
@@ -75,10 +80,10 @@ public class MetronomePlayer extends Thread {
 			endMidiNote(midiNote);
 
 			beatCount++;
-			if (beatCount > timePanel.numBeats) {
+			if (beatCount > numBeats) {
 				beatCount = 1;
-				if (tempo < timePanel.endTempo) {
-					tempo += timePanel.increment;
+				if (tempo < endTempo) {
+					tempo += increment;
 					interval = (int) (1000d * 60d / tempo);
 					log.debug(tempo);	
 					timePanel.setTempoValue(tempo);

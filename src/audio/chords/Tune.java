@@ -49,6 +49,7 @@ public class Tune {
 	public String text 				= "";
 	public String errorMsg 			= "";
 	public int time 				= 0;
+	public int type					= 0;
 	public int beginTempo			= 0;
 	public int endTempo				= 0;
 	public int increment    		= 0;    
@@ -94,6 +95,11 @@ public class Tune {
 					int len = tokens.length;
 
 					time = Integer.parseInt(tokens[0]);
+
+					if (time > 9) {
+						type = time % 10;
+						time = time / 10;
+					} 
 					
 					if (len > 1) {
 						String tempo = tokens[1];

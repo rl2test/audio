@@ -7,6 +7,19 @@ public class Test {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+
+		int[] times = {2,3,4,5,6,7, 51, 52, 61, 62, 71, 72};
+		
+		for (int time: times) {
+			int type = 0;
+			if (time > 9) {
+				type = time % 10;
+				time = time / 10;
+			} 
+			System.out.println("time=" + time + ", type=" + type);
+		}
+		
+		/*
 		int modulus = 3;
 		
 		System.out.println("modulus=" + modulus);
@@ -20,7 +33,8 @@ public class Test {
 		
 		System.getProperties().list(System.out);
 		
-		/*
+
+			
 			java.runtime.name=Java(TM) SE Runtime Environment
 			sun.boot.library.path=/Library/Java/JavaVirtualMachines/jdk...
 			java.vm.version=24.79-b02

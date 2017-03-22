@@ -1,2 +1,3 @@
-Db7                 |Gb7                 |Db7                 |Db7                 |Gb7                 |Gb7                 |Db7                 |Bb7                 |
-Ebm                 |Ab7                 |Db7                 |Ab7                 |
+Gm                  |Gm                  |Gm                  |G7+9                |Cm                  |F7                  |Bbmaj7              |Ebmaj7              |
+Am7-5               |D7+9                |Gm                  |D7+9                |Gm                  |Gm                  |Gm                  |G7+9                |
+Cm                  |F7                  |Bbmaj7              |Ebmaj7              |Am7-5               |D7+9                |Gm, E7+9            |A7+9, D7+9          |

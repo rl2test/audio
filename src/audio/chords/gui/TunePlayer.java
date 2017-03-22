@@ -74,24 +74,12 @@ public class TunePlayer extends Thread {
 
 			Tune tune = new Tune(text, transposeTo); 
 			int time		= (timePanel.set) ? timePanel.time : tune.time;
-			int type		= (timePanel.set) ? timePanel.type : 0;
+			int type		= (timePanel.set) ? timePanel.type : tune.type;
 			int beginTempo	= (timePanel.set) ? timePanel.beginTempo : tune.beginTempo;
 			int endTempo 	= (timePanel.set) ? timePanel.endTempo : tune.endTempo;
-			int increment 	= (timePanel.set) ? timePanel.increment : tune.increment;			
-			
-			int patternKey = 0;
-			if (timePanel.set) { // using timePanel settings
-				patternKey = (time < 5) ? time : time * 10 + type;
-			} else { // using settings in .chords file
-				if (time < 5) { // 2-4
-					patternKey = time;
-				} else if (time < 10) { // 5 - 9
-					// type not set
-					patternKey = time * 10 + 1;
-				} else { // 51,52,61,62 etc.
-					patternKey = time;
-				}
-			}
+			int increment 	= (timePanel.set) ? timePanel.increment : tune.increment;	
+
+			int patternKey = (time < 5) ? time : time * 10 + type;
 			Integer[] pattern = PATTERNS.get(patternKey);
 			log.debug("patternStr=" + PATTERN_STRS.get(patternKey));
 			ac.setMsg(PATTERN_STRS.get(patternKey));
