@@ -5,6 +5,7 @@ import static audio.Constants.TRANSPOSE_KEYS;
 import static audio.Constants.TRANSPOSE_KEYS_MINOR;
 import static audio.Constants.W;
 
+import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -19,7 +20,6 @@ public class KeyPanel extends AudioPanel {
 	public DronePlayer dronePlayer 			= null;
 	private final KeyListener keyListener 	= new KeyListener();
 	public int selectedKeyIndex				= -1;
-	//public boolean transpose				= false; // if true this will overide the tune settings
 	public boolean drone					= false;
 	
     /**
@@ -43,10 +43,6 @@ public class KeyPanel extends AudioPanel {
 	    add(getLabel("Key", null, C[6], C[16], x, y, w, h, null));
 	    x += w + 1;
 
-	    // transpose label
-	    //add(getLabel("Transpose", "transpose", C[12], C[0], x, y, W[3], W[1], keyListener));
-	    //x += W[3] + 1;
-	    
 	    // transpose key labels
 	    for (int i = 0, n = TRANSPOSE_KEYS.length; i < n; i++) {
 	    	String key = TRANSPOSE_KEYS[i];
@@ -59,6 +55,11 @@ public class KeyPanel extends AudioPanel {
 
 	    // drone label
 	    add(getLabel("Drone", "drone", C[12], C[0], x, y, w, h, keyListener));
+	    x += w + 1;
+	    
+	    // msg label
+	    int width = ac.w - x;
+	    add(getLabel("", "msg", C[0], Color.green, x, y, width, h, null));
     }  
 
     private class KeyListener extends MouseAdapter {
@@ -66,7 +67,6 @@ public class KeyPanel extends AudioPanel {
         public void mouseClicked(MouseEvent e) {
             JLabel l = (JLabel) e.getSource();
             String name = l.getName();
-            //log.debug("name=" + name + ", selectedKey=" + selectedKey);
             
             if (name.startsWith("key")) {
             	 int keyIndex = Integer.parseInt(name.replace("key", ""));
@@ -80,14 +80,6 @@ public class KeyPanel extends AudioPanel {
                  	set(l);
              		selectedKeyIndex = keyIndex;
              	 }
-            	 //log.debug("selectedKey=" + selectedKey);
-            //} else if (name.equals("transpose")) {
-            //	 if (transpose) {
-            //		 unset(l);
-            //	 } else {
-            //		 set(l);
-            //	 }
-        	//	 transpose = !transpose;
             } else if (name.equals("drone")) {
             	if (drone) {
             		unset(l);

@@ -66,6 +66,28 @@ public class FilePanel extends AudioPanel {
         super(ac);
 	    
         h = W[1];
+
+	    // play/stop
+	    w = W[2];
+	    add(getLabel("Play", "playStop", C[6], C[16], x, y, w, h, listener));
+	    x += w + 1;
+	    
+	    // save
+	    add(getLabel("Save", "save", C[6], C[16], x, y, w, h, listener));
+	    x += w + 1;
+
+	    // save as
+	    w = W[3];
+	    add(getLabel("Save as", "saveAs", C[6], C[16], x, y, w, h, listener));
+	    x += w + 1;
+
+	    // refresh
+		add(getLabel("Refresh", "refresh", C[6], C[16], x, y, w, h, listener));
+	    x += w + 1;
+
+	    // updated
+		add(getLabel("Updated", "updated", C[6], C[16], x, y, w, h, listener));
+	    x += w + 1;        
         
 		// genre
         w = W[2];
@@ -117,29 +139,6 @@ public class FilePanel extends AudioPanel {
 		// tune combo box bg label - note: paints BEFORE preceding element
 		add(getLabel(null, null, C[6], null, x, y, w, h, null));
 	    x += w + 1;
-
-	    // play/stop
-	    w = W[2];
-	    add(getLabel("Play", "playStop", C[6], C[16], x, y, w, h, listener));
-	    x += w + 1;
-	    
-	    // save
-	    add(getLabel("Save", "save", C[6], C[16], x, y, w, h, listener));
-	    x += w + 1;
-
-	    // save as
-	    w = W[3];
-	    add(getLabel("Save as", "saveAs", C[6], C[16], x, y, w, h, listener));
-	    x += w + 1;
-
-	    // refresh
-		add(getLabel("Refresh", "refresh", C[6], C[16], x, y, w, h, listener));
-	    x += w + 1;
-
-	    // refresh
-		add(getLabel("Updated", "updated", C[6], C[16], x, y, w, h, listener));
-	    x += w + 1;
-
     }
     
     public void setUpdated() {

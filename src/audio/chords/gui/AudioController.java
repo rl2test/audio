@@ -144,6 +144,14 @@ public class AudioController extends JPanel {
 		synthesizer = null;
 	}
 	
+	public void setMsg(String msg) {
+		keyPanel.labels.get("msg").setText(msg);
+	}
+	
+	public void clearMsg(String msg) {
+		keyPanel.labels.get("msg").setText("");
+	}
+	
 	/**
 	 * @param args
 	 */

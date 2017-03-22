@@ -19,7 +19,7 @@ public class TimePanel extends AudioPanel {
 	private final TimeListener listener 		= new TimeListener();
     // set property defaults
     public int time								= 4;
-	public int timeType							= 1;
+	public int type								= 1;
     public int beginTempo						= 90;
 	public int endTempo							= 180;
     public int increment 						= 1;
@@ -42,7 +42,7 @@ public class TimePanel extends AudioPanel {
     	super(ac);
 		
 		int[] times = {2, 3, 4, 5, 6, 7};
-		int[] timeTypes = {1, 2};
+		int[] types = {1, 2};
 		
     	// 50 - 250 in increment of 10
     	int[] tempos = new int[21];
@@ -76,18 +76,18 @@ public class TimePanel extends AudioPanel {
 	    }
 	    x += dx;
 	    
-	    // timeType label
+	    // type label
 	    w = W[2];
 	    add(getLabel("Type", null, C[6], C[16], x, y, w, h, null));
 	    x += w + 1;	    
 
-	    // timeType labels
+	    // type labels
 	    w = 12;
 	    dx = 0;
-	    for (int i = 0; i < timeTypes.length; i++) {
-	    	int type = timeTypes[i];
-	    	String name = "type" + type;
-	    	add(getLabel("" + type, name, C[12], C[0], x + dx, y, w, h, listener));
+	    for (int i = 0; i < types.length; i++) {
+	    	String text = "" + types[i];
+	    	String name = "type" + types[i];
+	    	add(getLabel(text, name, C[12], C[0], x + dx, y, w, h, listener));
 	    	dx += w + 1;
 	    }
 	    x += dx;
@@ -177,7 +177,7 @@ public class TimePanel extends AudioPanel {
 	    
 	    // set to defaults
 		set("time" + time);
-		set("type" + timeType);
+		set("type" + type);
 		set("begin" + beginTempo);
 		set("end" + endTempo);
 		set("inc" + increment);
@@ -194,7 +194,7 @@ public class TimePanel extends AudioPanel {
     }
     
     public void setPatternValue() {
-    	int patternKey = (time < 5) ? time : time * 10 + timeType;
+    	int patternKey = (time < 5) ? time : time * 10 + type;
     	labels.get("patternValue").setText(PATTERN_STRS.get(patternKey));
     }
     
@@ -230,10 +230,10 @@ public class TimePanel extends AudioPanel {
              		if (time > 0) unset("time" + time);
             		time = Integer.parseInt(name.replace("time", ""));
             		setPatternValue();
-            	// timeType	
+            	// type	
     	     	} else if (name.startsWith("type")) {
-    	     		if (timeType > 0) unset("type" + timeType);
-    	     		timeType = Integer.parseInt(name.replace("type", ""));
+    	     		if (type > 0) unset("type" + type);
+    	     		type = Integer.parseInt(name.replace("type", ""));
     	     		setPatternValue();
              	// begin/end tempo	
              	} else if (name.startsWith("begin")) {
