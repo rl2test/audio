@@ -144,14 +144,20 @@ public class AudioController extends JPanel {
 		synthesizer = null;
 	}
 	
+	// set msg on key panel
 	public void setMsg(String msg) {
 		keyPanel.labels.get("msg").setText(msg);
 	}
 	
+	// clear msg on key panel
 	public void clearMsg(String msg) {
 		keyPanel.labels.get("msg").setText("");
 	}
 	
+	// get pattern key by time and type
+	public int getPatternKey(int time, int type) {
+		return (time < 5) ? time : time * 10 + type;
+	} 
 	/**
 	 * @param args
 	 */

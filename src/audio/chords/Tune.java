@@ -94,12 +94,15 @@ public class Tune {
 					String[] tokens = line.split(PIPE_DELIM);
 					int len = tokens.length;
 
-					time = Integer.parseInt(tokens[0]);
+					int timeType = Integer.parseInt(tokens[0]);
 
 					if (time > 9) {
 						type = time % 10;
 						time = time / 10;
-					} 
+					} else {
+						time = timeType;
+						type = 1;
+					}
 					
 					if (len > 1) {
 						String tempo = tokens[1];

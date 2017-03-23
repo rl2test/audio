@@ -23,7 +23,7 @@ public class TimePanel extends AudioPanel {
     public int beginTempo						= 90;
 	public int endTempo							= 180;
     public int increment 						= 1;
-	public int numBeats 						= 8;
+	public int numBars 							= 8;
 	public boolean set							= false; // if true this will overide the tune settings
 	public boolean metronome					= false;
 
@@ -50,7 +50,7 @@ public class TimePanel extends AudioPanel {
     		tempos[i] = (i + 5) * 10;
     	}
     	
-	    int[] numBeatsArr = {8, 16, 32};
+	    int[] numBarsArr = {8, 16, 32};
 	    
 	    h = W[1];
 	    int dx = 0, dy = 0;
@@ -145,15 +145,15 @@ public class TimePanel extends AudioPanel {
 	    }
 	    x += dx;
 	    
-	    // numBeats label
+	    // numBars label
 	    w = W[3];
-	    add(getLabel("NumBeats", null, C[6], C[16], x, y, w, h, null));
+	    add(getLabel("NumBars", null, C[6], C[16], x, y, w, h, null));
 	    x += w + 1;
 
-	    // numBeats labels
+	    // numBars labels
 	    dx = 0;
-	    for (int i = 0; i < numBeatsArr.length; i++) {
-	    	int val = numBeatsArr[i];
+	    for (int i = 0; i < numBarsArr.length; i++) {
+	    	int val = numBarsArr[i];
 	    	String name = "num" + val;
 	    	w = (val < 10) ? 12 : W[1];
 	    	add(getLabel("" + val, name, C[12], C[0], x + dx, y, w,h, listener));
@@ -181,7 +181,7 @@ public class TimePanel extends AudioPanel {
 		set("begin" + beginTempo);
 		set("end" + endTempo);
 		set("inc" + increment);
-		set("num" + numBeats);
+		set("num" + numBars);
 
 		setPatternValue();
 		labels.get("begin").setText("" + beginTempo);
@@ -194,7 +194,7 @@ public class TimePanel extends AudioPanel {
     }
     
     public void setPatternValue() {
-    	int patternKey = (time < 5) ? time : time * 10 + type;
+    	int patternKey = ac.getPatternKey(time, type);
     	labels.get("patternValue").setText(PATTERN_STRS.get(patternKey));
     }
     
@@ -250,8 +250,8 @@ public class TimePanel extends AudioPanel {
             		increment = Integer.parseInt(name.replace("inc", ""));
              	// num beats	
              	} else if (name.startsWith("num")) {
-            		if (numBeats > 0) unset("num" + numBeats);
-            		numBeats = Integer.parseInt(name.replace("num", ""));
+            		if (numBars > 0) unset("num" + numBars);
+            		numBars = Integer.parseInt(name.replace("num", ""));
              	}	
         		set(l);
          	}

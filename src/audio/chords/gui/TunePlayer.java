@@ -79,7 +79,7 @@ public class TunePlayer extends Thread {
 			int endTempo 	= (timePanel.set) ? timePanel.endTempo : tune.endTempo;
 			int increment 	= (timePanel.set) ? timePanel.increment : tune.increment;	
 
-			int patternKey = (time < 5) ? time : time * 10 + type;
+			int patternKey = ac.getPatternKey(time, type);
 			Integer[] pattern = PATTERNS.get(patternKey);
 			log.debug("patternStr=" + PATTERN_STRS.get(patternKey));
 			ac.setMsg(PATTERN_STRS.get(patternKey));
