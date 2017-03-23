@@ -196,7 +196,6 @@ public class Constants {
 		int i = 0;
 		for (i = 0; i <= 16; i++) {
 			int v = (i == 0) ? 0 : i * 16 - 1;
-			log.debug(i + " " + v);
 			V[i] = v;
 			W[i] = i * 25;
 		}
