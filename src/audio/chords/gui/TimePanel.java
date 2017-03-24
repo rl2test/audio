@@ -9,6 +9,8 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JLabel;
 
+import audio.jsound.Groove;
+
 public class TimePanel extends AudioPanel { 
 	/** Default serialVersionUID. */
 	private static final long serialVersionUID 	= 1L;
@@ -174,7 +176,12 @@ public class TimePanel extends AudioPanel {
 	    w = W[3];
 	    add(getLabel("Metronome", "metronome", C[12], C[0], x, y, w, h, listener));
 	    x += w + 1;	    
-	    
+
+	    // groove label
+	    w = W[3];
+	    add(getLabel("Groove", "groove", C[12], C[0], x, y, w, h, listener));
+	    x += w + 1;	    
+
 	    // set to defaults
 		set("time" + time);
 		set("type" + type);
@@ -224,6 +231,9 @@ public class TimePanel extends AudioPanel {
            	    	set(l);
          		}
          		metronome = !metronome;
+         	} else if (name.equals("groove")) {
+       	    	Groove groove = new Groove();
+       	    	groove.init();
          	} else {
          		// time
          		if (name.startsWith("time")) {

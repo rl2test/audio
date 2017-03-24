@@ -397,8 +397,30 @@ public class Groove extends JPanel implements ActionListener, ControlContext, Me
     }
 
 
+    public void init() {
+        final JFrame f = new JFrame("Rhythm Groove Box");
+        f.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+            	//System.exit(0);
+            	f.dispose();
+            }
+        });
+        f.getContentPane().add("Center", this);
+        f.pack();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int w = 640;
+        int h = 440;
+        f.setLocation(screenSize.width/2 - w/2, screenSize.height/2 - h/2);
+        f.setSize(w, h);
+        f.show();
+        f.setVisible(true);
+        this.open();
+    }
+    
     public static void main(String args[]) {
         final Groove groove = new Groove();
+        groove.init();
+        /*
         JFrame f = new JFrame("Rhythm Groove Box");
         f.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {System.exit(0);}
@@ -412,5 +434,6 @@ public class Groove extends JPanel implements ActionListener, ControlContext, Me
         f.setSize(w, h);
         f.show();
         groove.open();
+        */
     }
 } 
