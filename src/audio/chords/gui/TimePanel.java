@@ -182,6 +182,11 @@ public class TimePanel extends AudioPanel {
 	    add(getLabel("Groove", "groove", C[12], C[0], x, y, w, h, listener));
 	    x += w + 1;	    
 
+	    // groove label
+	    w = W[1];
+	    add(getLabel("J", "groovej", C[12], C[0], x, y, w, h, listener));
+	    x += w + 1;	    
+
 	    // set to defaults
 		set("time" + time);
 		set("type" + type);
@@ -233,6 +238,9 @@ public class TimePanel extends AudioPanel {
          		metronome = !metronome;
          	} else if (name.equals("groove")) {
        	    	Groove groove = new Groove();
+       	    	groove.init();
+         	} else if (name.equals("groovej")) {
+       	    	GrooveJ groove = new GrooveJ();
        	    	groove.init();
          	} else {
          		// time

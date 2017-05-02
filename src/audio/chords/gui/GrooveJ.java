@@ -1,4 +1,4 @@
-package audio.jsound;
+package audio.chords.gui;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -12,35 +12,9 @@ import javax.swing.event.*;
 import javax.sound.midi.*;
 import java.util.Vector;
 
-/**
- * Rhythm Groove Box.  Program any beat you like, click on a cell.
- * Channel 10 (the rhythm channel) supports the 47 instrument sounds. 
- * These sounds are the result of a program change to instrument 1.
- * 
- * Beat Pattern 1
- * 
- *     |  1 sec         | 2 sec
- *     1 e + a  2 e + a   3 e + a  4 e + a 
- * hh  x   x    x   x     x   x    x   x
- * sn           x                  x
- * kk  x     x      x     x
- *     0 1 2 3  4 5 6 7   8 9 1011 12131415
- *  
- * Hi-hat
- * on-off : 0-1, 2-3, 4-5, 6-7, 8-9, 10-11, 12-13, 14-15
- *  
- * snare :
- * on-off : 4-5, 12-13
- * 
- * bass :
- * on-off : 0-1, 3-4, 6-7, 8-9  
- *
- * @version @(#)Groove.java	1.16 99/11/03
- * @author Brian Lichtenwalter  
- */
-public class GrooveJ extends JPanel implements ActionListener, ControlContext, MetaEventListener {
+public class GrooveJ extends JPanel implements ActionListener, MetaEventListener {
 	/** The log. */
-	private Logger log = Logger.getLogger(getClass());
+	Logger log = Logger.getLogger(getClass());
     final int PROGRAM = 192;
     final int NOTEON = 144;
     final int NOTEOFF = 128;
@@ -68,6 +42,7 @@ public class GrooveJ extends JPanel implements ActionListener, ControlContext, M
           "Claves", "Hi wood block", "Low wood block", "Mute cuica", 
           "Open cuica", "Mute triangle", "Open triangle" };
     Vector data = new Vector(instruments.length);
+	AudioController ac = null;
 
 
     public GrooveJ() {
@@ -231,10 +206,12 @@ public class GrooveJ extends JPanel implements ActionListener, ControlContext, M
         try {
             sequencer.setSequence(sequence);
         } catch (Exception ex) { ex.printStackTrace(); }
-        sequencer.setLoopCount(20);
+        sequencer.setLoopCount(1000);
         sequencer.start();
         //sequencer.setTempoInBPM(tempoDial.getTempo());
-        sequencer.setTempoInBPM(200);
+        int bpm = AudioController.getInstance().timePanel.endTempo;
+        log.debug("bpm=" + bpm);
+        sequencer.setTempoInBPM(bpm);
     }
 
 

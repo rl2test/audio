@@ -75,6 +75,13 @@ public class AudioController extends JPanel {
     	return controller;
     }
 	
+    /**
+     * @return singleton instance of this class
+     */
+    public static AudioController getInstance() {
+    	return controller;
+    }
+    
     /** Private constructor */
     /**
      * 
