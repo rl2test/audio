@@ -15,9 +15,15 @@ import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 
+import javax.sound.midi.Instrument;
 import javax.sound.midi.MidiChannel;
 import javax.sound.midi.MidiSystem;
+import javax.sound.midi.Soundbank;
 import javax.sound.midi.Synthesizer;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -101,10 +107,39 @@ public class AudioController extends JPanel {
 				return;
 			}
 			synthesizer.open();
+			/*
+			Soundbank sb = synthesizer.getDefaultSoundbank();
+			Instrument[] instruments = sb.getInstruments();
+			int i = 0;
+			for(Instrument instrument: instruments) {
+				log.debug(++i + " " + instrument.getName());
+			}
+			*/
 		} catch (Exception e) {
 			log.error(e);
 		}
 		
+		/* does not work on mac osx	
+		Soundbank sb = null;
+		File file = new File("/Library/Java/JavaVirtualMachines/jdk1.8.0_111.jdk/Contents/Home/jre/lib/audio/soundbank-deluxe.gm"); //_deluxe
+		BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(file)); 
+		try {
+			sb = MidiSystem.getSoundbank(inputStream);
+			log.debug(sb.getDescription());
+			log.debug(sb.getName());			
+			log.debug(sb.getVendor());
+			log.debug(sb.getVersion());
+		} catch(Exception e) {
+			log.error(e);
+		}
+		if (sb != null) {
+			Instrument[] instruments = sb.getInstruments();
+			//synthesizer.loadInstrument(instruments[0]); // from orig
+		} else {
+			log.debug("couldn't get soundbank");
+		}
+		*/
+
 		// get the synthesizer channels
 		midiChannels = synthesizer.getChannels();
 		
