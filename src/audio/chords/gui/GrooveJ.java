@@ -236,9 +236,9 @@ public class GrooveJ extends JPanel implements ActionListener, MetaEventListener
 
         switch (num) {
             case 0 : 	//setCell(48, 2);
-            			setCell(48, 4);
-            			setCell(48, 8);
-            			setCell(48, 10);
+            			//setCell(48, 4);
+            			setCell(45, 8);
+            			//setCell(48, 10);
 
             			/*setCell(44, 1);
             			setCell(44, 3);
@@ -247,10 +247,11 @@ public class GrooveJ extends JPanel implements ActionListener, MetaEventListener
 	                    setCell(44, 9);
 	                    setCell(44, 11);*/
 	                    //setCell(45, 5);
-	                    setCell(45, 9);
+	                    setCell(41, 4);
+	                    setCell(41, 10);
 	                    int bass1[] = { 0, 6 };
 	                    for (int i = 0; i < bass1.length; i++) {
-	                        setCell(41, bass1[i]); 
+	                        setCell(35, bass1[i]); 
 	                    }
 	                    break;
             case 1 :	setCell(ACOUSTIC_SNARE, 4);
