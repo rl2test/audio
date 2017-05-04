@@ -236,7 +236,7 @@ public class Groove extends JPanel implements ActionListener, ControlContext, Me
         try {
             sequencer.setSequence(sequence);
         } catch (Exception ex) { ex.printStackTrace(); }
-        sequencer.setLoopCount(5);
+        sequencer.setLoopCount(100);
         sequencer.start();
         sequencer.setTempoInBPM(tempoDial.getTempo());
     }
