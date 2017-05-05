@@ -200,6 +200,7 @@ public class AudioController extends JPanel {
 	public int getPatternKey(int time, int type) {
 		return (time < 5) ? time : time * 10 + type;
 	} 
+
 	/**
 	 * @param args
 	 */
