@@ -285,14 +285,14 @@ public class GrooveS extends JPanel implements ActionListener, MetaEventListener
         clearTable();
 
         switch (num) {
-            case 0 : 	setCell(map.get("Low floor tom"), 0);
-            			setCell(map.get("Low floor tom"), 6);
-            			setCell(map.get("Low floor tom"), 12);
-            			setCell(map.get("Hi-mid tom"), 4);
-            			setCell(map.get("Hi-mid tom"), 10);
-            			setCell(map.get("Hi-mid tom"), 14);
-            			setCell(map.get("Hi-mid tom"), 16);
-	                    setCell(map.get("Low tom"), 15);
+            case 0 : 	setCell(map.get("Acoustic bass drum"), 0);
+            			setCell(map.get("Acoustic bass drum"), 6);
+            			setCell(map.get("Acoustic bass drum"), 12);
+            			setCell(map.get("Low floor tom"), 4);
+            			setCell(map.get("Low floor tom"), 10);
+            			setCell(map.get("Low floor tom"), 16);
+            			setCell(map.get("High floor tom"), 14);
+            			setCell(map.get("Low tom"), 15);
 	                    break;
             case 1 :	break;
             case 2 : 	break;
