@@ -92,7 +92,9 @@ public class Constants {
 	public static final File C_SCALES_FILE				= new File(DATA_DIR, "c-scales" + EXT_TXT);
 	/** Keys file. */
 	public static final File KEYS_FILE					= new File(DATA_DIR, "keys" + EXT_TXT);
-
+	/** Rhythms file. */
+	public static final File RHYTHMS_FILE				= new File(DATA_DIR, "rhythms" + EXT_TXT);
+	
 	/* file filters */
 	public static final AbcFilter ABC_FILTER			= new AbcFilter();
 	public static final ChordsFilter CHORDS_FILTER		= new ChordsFilter();

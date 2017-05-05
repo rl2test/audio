@@ -35,8 +35,8 @@ public class FilePanel extends AudioPanel {
 	/** Default serialVersionUID. */
 	private static final long serialVersionUID 	= 1L;
 	/** The singleton instance of this class. */    
-	private static FilePanel panel 			= null;
-	private final FileListener listener 		= new FileListener();
+	private static FilePanel panel 				= null;
+	private final Listener listener 			= new Listener();
 	/** The player. */
 	public TunePlayer player 					= null;
 	/** Genre box. */
@@ -303,7 +303,7 @@ public class FilePanel extends AudioPanel {
 		clearUpdated();
 	}
 	
-    private class FileListener extends MouseAdapter {
+    private class Listener extends MouseAdapter {
         @Override
         public void mouseClicked(MouseEvent e) {
             JLabel l = (JLabel) e.getSource();

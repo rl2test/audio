@@ -48,7 +48,8 @@ public class DisplayPanel extends AudioPanel {
 		//myLabels.clear();
 		labels.clear();
 		x = 0;
-		y = 0;    	int barCount = 0;
+		y = 0;    	
+		int barCount = 0;
     	for (Bar bar: bars) {
     	    String text = bar.cleanBarStr.replace(",", ", ");
     	    sb.append(Util.pad(text, " ", 20, END) + PIPE);

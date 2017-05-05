@@ -1,19 +1,27 @@
 package audio.chords.gui;
 
-import static audio.Constants.ENV;
-import static audio.Constants.RUNTIME_VERSION;
+import static audio.Constants.C;
+import static audio.Constants.EXT_CHORDS;
+import static audio.Constants.FONT;
+import static audio.Constants.FS;
+import static audio.Constants.GENRE_NAMES;
+import static audio.Constants.NL;
+import static audio.Constants.PIPE_DELIM;
+import static audio.Constants.RHYTHMS_FILE;
 import static audio.Constants.TOP_BAR_HEIGHT;
-import static audio.Constants.WK;
+import static audio.Constants.W;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+
 import javax.swing.*;
-import javax.swing.border.*;
 import javax.swing.table.*;
 
 import org.apache.log4j.Logger;
 
-import audio.chords.gui.GrooveS.Data;
+import audio.Util;
+import audio.chords.gui.FilePanel.GenreBoxListener;
 
 import javax.swing.event.*;
 import javax.sound.midi.*;
@@ -22,10 +30,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 @SuppressWarnings({ "unchecked", "serial" })
-public class Rhythm extends JPanel implements ActionListener, MetaEventListener {
+public class RhythmPanel extends AudioPanel implements MetaEventListener {
 	/** The log. */
 	private Logger log = Logger.getLogger(getClass());
     final int PROGRAM = 192;
@@ -35,145 +42,115 @@ public class Rhythm extends JPanel implements ActionListener, MetaEventListener 
     Sequencer sequencer;
     Sequence sequence;
     Track track;
-    TableModel dataModel;
-    JTable table;
     int row, col;
-    JButton loopB, startB;
-    JComboBox<String> combo;
+    JComboBox<String> combo = new JComboBox<String>();
     String instruments[] = { 
     		"Acoustic bass drum", "Bass drum 1", "Side stick", "Acoustic snare",
 	        "Hand clap", "Electric snare", "Low floor tom", "Closed hi-hat",
 	        "High floor tom", "Pedal hi-hat", "Low tom", "Open hi-hat", 
 	        "Low-mid tom", "Hi-mid tom" };
-    List<Data> data = new ArrayList<Data>();
+    List<InstrumentData> instrumentData = new ArrayList<InstrumentData>();
 	AudioController ac = null;
 	Map<String, Integer> map = new HashMap<String, Integer>();
 	int numColumns = 0;
 	int w = 0;
 	int h = 0;
+	String[] types = {"Reel", "Jig", "Slide"};
+	boolean playing = false;
+	private final Listener listener = new Listener();
+	
 
-	public Rhythm() {
-    	int j = 35;
+	public RhythmPanel(AudioController ac, int type) throws Exception {
+    	super(ac);
+        setBackground(C[6]);
+        
+        List<Rhythm> rhythms = getRhythms();
+        String[] rhythmNames = new String[rhythms.size()];
+        int i = 0;
+        for (Rhythm rhythm: rhythms) {
+        	log.debug(rhythm);
+        	rhythmNames[i++] = rhythm.name;
+        }
+        
+     	int numBeats = 0;
+     	int numSubBeats = 0;
+     	
+     	switch (type) {
+     		case 1: numBeats = 4; numSubBeats = 4; break; 
+     		case 2: numBeats = 6; numSubBeats = 2; break; 
+     		case 3: numBeats = 9; numSubBeats = 2; break; 
+     		default: break;
+     	}
+     	
+     	int numCells = numBeats * numSubBeats;
+        
+        int id = 35;
      	for (String instrument: instruments) {
-     		map.put(instrument, j);
-     		j++;
+     		instrumentData.add(new InstrumentData(instrument, id, numCells));
+     		map.put(instrument, id);
+     		id++;
      	}
     	
-        setLayout(new BorderLayout(0,0));
-
-        final String[] columns = { "Instrument", 
-                "1", "-", "-", "-",
-                "2", "-", "-", "-",
-                "3", "-", "-", "-",
-                "4", "-", "-", "-",
-                };
-        numColumns = columns.length;
-        log.debug("numColumns=" + numColumns);
-        
-        for (int i = 0, id = 35; i < instruments.length; i++, id++) {
-            data.add(new Data(id + " " + instruments[i], id));
+        List<String> headings = new ArrayList<String>();
+        headings.add("Instrument");
+        for (i = 0; i < numBeats; i++) {
+        	headings.add("" + i);
+        	for (int j = 1; j < numSubBeats; j++) {
+        		headings.add("-");	
+            }	
         }
-
-        dataModel = new AbstractTableModel() {
-            public int getColumnCount() { 
-            	return columns.length;
-            }
-            public int getRowCount() { 
-            	return data.size();
-            }
-            public Object getValueAt(int row, int col) { 
-                if (col == 0) {
-                    return (data.get(row)).name;
-                } else {
-                    return (data.get(row)).staff[col-1];
-                }
-            }
-            public String getColumnName(int col) { 
-            	return columns[col]; 
-            }
-
-			public Class getColumnClass(int c) {
-                return getValueAt(0, c).getClass();
-            }
-            public boolean isCellEditable(int row, int col) {
-                return col == 0 ? false : true;
-            }
-            public void setValueAt(Object aValue, int row, int col) {
-                if (col == 0) {
-                    ((Data) data.get(row)).name = (String) aValue;
-                } else {
-                    ((Data) data.get(row)).staff[col-1] = (Color) aValue;
-                }
-            }
-        };
-
-        DefaultTableCellRenderer renderer = new DefaultTableCellRenderer() {
-            public void setValue(Object value) {
-                setBackground((Color) value);
-            }
-        };
-
-        table = new JTable(dataModel);
-        table.setGridColor(Color.LIGHT_GRAY);
-        table.getColumn(columns[0]).setMinWidth(150);
-        TableColumnModel tcm = table.getColumnModel();
-        for (int i = 1; i < columns.length; i++) {
-            TableColumn col = tcm.getColumn(i);
-            col.setCellRenderer(renderer);
-        }
-
-        // Listener for row changes
-        ListSelectionModel lsm = table.getSelectionModel();
-        lsm.addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
-                ListSelectionModel sm = (ListSelectionModel) e.getSource();
-                if (!sm.isSelectionEmpty()) {
-                    row = sm.getMinSelectionIndex();
-                }
-            }
-        });
-
-        // Listener for column changes
-        lsm = table.getColumnModel().getSelectionModel();
-        lsm.addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
-                ListSelectionModel sm = (ListSelectionModel) e.getSource();
-                if (!sm.isSelectionEmpty()) {
-                    col = sm.getMinSelectionIndex();
-                }
-                if (col != 0) {
-                    Color c = ((Data) data.get(row)).staff[col-1];
-                    if (c.equals(Color.white)) {
-                        ((Data) data.get(row)).staff[col-1] = Color.black;
-                    } else {
-                        ((Data) data.get(row)).staff[col-1] = Color.white;
-                    }
-                    table.tableChanged(new TableModelEvent(dataModel));
-                }
-            }
-        });
         
-        JPanel p1 = new JPanel();
-        p1.setLayout(new BoxLayout(p1, BoxLayout.Y_AXIS));
-        p1.add(Box.createVerticalStrut(10));
+	    h = W[1];
+	    
+	    // play/stop label
+	    w = W[2];
+	    add(getLabel("Play", "playStop", C[6], C[16], x, y, w, h, listener));
+	    x += w + 1;  
+	    
+	    add(getLabel("Clear", "clear", C[6], C[16], x, y, w, h, listener));
+	    x += w + 1;  
+        
+	    // genre combo box
+	    w = W[4];
+	    combo.setModel(new DefaultComboBoxModel<String>(rhythmNames));
+	    combo.addItemListener(new ComboListener());
+	    combo.setBounds(x, y, w, h);
+	    combo.setFont(FONT);
+		add(combo);
+		combo.setSelectedItem(rhythmNames[0]);
 
-        JPanel p2 = new JPanel(new GridLayout(0,1,2,10));
-        p2.add(startB = makeButton("Start", getBackground()));
-        p2.add(makeButton("Clear Table", getBackground()));
-
-        combo = new JComboBox<String>();
-        combo.addActionListener(this);
-        combo.addItem("Rock Beat 1");
-        combo.addItem("Rock Beat 2");
-        combo.addItem("Rock Beat 3");
-        p2.add(combo);
-
-        p1.add(p2);
-        p1.add(Box.createVerticalStrut(120));
-        add("West", p1);
-
-        add("Center", new JScrollPane(table));
-    }
+		Rhythm rhythm = rhythms.get(0);
+		
+		x = 0;
+		y += W[1] + 1; 
+		w = W[1];
+		i = 0; 
+		for (String heading: headings) {
+			log.debug(heading + " " + x);
+			if (i == 0) {
+				add(getLabel(heading, null, C[12], C[0], x, y, W[8], h, null));
+				x += W[8] + 1;
+			} else {
+				add(getLabel(heading, null, C[12], C[0], x, y, w, h, null));
+				x += w + 1;
+			}
+			
+			i++;
+		}
+		
+		for (InstrumentData data: instrumentData) {
+			x = 0;
+			y += W[1] + 1;
+			w = W[1];
+			add(getLabel(data.name, null, C[12], C[0], x, y, W[8], h, null));
+			x += W[8] + 1;
+			for (i = 0; i < numBeats * numSubBeats; i++) {
+				add(getLabel("", data.name.replace(" ", "-") + "-" + i, C[12], C[0], x, y, w, h, listener));
+				x += w + 1;
+			}
+			
+		}
+	}
 
 
     public void open() {
@@ -186,23 +163,14 @@ public class Rhythm extends JPanel implements ActionListener, MetaEventListener 
 
 
     public void close() {
-        if (startB.getText().startsWith("Stop")) {
-            startB.doClick(0);
-        }
+        //if (startB.getText().startsWith("Stop")) {
+        //   startB.doClick(0);
+        //}
         if (sequencer != null) {
             sequencer.close();
         }
         sequencer = null;
     }
-
-
-    private JButton makeButton(String bName, Color c) {
-        JButton b = new JButton(bName);
-        b.setBackground(c);
-        b.addActionListener(this);
-        return b;
-    }
-
 
     private void buildTrackThenStartSequencer() {
         try {
@@ -210,6 +178,7 @@ public class Rhythm extends JPanel implements ActionListener, MetaEventListener 
         } catch (Exception ex) { ex.printStackTrace(); }
         track = sequence.createTrack();
         createEvent(PROGRAM, 9, 1, 0);
+        /*
         for (int i = 0; i < data.size(); i++) {
             Data d = (Data) data.get(i);
             for (int j = 0; j < d.staff.length; j++) {
@@ -220,6 +189,7 @@ public class Rhythm extends JPanel implements ActionListener, MetaEventListener 
                 }
             }
         }
+        */
         // so we always have a track from 0 to 15.
         createEvent(PROGRAM, 9, 1, 16);
 
@@ -291,30 +261,27 @@ public class Rhythm extends JPanel implements ActionListener, MetaEventListener 
                      break;
             default :
         }
-        table.tableChanged(new TableModelEvent(dataModel));
     }
 
-
     private void setCell(int id, int tick) {
-        for (int i = 0; i < data.size(); i++) {
+        /*for (int i = 0; i < data.size(); i++) {
             Data d = (Data) data.get(i);
             if (d.id == id) {
                 d.staff[tick] = Color.black;
                 break;
             }
-        }
+        }*/
     }
 
 
     private void clearTable() {
-        for (int i = 0; i < data.size(); i++) {
+        /*for (int i = 0; i < data.size(); i++) {
             Data d = (Data) data.get(i);
             for (int j = 0; j < d.staff.length; j++) {
                 d.staff[j] = Color.white;
             }
-        }
+        }*/
     }
-
 
     private void createEvent(int type, int chan, int num, long tick) {
         ShortMessage message = new ShortMessage();
@@ -330,7 +297,8 @@ public class Rhythm extends JPanel implements ActionListener, MetaEventListener 
     	log.debug(message.getType());
         if (message.getType() == 47) {  // 47 is end of track
         	//log.debug(message.getType() + " " + loopB.getBackground() + " " + Color.gray);
-            if (loopB.getBackground().equals(Color.gray)) {
+            /*
+        	if (loopB.getBackground().equals(Color.gray)) {
                 if (sequencer != null && sequencer.isOpen()) {
                 	log.debug(message.getType());
                 	//sequencer.start();
@@ -339,10 +307,11 @@ public class Rhythm extends JPanel implements ActionListener, MetaEventListener 
             } else {
                 startB.setText("Start");
             }
+            */
         }
     }
 
-
+    /*
     public void actionPerformed(ActionEvent e) {
         Object object = e.getSource();
         if (object instanceof JComboBox) {
@@ -374,39 +343,116 @@ public class Rhythm extends JPanel implements ActionListener, MetaEventListener 
             }
         }
     }
+	*/
+    
+    private class Listener extends MouseAdapter {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            JLabel l = (JLabel) e.getSource();
+            String name = l.getName();
+            log.debug("name=" + name);
+            
+            if (name.equals("playStop")) {
+            	if (playing) {
+    				//player.destroyPlayer();
+    				//player = null;
+    				playing = false;
+    				l.setText("Play");
+            	} else {
+					//String text = ac.textPanel.textArea.getText();
+					//player = new TunePlayer(text, ac);
+					//player.start();
+					playing = true;
+					l.setText("Stop");
+            	}	
+            } else if (name.equals("clear")) {
+            	//updateTuneBox();
+            } else if (name.equals("save")) {
+            	/*
+            	String text 		= ac.textPanel.textArea.getText();
+				
+				int n = JOptionPane.showConfirmDialog(
+				    null,
+				    "Overwrite existing file: " + tuneName + "?",
+				    "Warning",
+				    JOptionPane.YES_NO_OPTION);
+				if (n == 0) {
+					save(text);
+					log.debug("save " + NL + genreName + NL + folderName + NL + tuneName + NL + text);
+				}
+				*/
+            } else if (name.equals("saveAs")) {
+            	/*
+				String text 		= ac.textPanel.textArea.getText();
 
-
-    /**
-     * Storage class for instrument and musical staff represented by color.
-     */
-    class Data extends Object {
-        String name; int id; Color staff[] = new Color[16];
-        public Data(String name, int id) {
-            this.name = name;
-            this.id = id;
-            for (int i = 0; i < staff.length; i++) {
-                staff[i] = Color.white;
+			    String s = (String) JOptionPane.showInputDialog(
+						null,
+						"File Name",
+						"Save As ...",
+						JOptionPane.PLAIN_MESSAGE,
+						null,
+						null,
+						tuneName);
+				if ((s != null) && (s.length() > 0)) {
+					boolean save = false;	
+					if (s.endsWith(EXT_CHORDS)) {
+						s.replace(EXT_CHORDS, "");
+					}
+					if (s.equals(tuneName)) {
+						int n = JOptionPane.showConfirmDialog(
+							    null,
+							    "Overwrite existing file: " + tuneName + "?",
+							    "Warning",
+							    JOptionPane.YES_NO_OPTION);
+						if (n == 0) {
+							save = true;
+						}
+					} else {
+						save = true;
+					}
+					if (save) {
+					    saveAs(s, text);
+					    updateTuneBox();
+					    tuneBox.setSelectedItem(s);
+					    log.debug("save " + NL + genreName + NL + folderName + NL + s + NL + text);
+					}
+				}
+				*/ 
             }
         }
     }
+    
 
+	/**
+	 * Listener for combo box.
+	 */
+	class ComboListener implements ItemListener {
+	    public void itemStateChanged(ItemEvent event) {
+	    	log.debug("ComboListener");	
+	        if (event.getStateChange() == ItemEvent.SELECTED) {
+	        	String name = event.getItem().toString();
+	        	log.debug("ComboListener: name " + name + " selected");
 
-    public void init0() {
-        final JFrame f = new JFrame("Rhythm Groove Box");
-        f.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-            	f.dispose();
+	        	//updateFolderBox();
+	        }
+	    }
+	}    
+    
+    /**
+     * Storage class for instrument
+     */
+    class InstrumentData {
+        String name; 
+        int id; 
+        boolean[] cells;
+        public InstrumentData(String name, int id, int numCells) {
+            this.name = name;
+            this.id = id;
+            cells = new boolean[numCells];
+            for (int i = 0; i < cells.length; i++) {
+                cells[i] = false;
             }
-        });
-        f.getContentPane().add("Center", this);
-        f.pack();
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int w = 640;
-        int h = 440;
-        f.setLocation(screenSize.width/2 - w/2, screenSize.height/2 - h/2);
-        f.setSize(w, h);
-        f.setVisible(true);
-        this.open();
+        }
     }
     
     public void init() {    
@@ -415,8 +461,6 @@ public class Rhythm extends JPanel implements ActionListener, MetaEventListener 
 	    int len 				= gds.length;
 	    boolean isDual 			= (len > 1);
 	    int useScreen			= (isDual) ? 2 : 1;
-		int x					= 0;
-		int y					= 0;
 	
 	    log.debug(len + " screens detected: isDual=" + isDual + ", useScreen=" + useScreen);
 	    int screenNum = 1;
@@ -460,12 +504,88 @@ public class Rhythm extends JPanel implements ActionListener, MetaEventListener 
 		h = h - TOP_BAR_HEIGHT - insets.top - insets.bottom;
 
         frame.getContentPane().add("Center", this);
-        frame.pack();
+		// call setVisible to display gui
+		frame.validate();
+		frame.repaint();
+        //frame.pack();
     }
     
     
     public static void main(String args[]) {
-        final Rhythm rhythm = new Rhythm();
-        rhythm.init();
+        RhythmPanel rhythm;
+		try {
+			rhythm = new RhythmPanel(null, 1);
+	        rhythm.init();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    }
+    
+    // rhythm section
+    
+    private List<Rhythm> getRhythms() {
+    	List<Rhythm> rhythms = new ArrayList<Rhythm>();
+    	Rhythm rhythm = null;
+		List<String> lines 	= Util.getLines(RHYTHMS_FILE);
+		for (String line: lines) {
+			/*
+			@Jig 1            |123456789012
+			Acoustic bass drum|-     -
+			Low floor tom     |    -     -
+			Low tom           |        -
+			*/
+			if (line.startsWith("#")) {
+				// comment
+			} else if (line.startsWith("@")) {
+				rhythm = new Rhythm();
+				String[] arr = line.substring(1).split(PIPE_DELIM);
+				rhythm.name = arr[0].trim();
+				rhythm.numBeats = arr[1].length();
+				rhythms.add(rhythm);
+			} else {
+				String[] arr = line.split(PIPE_DELIM);
+				RhythmInstrument instrument = new RhythmInstrument();
+				rhythm.instruments.add(instrument);
+				instrument.name = arr[0].trim();
+				String beats = arr[1]; 
+				int len = beats.length();
+				for (int i = 0; i < len; i++) {
+					String s = beats.substring(i, i + 1);
+					if (s.equals("-")) {
+						instrument.beats.add(i);
+					}
+				}
+			}
+		}
+    	
+    	return rhythms;
+    }
+    
+    class Rhythm {
+    	String name = "";
+    	int numBeats = 0;
+    	List<RhythmInstrument> instruments = new ArrayList<RhythmInstrument>();
+    	public String toString() {
+    		String s = NL + name + ": " + numBeats + NL;
+    		for (RhythmInstrument instrument: instruments) {
+    			s += "  " + instrument.toString();	
+    		}
+    		return s;
+    	}
+    }
+    
+    class RhythmInstrument {
+    	String name;
+    	List<Integer> beats = new ArrayList<Integer>();
+       	public String toString() {
+    		String s = name + ": ";
+    		for (Integer beat: beats) {
+    			s += beat + " ";	
+    		}
+    		s += NL;
+    		return s;
+    	}
     }
 } 
+
+

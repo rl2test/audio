@@ -435,7 +435,7 @@ public class Groove extends JPanel implements ActionListener, MetaEventListener 
     }
     
     public static void main(String args[]) {
-        final Rhythm groove = new Rhythm();
+        final Groove groove = new Groove();
         groove.init();
     }
 } 

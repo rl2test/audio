@@ -18,7 +18,7 @@ public class TimePanel extends AudioPanel {
 	private static TimePanel panel 				= null;
 	/** The player. */
 	public MetronomePlayer player 				= null;
-	private final TimeListener listener 		= new TimeListener();
+	private final Listener listener 			= new Listener();
     // set property defaults
     public int time								= 4;
 	public int type								= 1;
@@ -26,7 +26,7 @@ public class TimePanel extends AudioPanel {
 	public int endTempo							= 180;
     public int increment 						= 1;
 	public int numBars 							= 8;
-	public boolean set							= false; // if true this will overide the tune settings
+	public boolean set							= false; // if true this will override the tune settings
 	public boolean metronome					= false;
 
     /**
@@ -215,7 +215,7 @@ public class TimePanel extends AudioPanel {
     	labels.get("patternValue").setText(PATTERN_STRS.get(patternKey));
     }
     
-    private class TimeListener extends MouseAdapter {
+    private class Listener extends MouseAdapter {
         @Override
         public void mouseClicked(MouseEvent e) {
             JLabel l = (JLabel) e.getSource();
