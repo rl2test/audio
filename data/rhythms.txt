@@ -1,38 +1,33 @@
-@Jig 1            |123456789012
+@Jig 1            |1-2-3-4-5-6-  
 Acoustic bass drum|-     -
 Low floor tom     |    -     -
 Low tom           |        -
 
+@Reel 1           |1---2---3---4---  
+#                  0123456789012345
+Acoustic bass drum|-  -  - -
+Acoustic snare    |    -       -
+Closed hi-hat     |- - - - - - - -
+
+@Slip Jig 1       |1-2-3-4-5-6-7-8-9-
+#                  012345678901234567
+Acoustic bass drum|-     -     -
+Low floor tom     |    -     -     -
+High floor tom    |              -
+Low tom           |               -
 
 
-#@Jig 1            |123456789012
-#Acoustic bass drum|-     -
+#Acoustic bass drum|
 #Bass drum 1       |
 #Side stick        |
 #Acoustic snare    |
 #Hand clap         |
 #Electric snare    |
-#Low floor tom     |    -     -
+#Low floor tom     |
 #Closed hi-hat     |
 #High floor tom    |
 #Pedal hi-hat      |
-#Low tom           |        -
+#Low tom           |
 #Open hi-hat       |
 #Low-mid tom       |
 #Hi-mid tom        |
-
-
-#        final int ACOUSTIC_BASS = 35;
-#        final int BASS_DRUM_1 = 36;
-#        final int ACOUSTIC_SNARE = 38;
-#        final int HAND_CLAP = 39;
-#        final int LOW_FLOOR_TOM = 41;
-#        final int CLOSED_HIHAT = 42;
-#        final int PEDAL_HIHAT = 44;
-#        final int LO_TOM = 45;
-#        final int HI_MID_TOM = 48;
-#        final int CRASH_CYMBAL1 = 49;
-#        final int HI_TOM = 50;
-#        final int RIDE_BELL = 53;
-
-	                    

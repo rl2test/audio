@@ -4,6 +4,7 @@ import static audio.Constants.C;
 import static audio.Constants.PATTERN_STRS;
 import static audio.Constants.W;
 
+import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -179,6 +180,12 @@ public class TimePanel extends AudioPanel {
 
 	    // groove label
 	    w = W[3];
+	    add(getLabel("Rhythm", "rhythm", C[12], C[0], x, y, w, h, listener));
+	    x += w + 1;	    
+
+	    /*
+	    // groove label
+	    w = W[3];
 	    add(getLabel("Groove", "groove", C[12], C[0], x, y, w, h, listener));
 	    x += w + 1;	    
 
@@ -191,6 +198,7 @@ public class TimePanel extends AudioPanel {
 	    w = W[1];
 	    add(getLabel("S", "grooves", C[12], C[0], x, y, w, h, listener));
 	    x += w + 1;	 
+	    */
 	    
 	    // set to defaults
 		set("time" + time);
@@ -241,6 +249,13 @@ public class TimePanel extends AudioPanel {
            	    	set(l);
          		}
          		metronome = !metronome;
+         	} else if (name.equals("rhythm")) {
+         		try {
+         			Rectangle r = ac.rhythmRectangle;
+					new RhythmPanel(ac, r.width, r.height, r.x, r.y);
+				} catch (Exception e1) {
+					log.debug(e);
+				}
          	} else if (name.equals("groove")) {
        	    	Groove groove = new Groove();
        	    	groove.init();

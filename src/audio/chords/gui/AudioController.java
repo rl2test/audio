@@ -70,6 +70,7 @@ public class AudioController extends JPanel {
 	public DisplayPanel displayPanel 			= null;
 	public boolean init							= false;
 	public int barWidth							= 0;
+	public static Rectangle rhythmRectangle		= null;
 	
     /**
      * @return singleton instance of this class
@@ -228,18 +229,18 @@ public class AudioController extends JPanel {
         		screenW = r.width / scale;
         		screenH = r.height / scale;
         		screenX = r.x;
-        		screenY = screenW;
+        		screenY = r.y;
        		 	System.out.println("screenNum" + screenNum + ":" + screenW + ", " + screenH + ", " + screenX + ", " + screenY);
         	 }
         	 screenNum++;
-         }
+        }
+        rhythmRectangle = new Rectangle(screenW / 4, screenH / 4, screenW / 2, screenH / 2);
         
-		JFrame frame = new JFrame("AudioController");
+        JFrame frame = new JFrame("AudioController");
 
 		//Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		//int width = screenSize.width - DOCK_WIDTH; 
 		//int height = screenSize.height - TOP_BAR_HEIGHT;
-
 		//Dimension frameDimension = new Dimension(
 		//		screenSize.width, 
 		//		screenSize.height - TASKBAR_HEIGHT);

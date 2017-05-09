@@ -66,7 +66,12 @@ public class AudioPanel extends JPanel {
         	} else {
         		label.setFont(FONT);
         	}
-       		label.setHorizontalAlignment(JLabel.CENTER);	
+        	if (name != null && name.startsWith("i")) {
+        		label.setHorizontalAlignment(JLabel.LEFT);
+        	} else {
+        		label.setHorizontalAlignment(JLabel.CENTER);	
+        	}
+       			
         }
         if (name != null) label.setName(name);    	
         label.setBackground(bg);
