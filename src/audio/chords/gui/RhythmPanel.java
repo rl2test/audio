@@ -60,8 +60,8 @@ public class RhythmPanel extends AudioPanel implements MetaEventListener {
 	private List<Rhythm> rhythms;
 	private Rhythm rhythm;
 	
-	public RhythmPanel(Rectangle r) throws Exception {
-    	super(null);
+	public RhythmPanel(AudioController ac, Rectangle r) throws Exception {
+    	super(ac);
         setBackground(C[6]);
         
         this.x = r.x;
@@ -221,7 +221,7 @@ public class RhythmPanel extends AudioPanel implements MetaEventListener {
             sequencer.setSequence(sequence);
         } catch (Exception ex) { ex.printStackTrace(); }
         sequencer.setLoopCount(LOOP_COUNT);
-        int bpm = (AudioController.controller == null) ? BPM: AudioController.getInstance().timePanel.endTempo;
+        int bpm = (ac == null) ? BPM: ac.timePanel.endTempo;
         log.debug("bpm=" + bpm);
         sequencer.setTempoInBPM(bpm);
 
@@ -486,15 +486,15 @@ public class RhythmPanel extends AudioPanel implements MetaEventListener {
 	    	 if (useScreen == screenNum) {
 	    		w = r.width / 2;
 	    		h = r.height / 2;
-	    		x = w / 2;
-	    		y = h / 2;
+	    		x = r.x + w / 2;
+	    		y = r.y + h / 2;
 	    		System.out.println("screenNum=" + screenNum + ": w=" + w + ", h=" + h + ", x=" + x + ", y=" + y);
 	    	 }
 	    	 screenNum++;
 	     }
 	    
 		try {
-			new RhythmPanel(new Rectangle(x, y, w, h));
+			new RhythmPanel(null, new Rectangle(x, y, w, h));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

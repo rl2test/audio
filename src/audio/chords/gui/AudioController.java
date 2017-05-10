@@ -46,7 +46,7 @@ public class AudioController extends JPanel {
 	/** The generated serialVersionUID. */
 	private static final long serialVersionUID	= 1L;
 	/** The singleton instance of this class. */    
-	public static AudioController controller 	= null;
+	private static AudioController controller 	= null;
 	/** The log. */
 	private Logger log 							= Logger.getLogger(this.getClass());
 	/** The synthesizer. */
@@ -228,7 +228,7 @@ public class AudioController extends JPanel {
         	 }
         	 screenNum++;
         }
-        rhythmRectangle = new Rectangle(screenW / 4, screenH / 4, screenW / 2, screenH / 2);
+        rhythmRectangle = new Rectangle(screenX + screenW / 4, screenY + screenH / 4, screenW / 2, screenH / 2);
         
         JFrame frame = new JFrame("AudioController");
 

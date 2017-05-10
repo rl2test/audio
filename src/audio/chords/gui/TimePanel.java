@@ -232,7 +232,7 @@ public class TimePanel extends AudioPanel {
          		metronome = !metronome;
          	} else if (name.equals("rhythm")) {
          		try {
-					new RhythmPanel(AudioController.rhythmRectangle);
+					new RhythmPanel(ac, AudioController.rhythmRectangle);
 				} catch (Exception e1) {
 					log.debug(e);
 				}
