@@ -15,15 +15,9 @@ import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 
-import javax.sound.midi.Instrument;
 import javax.sound.midi.MidiChannel;
 import javax.sound.midi.MidiSystem;
-import javax.sound.midi.Soundbank;
 import javax.sound.midi.Synthesizer;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -52,7 +46,7 @@ public class AudioController extends JPanel {
 	/** The generated serialVersionUID. */
 	private static final long serialVersionUID	= 1L;
 	/** The singleton instance of this class. */    
-	private static AudioController controller 	= null;
+	public static AudioController controller 	= null;
 	/** The log. */
 	private Logger log 							= Logger.getLogger(this.getClass());
 	/** The synthesizer. */

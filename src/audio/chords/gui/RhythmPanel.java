@@ -6,6 +6,7 @@ import static audio.Constants.NL;
 import static audio.Constants.PIPE_DELIM;
 import static audio.Constants.RHYTHMS_FILE;
 import static audio.Constants.W;
+import static audio.Constants.V;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -54,20 +55,19 @@ public class RhythmPanel extends AudioPanel implements MetaEventListener {
 	        "Hi-mid tom"
 	};
 	private Data data = new Data();
-	private AudioController ac = null;
 	boolean playing = false;
 	private final Listener listener = new Listener();
 	private List<Rhythm> rhythms;
 	private Rhythm rhythm;
 	
-	public RhythmPanel(AudioController ac, int w, int h, int x, int y) throws Exception {
-    	super(ac);
+	public RhythmPanel(Rectangle r) throws Exception {
+    	super(null);
         setBackground(C[6]);
         
-        this.x = x;
-        this.y = y;
-        this.w = w;
-        this.h = h;
+        this.x = r.x;
+        this.y = r.y;
+        this.w = r.width;
+        this.h = r.height;
         
 		final JFrame frame = new JFrame("Rhythm");
 		frame.setSize(w, h);
@@ -145,7 +145,6 @@ public class RhythmPanel extends AudioPanel implements MetaEventListener {
         
         int id = 35;
      	for (String instrumentName: instrumentNames) {
-     		log.debug("instrumentName=" + instrumentName) ;
      		Instrument instrument = new Instrument(instrumentName, id, rhythm.numPulses);
      		data.instruments.add(instrument);
      		data.idMap.put(id, instrument);
@@ -169,7 +168,6 @@ public class RhythmPanel extends AudioPanel implements MetaEventListener {
 
 		int i = 0; 
 		for (String heading: headings) {
-			log.debug(heading + " " + x);
 			if (i == 0) {
 				add(getLabel(heading, "h" + i, C[12], C[0], x, y, W[8], h, null));
 				x += W[8] + 1;
@@ -223,7 +221,7 @@ public class RhythmPanel extends AudioPanel implements MetaEventListener {
             sequencer.setSequence(sequence);
         } catch (Exception ex) { ex.printStackTrace(); }
         sequencer.setLoopCount(LOOP_COUNT);
-        int bpm = (ac == null) ? BPM : ac.timePanel.endTempo;
+        int bpm = (AudioController.controller == null) ? BPM: AudioController.getInstance().timePanel.endTempo;
         log.debug("bpm=" + bpm);
         sequencer.setTempoInBPM(bpm);
 
@@ -234,7 +232,7 @@ public class RhythmPanel extends AudioPanel implements MetaEventListener {
     private void createEvent(int type, int chan, int num, long tick) {
         ShortMessage message = new ShortMessage();
         try {
-            message.setMessage(type, chan, num); // , velocity
+            message.setMessage(type, chan, num, V[8]); // , velocity
             MidiEvent event = new MidiEvent( message, tick );
             track.add(event);
         } catch (Exception ex) { ex.printStackTrace(); }
@@ -496,7 +494,7 @@ public class RhythmPanel extends AudioPanel implements MetaEventListener {
 	     }
 	    
 		try {
-			RhythmPanel rp = new RhythmPanel(null, w, h, x, y);
+			new RhythmPanel(new Rectangle(x, y, w, h));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

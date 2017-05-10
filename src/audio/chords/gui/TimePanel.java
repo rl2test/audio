@@ -4,13 +4,11 @@ import static audio.Constants.C;
 import static audio.Constants.PATTERN_STRS;
 import static audio.Constants.W;
 
-import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JLabel;
 
-import audio.jsound.Groove;
 
 public class TimePanel extends AudioPanel { 
 	/** Default serialVersionUID. */
@@ -178,27 +176,10 @@ public class TimePanel extends AudioPanel {
 	    add(getLabel("Metronome", "metronome", C[12], C[0], x, y, w, h, listener));
 	    x += w + 1;	    
 
-	    // groove label
+	    // rhythm label
 	    w = W[3];
 	    add(getLabel("Rhythm", "rhythm", C[12], C[0], x, y, w, h, listener));
 	    x += w + 1;	    
-
-	    /*
-	    // groove label
-	    w = W[3];
-	    add(getLabel("Groove", "groove", C[12], C[0], x, y, w, h, listener));
-	    x += w + 1;	    
-
-	    // groovej label
-	    w = W[1];
-	    add(getLabel("J", "groovej", C[12], C[0], x, y, w, h, listener));
-	    x += w + 1;	    
-
-	    // groovej label
-	    w = W[1];
-	    add(getLabel("S", "grooves", C[12], C[0], x, y, w, h, listener));
-	    x += w + 1;	 
-	    */
 	    
 	    // set to defaults
 		set("time" + time);
@@ -251,20 +232,10 @@ public class TimePanel extends AudioPanel {
          		metronome = !metronome;
          	} else if (name.equals("rhythm")) {
          		try {
-         			Rectangle r = ac.rhythmRectangle;
-					new RhythmPanel(ac, r.width, r.height, r.x, r.y);
+					new RhythmPanel(AudioController.rhythmRectangle);
 				} catch (Exception e1) {
 					log.debug(e);
 				}
-         	} else if (name.equals("groove")) {
-       	    	Groove groove = new Groove();
-       	    	groove.init();
-         	} else if (name.equals("groovej")) {
-       	    	GrooveJ groove = new GrooveJ();
-       	    	groove.init();
-         	} else if (name.equals("grooves")) {
-       	    	GrooveS groove = new GrooveS();
-       	    	groove.init();
          	} else {
          		// time
          		if (name.startsWith("time")) {
