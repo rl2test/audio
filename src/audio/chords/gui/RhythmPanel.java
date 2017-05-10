@@ -33,11 +33,11 @@ public class RhythmPanel extends AudioPanel implements MetaEventListener {
 	private final int NOTEOFF = 128;
 	private final int CHANNEL = 9;
 	private final int LOOP_COUNT = 1000;
-	private final int BPM = 150;
+	private int bpm = 150;
 	private Sequencer sequencer;
 	private Sequence sequence;
 	private Track track;
-	private JComboBox<String> combo = new JComboBox<String>();
+	private JComboBox<String> comboBox = new JComboBox<String>();
 	private String instrumentNames[] = { 
     		"Acoustic bass drum", 
     		"Bass drum 1", 
@@ -54,14 +54,15 @@ public class RhythmPanel extends AudioPanel implements MetaEventListener {
 	        "Low-mid tom", 
 	        "Hi-mid tom"
 	};
-	private Data data = new Data();
-	boolean playing = false;
+	private List<Instrument> instruments = new ArrayList<Instrument>();
+	private Map<String, Instrument> instrumentMap = new HashMap<String, Instrument>();	
+	private boolean playing = false;
 	private final Listener listener = new Listener();
 	private List<Rhythm> rhythms;
 	private Rhythm rhythm;
 	
-	public RhythmPanel(AudioController ac, Rectangle r) throws Exception {
-    	super(ac);
+	public RhythmPanel(Rectangle r) throws Exception {
+    	super(null);
         setBackground(C[6]);
         
         this.x = r.x;
@@ -89,9 +90,10 @@ public class RhythmPanel extends AudioPanel implements MetaEventListener {
 		frame.repaint();
 		
      	openSequencer();
-     	openRhythm(0);
+     	openRhythm(0);	// load the first one
 	}	
 
+	// init ui
 	private void initUi() throws Exception {
         rhythms = getRhythms();
         String[] rhythmNames = new String[rhythms.size()];
@@ -109,92 +111,94 @@ public class RhythmPanel extends AudioPanel implements MetaEventListener {
 	    add(getLabel("Play", "playStop", C[6], C[16], x, y, w, h, listener));
 	    x += w + 1;  
 	    
-	    add(getLabel("Clear", "clear", C[6], C[16], x, y, w, h, listener));
-	    x += w + 1;  
+	    //add(getLabel("Clear", "clear", C[6], C[16], x, y, w, h, listener));
+	    //x += w + 1;  
         
 	    // genre combo box
 	    w = W[4];
-	    combo.setModel(new DefaultComboBoxModel<String>(rhythmNames));
-	    combo.addItemListener(new ComboListener());
-	    combo.setBounds(x, y, w, h);
-	    combo.setFont(FONT);
-		add(combo);
-		combo.setSelectedItem(rhythmNames[0]);
+	    comboBox.setModel(new DefaultComboBoxModel<String>(rhythmNames));
+	    comboBox.setName("comboBox");
+	    comboBox.addItemListener(new ComboListener());
+	    comboBox.setBounds(x, y, w, h);
+	    comboBox.setFont(FONT);
+		add(comboBox);
+		comboBox.setSelectedItem(rhythmNames[0]);
+		x += w + 1;
+		
+	    // tempo label
+	    w = W[2];
+	    add(getLabel("Tempo", "tempoLabel", C[6], C[16], x, y, w, h, null));
+	    x += w - 1;
+
+	    w = W[1];
+     	for (i = 60; i < 260; i += 10) {
+			add(getLabel("" + i, "b-" + i, C[12], C[0], x, y, w, h, listener));
+			x += w + 1;
+		}
+     	set("b-" + bpm);
+	    
+		
+        int id = 35;
+     	for (String instrumentName: instrumentNames) {
+     		Instrument instrument = new Instrument(instrumentName, id);
+     		instruments.add(instrument);
+     		instrumentMap.put(instrumentName, instrument);
+     		id++;
+     	}
+		
+		x = 0;
+		w = W[8];
+
+		y += W[1] + 1;
+		add(getLabel("Instrument", "instrument", C[12], C[0], x, y, w, h, null));
+		y += W[1] + 1;
+     	for (Instrument instrument: instruments) {
+			add(getLabel(instrument.id + " " + instrument.name, "i-" + instrument.id, C[12], C[0], x, y, w, h, null));
+			y += W[1] + 1;
+		}
 	}
 	
+	// open rhythm
 	private void openRhythm(int num) throws Exception {
-        // load the first one
         rhythm = rhythms.get(num);
         log.debug("rhythm=" + rhythm);
 
- 		data.instruments.clear();
- 		data.idMap.clear();
- 		data.map.clear();
- 		
  		Component[] componentList = this.getComponents();
- 		if (componentList == null) log.debug("componentList is null");
  		log.debug(componentList.length);
- 		for(Component c : componentList){
- 			String name = (c.getName() == null) ? "" : c.getName();
- 		    if ((c instanceof JComboBox) || name.equals("playStop") || name.equals("clear") ){
- 		    } else {
+ 		for(Component c: componentList){
+ 			String name = c.getName();
+ 		    if (name.startsWith("h-") || name.startsWith("p-")) { // heading or pulse
  		        this.remove(c);
  		        labels.remove(name);
  		    }
  		}
         
-        int id = 35;
-     	for (String instrumentName: instrumentNames) {
-     		Instrument instrument = new Instrument(instrumentName, id, rhythm.numPulses);
-     		data.instruments.add(instrument);
-     		data.idMap.put(id, instrument);
-     		data.map.put(instrumentName, instrument);
-     		id++;
-     	}
-     	
-        List<String> headings = new ArrayList<String>();
-        headings.add("Instrument");
-        for (int i = 0; i < rhythm.numBeats; i++) {
-        	headings.add("" + (i + 1));
-        	for (int j = 1; j < rhythm.numSubBeats; j++) {
-        		headings.add("-");	
-            }	
-        }
-        
-		x = 0;
+		x = W[8] + 1;
 		y = W[1] + 1; 
 		w = W[1];
-		log.debug(x + " " + y + " " + w + " " + h);
+        for (int i = 0; i < rhythm.numBeats; i++) {
+        	add(getLabel("" + (i + 1), "h-" + i, C[12], C[0], x, y, w, h, null));
+        	x += W[1] + 1;
+        	for (int j = 1; j < rhythm.numSubBeats; j++) {
+        		add(getLabel("-", "h-" + i + "-" + j, C[12], C[0], x, y, w, h, null));
+        		x += W[1] + 1;
+            }
+        }
 
-		int i = 0; 
-		for (String heading: headings) {
-			if (i == 0) {
-				add(getLabel(heading, "h" + i, C[12], C[0], x, y, W[8], h, null));
-				x += W[8] + 1;
-			} else {
-				add(getLabel(heading, "h" + i, C[12], C[0], x, y, w, h, null));
+		y += W[1] + 1;
+		for (Instrument instrument: instruments) {
+			x = W[8] + 1;
+			for (int i = 0; i < rhythm.numPulses; i++) {
+				add(getLabel("",  "p-" + instrument.id + "-" + i, C[12], C[0], x, y, w, h, listener));
 				x += w + 1;
 			}
-			i++;
-		}
-		
-		for (Instrument instrument: data.instruments) {
-			x = 0;
 			y += W[1] + 1;
-			w = W[1];
-			add(getLabel(instrument.id + " " + instrument.name, "i" + instrument.id, C[12], C[0], x, y, W[8], h, null));
-			x += W[8] + 1;
-			for (i = 0; i < rhythm.numPulses; i++) {
-				add(getLabel("",  "p" + instrument.id + "-" + i, C[12], C[0], x, y, w, h, listener));
-				x += w + 1;
-			}
-			
 		}
 		
      	for (RhythmInstrument rhythmInstrument: rhythm.instruments) {
-     		Instrument instrument = data.map.get(rhythmInstrument.name);
+     		Instrument instrument = instrumentMap.get(rhythmInstrument.name);
      		for (int pulse: rhythmInstrument.pulses) {
-     			set("p" + instrument.id + "-" + pulse);
+     			set("p-" + instrument.id + "-" + pulse);
      		}
      	}
 
@@ -208,7 +212,7 @@ public class RhythmPanel extends AudioPanel implements MetaEventListener {
         track = sequence.createTrack();
         createEvent(PROGRAM, CHANNEL, 1, 0);
      	for (RhythmInstrument rhythmInstrument: rhythm.instruments) {
-     		Instrument instrument = data.map.get(rhythmInstrument.name);
+     		Instrument instrument = instrumentMap.get(rhythmInstrument.name);
      		for (int pulse: rhythmInstrument.pulses) {
                 createEvent(NOTEON, CHANNEL, instrument.id, pulse); 
                 createEvent(NOTEOFF, CHANNEL, instrument.id, pulse + 1);      		}
@@ -221,7 +225,6 @@ public class RhythmPanel extends AudioPanel implements MetaEventListener {
             sequencer.setSequence(sequence);
         } catch (Exception ex) { ex.printStackTrace(); }
         sequencer.setLoopCount(LOOP_COUNT);
-        int bpm = (ac == null) ? BPM: ac.timePanel.endTempo;
         log.debug("bpm=" + bpm);
         sequencer.setTempoInBPM(bpm);
 
@@ -331,6 +334,10 @@ public class RhythmPanel extends AudioPanel implements MetaEventListener {
 					playing = true;
 					l.setText("Stop");
             	}	
+            } else if (name.startsWith("b-")) {
+            	unset("b-" + bpm);
+            	bpm = Integer.parseInt(l.getText());
+            	set(l);
             } else if (name.equals("clear")) {
             	//updateTuneBox();
             } else if (name.equals("save")) {
@@ -396,8 +403,8 @@ public class RhythmPanel extends AudioPanel implements MetaEventListener {
 	    	log.debug("ComboListener");	
 	        if (event.getStateChange() == ItemEvent.SELECTED) {
 	        	//String name = event.getItem().toString();
-	        	String name = (String) combo.getSelectedItem();
-	        	int index = combo.getSelectedIndex();
+	        	String name = (String) comboBox.getSelectedItem();
+	        	int index = comboBox.getSelectedIndex();
 	        	log.debug("ComboListener: name=" + name + ", index=" + index);
 	        	try {
 					openRhythm(index);
@@ -443,29 +450,10 @@ public class RhythmPanel extends AudioPanel implements MetaEventListener {
     class Instrument {
         String name; 
         int id; 
-        boolean[] cells;
-        public Instrument(String name, int id, int numCells) {
+        public Instrument(String name, int id) {
             this.name = name;
             this.id = id;
-            cells = new boolean[numCells];
-            for (int i = 0; i < cells.length; i++) {
-                cells[i] = false;
-            }
         }
-    }
-    
-    /**
-     * Storage class for data
-     */
-    class Data {
-    	public List<Instrument> instruments = new ArrayList<Instrument>();
-    	public Map<Integer, Instrument> idMap = new HashMap<Integer, Instrument>();
-    	public Map<String, Instrument> map = new HashMap<String, Instrument>();
-    }
-    
-    class Cell {
-    	JLabel label;
-    	boolean selected = false;
     }
 
     // main =========================================================================================
@@ -494,7 +482,7 @@ public class RhythmPanel extends AudioPanel implements MetaEventListener {
 	     }
 	    
 		try {
-			new RhythmPanel(null, new Rectangle(x, y, w, h));
+			new RhythmPanel(new Rectangle(x, y, w, h - 13));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
