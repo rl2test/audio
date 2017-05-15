@@ -1,33 +1,20 @@
-@Jig 1            |1-2-3-4-5-6-  
-Acoustic bass drum|-     -
-Low floor tom     |    -     -
-Low tom           |        -
+@Jig 1            |6|2|6
+#                 |1-2-3-4-5-6-
+Acoustic bass drum|-     -     
+Low floor tom     |    -     - 
+High floor tom    |  -         
+Low tom           |        -   
 
-@Reel 1           |1---2---3---4---  
-#                  0123456789012345
+@Reel 1           |4|4|4
+#                 |1---2---3---4---
 Acoustic bass drum|-  -  - -
 Acoustic snare    |    -       -
 Closed hi-hat     |- - - - - - - -
 
-@Slip Jig 1       |1-2-3-4-5-6-7-8-9-
-#                  012345678901234567
+@Slip Jig 1       |9|2|6
+#                 |1-2-3-4-5-6-7-8-9-
 Acoustic bass drum|-     -     -
 Low floor tom     |    -     -     -
 High floor tom    |              -
 Low tom           |               -
 
-
-#Acoustic bass drum|
-#Bass drum 1       |
-#Side stick        |
-#Acoustic snare    |
-#Hand clap         |
-#Electric snare    |
-#Low floor tom     |
-#Closed hi-hat     |
-#High floor tom    |
-#Pedal hi-hat      |
-#Low tom           |
-#Open hi-hat       |
-#Low-mid tom       |
-#Hi-mid tom        |

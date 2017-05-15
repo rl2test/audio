@@ -3,6 +3,7 @@ package audio.chords.gui;
 import static audio.Constants.C;
 import static audio.Constants.FONT;
 import static audio.Constants.NL;
+import static audio.Constants.PIPE;
 import static audio.Constants.PIPE_DELIM;
 import static audio.Constants.RHYTHMS_FILE;
 import static audio.Constants.W;
@@ -54,8 +55,10 @@ public class RhythmPanel extends AudioPanel implements MetaEventListener {
 	        "Low-mid tom", 
 	        "Hi-mid tom"
 	};
+	private int maxInstrumentNameLen = instrumentNames[0].length();
 	private List<Instrument> instruments = new ArrayList<Instrument>();
-	private Map<String, Instrument> instrumentMap = new HashMap<String, Instrument>();	
+	private Map<String, Instrument> instrumentMap = new HashMap<String, Instrument>();
+	private Map<Integer, Instrument> instrumentIdMap = new HashMap<Integer, Instrument>();
 	private boolean playing = false;
 	private final Listener listener = new Listener();
 	private List<Rhythm> rhythms;
@@ -65,14 +68,9 @@ public class RhythmPanel extends AudioPanel implements MetaEventListener {
     	super(null);
         setBackground(C[6]);
         
-        this.x = r.x;
-        this.y = r.y;
-        this.w = r.width;
-        this.h = r.height;
-        
 		final JFrame frame = new JFrame("Rhythm");
-		frame.setSize(w, h);
-		frame.setLocation(x, y);
+		frame.setSize(r.width, r.height);
+		frame.setLocation(r.x, r.y);
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
                 sequencer.stop();
@@ -108,12 +106,9 @@ public class RhythmPanel extends AudioPanel implements MetaEventListener {
 	    
 	    // play/stop label
 	    w = W[2];
-	    add(getLabel("Play", "playStop", C[6], C[16], x, y, w, h, listener));
+	    add(getLabel("Play", "playStop", C[8], C[16], x, y, w, h, listener));
 	    x += w + 1;  
 	    
-	    //add(getLabel("Clear", "clear", C[6], C[16], x, y, w, h, listener));
-	    //x += w + 1;  
-        
 	    // genre combo box
 	    w = W[4];
 	    comboBox.setModel(new DefaultComboBoxModel<String>(rhythmNames));
@@ -124,9 +119,22 @@ public class RhythmPanel extends AudioPanel implements MetaEventListener {
 		add(comboBox);
 		comboBox.setSelectedItem(rhythmNames[0]);
 		x += w + 1;
-		
+
+	    add(getLabel("Save", "save", C[8], C[16], x, y, w, h, listener));
+	    x += w + 1;  
+	    
+	    add(getLabel("Save as", "saveAs", C[8], C[16], x, y, w, h, listener));
+	    x += w + 1;
+	    
+	    add(getLabel("Clear", "clear", C[8], C[16], x, y, w, h, listener));
+	    x += w + 1;  
+
+        x = 0;
+        y += h + 1;
+
+	    
 	    // tempo label
-	    w = W[2];
+	    w = W[2] + 22;
 	    add(getLabel("Tempo", "tempoLabel", C[6], C[16], x, y, w, h, null));
 	    x += w - 1;
 
@@ -143,25 +151,26 @@ public class RhythmPanel extends AudioPanel implements MetaEventListener {
      		Instrument instrument = new Instrument(instrumentName, id);
      		instruments.add(instrument);
      		instrumentMap.put(instrumentName, instrument);
+     		instrumentIdMap.put(id, instrument);
      		id++;
      	}
 		
 		x = 0;
 		w = W[8];
 
-		y += W[1] + 1;
+		y += h + 1;
 		add(getLabel("Instrument", "instrument", C[12], C[0], x, y, w, h, null));
-		y += W[1] + 1;
+		y += h + 1;
      	for (Instrument instrument: instruments) {
 			add(getLabel(instrument.id + " " + instrument.name, "i-" + instrument.id, C[12], C[0], x, y, w, h, null));
-			y += W[1] + 1;
+			y += h + 1;
 		}
 	}
 	
 	// open rhythm
 	private void openRhythm(int num) throws Exception {
         rhythm = rhythms.get(num);
-        log.debug("rhythm=" + rhythm);
+        log.debug("rhythm=" + NL + rhythm);
 
  		Component[] componentList = this.getComponents();
  		log.debug(componentList.length);
@@ -174,7 +183,7 @@ public class RhythmPanel extends AudioPanel implements MetaEventListener {
  		}
         
 		x = W[8] + 1;
-		y = W[1] + 1; 
+		y = (h + 1) * 2; 
 		w = W[1];
         for (int i = 0; i < rhythm.beats; i++) {
         	add(getLabel("" + (i + 1), "h-" + i, C[12], C[0], x, y, w, h, null));
@@ -185,21 +194,30 @@ public class RhythmPanel extends AudioPanel implements MetaEventListener {
             }
         }
 
-		y += W[1] + 1;
+		y += h + 1;
 		for (Instrument instrument: instruments) {
+			instrument.pulses = new boolean[rhythm.getNumPulses()];
 			x = W[8] + 1;
-			for (int i = 0; i < rhythm.pulses; i++) {
+			for (int i = 0, n = rhythm.getNumPulses(); i < n; i++) {
 				add(getLabel("",  "p-" + instrument.id + "-" + i, C[12], C[0], x, y, w, h, listener));
 				x += w + 1;
 			}
-			y += W[1] + 1;
+			y += h + 1;
 		}
 		
-     	for (RhythmInstrument rhythmInstrument: rhythm.instruments) {
-     		Instrument instrument = instrumentMap.get(rhythmInstrument.name);
-     		for (int pulse: rhythmInstrument.pulses) {
-     			set("p-" + instrument.id + "-" + pulse);
-     		}
+     	for (String instr: rhythm.instruments) {
+     		String[] arr = instr.split(PIPE_DELIM);
+			String instrName = arr[0].trim();
+     		Instrument instrument = instrumentMap.get(instrName);
+			String pulseStr = arr[1]; 
+			for (int i = 0, n = pulseStr.length(); i < n; i++) {
+				String s = pulseStr.substring(i, i + 1);
+				if (s.equals("-")) {
+					instrument.pulses[i] = true;
+     				log.debug("p-" + instrument.id + "-" + i);
+     				set("p-" + instrument.id + "-" + i);
+				}
+			}
      	}
 
      	repaint();
@@ -211,14 +229,16 @@ public class RhythmPanel extends AudioPanel implements MetaEventListener {
             track = sequence.createTrack();
             
             createEvent(PROGRAM, CHANNEL, 1, 0);
-	        for (RhythmInstrument rhythmInstrument: rhythm.instruments) {
-	      		Instrument instrument = instrumentMap.get(rhythmInstrument.name);
-	      		for (int pulse: rhythmInstrument.pulses) {
-	                 createEvent(NOTEON, CHANNEL, instrument.id, pulse); 
-	                 createEvent(NOTEOFF, CHANNEL, instrument.id, pulse + 1);      		}
+	        for (Instrument instrument: instruments) {
+	     		for (int i = 0, n = instrument.pulses.length; i < n; i++) {
+	     			if (instrument.pulses[i]) {
+	     				createEvent(NOTEON, CHANNEL, instrument.id, i);
+	     				createEvent(NOTEOFF, CHANNEL, instrument.id, i + 1);
+	     			}
+	        	}     
 	      	}
 	        // so we always have a track of numPulses length.
-	        createEvent(PROGRAM, CHANNEL, 1, rhythm.pulses);
+	        createEvent(PROGRAM, CHANNEL, 1, rhythm.getNumPulses());
 
 	        // set and start the sequencer.
             sequencer.setSequence(sequence);
@@ -257,33 +277,26 @@ public class RhythmPanel extends AudioPanel implements MetaEventListener {
 		List<String> lines 	= Util.getLines(RHYTHMS_FILE);
 		for (String line: lines) {
 			/*
-			@Jig 1            |1-2-3-4-5-6-  
+			@Jig 1            |6|2|6
+			#                 |1-2-3-4-5-6-
 			Acoustic bass drum|-     -
 			Low floor tom     |    -     -
 			Low tom           |        -
 			*/
 			if (!line.startsWith("#")) {
+				String[] arr = line.split(PIPE_DELIM);
 				if (line.startsWith("@")) {
-					String[] arr = line.substring(1).split(PIPE_DELIM);
-					r = new Rhythm(arr[0].trim());
+					r = new Rhythm();
+					r.name = arr[0].substring(1).trim();
+					r.beats = Integer.parseInt(arr[1]);
+					r.subBeats = Integer.parseInt(arr[2]);
+					r.ppq = Integer.parseInt(arr[3]);
 					rhythms.add(r);
 				} else {
-					String[] arr = line.split(PIPE_DELIM);
-					RhythmInstrument instrument = new RhythmInstrument();
-					r.instruments.add(instrument);
-					instrument.name = arr[0].trim();
-					String pulses = arr[1]; 
-					int len = pulses.length();
-					for (int i = 0; i < len; i++) {
-						String s = pulses.substring(i, i + 1);
-						if (s.equals("-")) {
-							instrument.pulses.add(i);
-						}
-					}
+					r.instruments.add(line);
 				}				
 			}
 		}
-    	
     	return rhythms;
     }
     
@@ -302,6 +315,22 @@ public class RhythmPanel extends AudioPanel implements MetaEventListener {
             sequencer.close();
         }
         sequencer = null;
+    }
+    
+    public String getSpaces(String name) {
+		String s = "";
+		for (int i = 0, n = maxInstrumentNameLen - name.length(); i < n; i++ ) {
+			s += " ";
+		}
+		return s;
+    }
+    
+    public void saveRhythms() {
+    	String s = "";
+    	for (Rhythm rhythm: rhythms) {
+    		s += rhythm.toString() + NL;
+    	}
+    	Util.writeToFile(RHYTHMS_FILE, s);
     }
     
     // classes =========================================================================================
@@ -328,60 +357,42 @@ public class RhythmPanel extends AudioPanel implements MetaEventListener {
             	bpm = Integer.parseInt(l.getText());
             	set(l);
             } else if (name.startsWith("p-")) {
-            	//set(l);
+            	if (!playing) {
+            		String[] arr = name.split("-");
+            		int id = Integer.parseInt(arr[1]);
+            		int pulse = Integer.parseInt(arr[2]);
+            		Instrument instrument = instrumentIdMap.get(id);
+            		if (instrument.pulses[pulse]) {
+            			unset(l);	
+            			instrument.pulses[pulse] = false;
+            		} else {
+            			set(l);	
+            			instrument.pulses[pulse] = true;            			
+            		}
+            	}
             } else if (name.equals("clear")) {
             	//updateTuneBox();
             } else if (name.equals("save")) {
-            	/*
-            	String text 		= ac.textPanel.textArea.getText();
-				
-				int n = JOptionPane.showConfirmDialog(
-				    null,
-				    "Overwrite existing file: " + tuneName + "?",
-				    "Warning",
-				    JOptionPane.YES_NO_OPTION);
-				if (n == 0) {
-					save(text);
-					log.debug("save " + NL + genreName + NL + folderName + NL + tuneName + NL + text);
-				}
-				*/
+            	rhythm.instruments.clear();
+            	for (Instrument instrument: instruments) {
+            		boolean save = false;
+            		for (boolean pulse: instrument.pulses) {
+            			if (pulse) {
+            				save = true;
+            				break;
+            			}
+            		}
+            		if (save) {
+            			String instr = instrument.name + getSpaces(instrument.name) + PIPE;
+            			for (boolean pulse: instrument.pulses) {
+            				instr += (pulse) ? "-" : " ";
+                		}
+            			instr.trim();
+            			rhythm.instruments.add(instr);
+            		}
+            	}
+            	saveRhythms();
             } else if (name.equals("saveAs")) {
-            	/*
-				String text 		= ac.textPanel.textArea.getText();
-
-			    String s = (String) JOptionPane.showInputDialog(
-						null,
-						"File Name",
-						"Save As ...",
-						JOptionPane.PLAIN_MESSAGE,
-						null,
-						null,
-						tuneName);
-				if ((s != null) && (s.length() > 0)) {
-					boolean save = false;	
-					if (s.endsWith(EXT_CHORDS)) {
-						s.replace(EXT_CHORDS, "");
-					}
-					if (s.equals(tuneName)) {
-						int n = JOptionPane.showConfirmDialog(
-							    null,
-							    "Overwrite existing file: " + tuneName + "?",
-							    "Warning",
-							    JOptionPane.YES_NO_OPTION);
-						if (n == 0) {
-							save = true;
-						}
-					} else {
-						save = true;
-					}
-					if (save) {
-					    saveAs(s, text);
-					    updateTuneBox();
-					    tuneBox.setSelectedItem(s);
-					    log.debug("save " + NL + genreName + NL + folderName + NL + s + NL + text);
-					}
-				}
-				*/ 
             }
         }
     }
@@ -410,61 +421,44 @@ public class RhythmPanel extends AudioPanel implements MetaEventListener {
      * Rhythm data
      */
 	class Rhythm {
+		/*
+		@Jig 1            |6|2|6
+		#                 |1-2-3-4-5-6-
+		*/
     	String name = "";
     	int beats = 0;
     	int subBeats = 0;
-    	int pulses = 0;
     	int ppq = 0; // pulses per quarter-note
-    	List<RhythmInstrument> instruments = new ArrayList<RhythmInstrument>();
-    	public Rhythm(String name) {
-    		this.name = name;
-    		if (name.startsWith("Jig")){
-				beats = 6;
-				subBeats = 2;
-				ppq = 6;
-			} else if (name.startsWith("Slip Jig")){
-				beats = 9;
-				subBeats = 2;
-				ppq = 6;
-			} else if (name.startsWith("Reel")){
-				beats = 4;
-				subBeats = 4;
-				ppq = 4;
-			}
-			pulses = beats * subBeats;
+    	List<String> instruments = new ArrayList<String>();
+    	
+    	public int getNumPulses() {
+    		return beats * subBeats;
     	}
+    	
     	public String toString() {
-    		String s = NL + name + ": " + beats + " " + subBeats + " " + pulses + " " + ppq + NL;
-    		for (RhythmInstrument instrument: instruments) {
-    			s += "  " + instrument.toString();	
-    		}
-    		return s;
-    	}
-    }
-    
-    /**
-     * RhythmInstrument data
-     */
-    class RhythmInstrument {
-    	String name;
-    	int id;
-    	List<Integer> pulses = new ArrayList<Integer>();
-       	public String toString() {
-    		String s = name + ": ";
-    		for (Integer pulse: pulses) {
-    			s += pulse + " ";	
+    		String s = "@" + name + getSpaces("@" + name) + PIPE + beats + PIPE + subBeats + PIPE + ppq + NL;
+    		s += "#" + getSpaces("#") + PIPE;
+    		for (int i = 0; i < beats; i++) {
+    			s += (i + 1);
+    			for (int j = 1; j < subBeats; j++) {
+    				s += "-";
+    			}
     		}
     		s += NL;
+    		for (String instrument: instruments) {
+    			s += instrument + NL;	
+    		}
     		return s;
     	}
     }
-    
+ 
     /**
      * Instrument data
      */
     class Instrument {
         String name; 
-        int id; 
+        int id;
+        boolean[] pulses = null;
         public Instrument(String name, int id) {
             this.name = name;
             this.id = id;
@@ -480,7 +474,7 @@ public class RhythmPanel extends AudioPanel implements MetaEventListener {
 	    int len 				= gds.length;
 	    boolean isDual 			= (len > 1);
 	    int useScreen			= (isDual) ? 2 : 1;
-	    int x = 0, y = 0, w = 0, h = 0;
+	    int rx = 0, ry = 0, rw = 0, rh = 0;
 	
 	    System.out.println(len + " screens detected: isDual=" + isDual + ", useScreen=" + useScreen);
 	    int screenNum = 1;
@@ -488,21 +482,19 @@ public class RhythmPanel extends AudioPanel implements MetaEventListener {
 	    	 GraphicsConfiguration	graphicsConfiguration = gd.getDefaultConfiguration();
 	    	 Rectangle r = graphicsConfiguration.getBounds();
 	    	 if (useScreen == screenNum) {
-	    		w = r.width / 2;
-	    		h = r.height / 2;
-	    		x = r.x + w / 2;
-	    		y = r.y + h / 2;
-	    		System.out.println("screenNum=" + screenNum + ": w=" + w + ", h=" + h + ", x=" + x + ", y=" + y);
+	    		rw = r.width / 2;
+	    		rh = r.height / 2;
+	    		rx = r.x + rw / 2;
+	    		ry = r.y + rh / 2;
+	    		System.out.println("screenNum=" + screenNum + ": w=" + rw + ", h=" + rh + ", x=" + rx + ", y=" + ry);
 	    	 }
 	    	 screenNum++;
 	     }
 	    
 		try {
-			new RhythmPanel(new Rectangle(x, y, w, h - 13));
+			new RhythmPanel(new Rectangle(rx, ry, rw, rh + 12));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
     }
 } 
-
-
