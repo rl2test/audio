@@ -102,57 +102,58 @@ public class GetAbcData {
 		tuneGroupPages.put("three-twos", 	 5);	
 		tuneGroupPages.put("mazurkas", 		 5);	
 	}
-
-	/**
-	 * Class representing abc tune metadata as per db schema.
-	 */
-	class AbcTune {
- 		public List<String> names 	= new ArrayList<String>();	// list of names for the tune
- 		public String tune_type 	= "";						// tune type as per thesession, session-tunes-1&2, obrien, my-tunes	
- 		public String tune_key 		= "";
- 		public String source 		= "";						// "session-tunes-1", "session-tunes-2", "obrien", "thesession", "my-tunes"
-		public int source_num		= 0;						// depends on source - 0 for mytunes	
-		public String source_url 	= "";						// for thesession
-		public String abc 			= "";						// first 2 bars - not used for my-tunes
-		
-		public String toQuery() {
-			String name = names.get(0);
-			String aka = "";
-			if (names.size() > 1) {
-				for (int i = 1; i < names.size(); i++) {
-					aka += names.get(i); 
-					if (i < names.size() - 1) {
-						aka += ", ";
-					}
-				}
-			}
-			String tune_group= "";
-			if (tuneTypeToGroup.containsKey(tune_type)) {
-				tune_group = tuneTypeToGroup.get(tune_type);
-			} else {
-				log.warn("tune_group not found for " + tune_type);
-			}	
-			String query = "insert into irish_tunes values (null,'" + addSlashes(name) + "','" + addSlashes(aka) + "','" + tune_type + "','" + tune_group + "','" + tune_key + "','" + source + "'," + source_num + ",'" + source_url + "','" + toIdString(names.get(0)) + "', 0)";
-			return query;
-		}
-	}
 	
 	/**
-	 * Class representing thesession abc tune metadata
-	 */
-	class ThesessionTune {
-		int thesessionId;
-		String name;
-		String tuneGroup;
-		int orderNum;
-		public ThesessionTune(int thesessionId, String name, String tuneGroup, int orderNum) {
-			this.thesessionId = thesessionId;
-			this.name = cleanName(name);
-			this.tuneGroup = tuneGroup;
-			this.orderNum = orderNum;
-		}
-		public String toString() {
-			return tuneGroup + " " + thesessionId + " " + name;
+	 * Prepare my-tunes folder for db insert - parse files and copy to tune-type dirs
+	 */	
+	protected void runMisc() {
+		List<File> files = Util.getFiles(new File("/Users/rlowe/rob/aws/htdocs/abc/file/misc"), ABC_FILTER);
+		for(File file: files) {
+			String filename = file.getName().replace(".abc", "");
+			String source = "misc";
+			log.debug(filename);
+			if (!existsInDb(filename, source)){
+				List<String>  lines = Util.getLines(file);
+				AbcTune tune = new AbcTune();
+				tune.source = source;
+				tune.source_url = "";
+				tune.source_num = 0;
+				tune.filename = filename; 
+
+				for (String line: lines) {
+					line = line.trim();
+					/*
+						X:1
+						T:Limerick Lassies, The
+						S:Trad, arr. Paddy O'Brien 
+						Z:Set: Limerick Lassies/Old Copper Plate/Buckley's Fancy
+						R:reel
+						E:9
+						I:speed 350
+						M:C|
+						K:D
+						c2|dBAF DEFD|GFGA BE~E2|dBAF DFAF|GBAG FD~D2|\
+					 */
+					if (line.startsWith("X:")) {
+					} else if (line.startsWith("T:")) {
+						String cleanName = cleanName(line.substring(2).trim());
+						if (!tune.names.contains(cleanName)) {
+							tune.names.add(cleanName);	
+						}
+					} else if (line.startsWith("R:")) {
+						tune.tune_type = line.substring(2).trim().toLowerCase();
+					} else if (line.startsWith("K:")) {
+						tune.tune_key = line.substring(2).trim();
+					} else {
+					} 
+					if (!line.startsWith("***")) {
+						tune.abc += line.trim() + NL;
+					}
+				}
+				writeToDb(tune);
+			} else {
+				log.debug(filename + " EXISTS");
+			}
 		}
 	}
 	
@@ -436,6 +437,21 @@ public class GetAbcData {
 		}		
 	}
 	
+	public boolean existsInDb(String filename, String source) {
+		int count = 0;
+		try {
+			String query = "select * from irish_tunes where id_string = '" + filename + "' and source = '" + source + "'";
+			rs = stmt.executeQuery(query);
+		    // process resultSet
+		    while (rs.next()) {
+		    	count++;
+		    }	
+		} catch(Exception e) {
+			log.debug(e);
+		}
+		return (count > 0);
+	}
+	
 	public String toIdString(String s) {
 		return s.toLowerCase().replace(" ", "-").replace(",", "").replace("'", "").replace("#", "");
 	}
@@ -473,15 +489,104 @@ public class GetAbcData {
 		return (s == null) ? "" : s.replace("'", "\\'");
 	}
 	
+
+	/**
+	 * Class representing abc tune metadata as per db schema.
+	 */
+	class AbcTune {
+ 		public List<String> names 	= new ArrayList<String>();	// list of names for the tune
+ 		public String tune_type 	= "";						// tune type as per thesession, session-tunes-1&2, obrien, my-tunes	
+ 		public String tune_key 		= "";
+ 		public String source 		= "";						// "session-tunes-1", "session-tunes-2", "obrien", "thesession", "my-tunes", "misc"
+		public int source_num		= 0;						// depends on source - 0 for mytunes, misc	
+		public String source_url 	= "";						// for thesession
+		public String abc 			= "";						// first 2 bars - not used for my-tunes
+		public String filename 		= "";						// filename - only used for misc
+		
+		public String toQuery() {
+			String name = names.get(0);
+			String aka = "";
+			if (names.size() > 1) {
+				for (int i = 1; i < names.size(); i++) {
+					aka += names.get(i); 
+					if (i < names.size() - 1) {
+						aka += ", ";
+					}
+				}
+			}
+			String tune_group= "";
+			if (tuneTypeToGroup.containsKey(tune_type)) {
+				tune_group = tuneTypeToGroup.get(tune_type);
+			} else {
+				log.warn("tune_group not found for " + tune_type);
+			}	
+			/*
+			1	idPrimary	int(11)			No	None		AUTO_INCREMENT
+			2	name	varchar(200)
+			3	aka	varchar(400)
+			4	tune_type	varchar(50)
+			5	tune_group	varchar(50)
+			6	tune_key	varchar(10)
+			7	source	varchar(200)
+			8	source_num	int(11)
+			9	source_url	varchar(400)
+			10	id_string	varchar(200)
+			11	rating	int(11)
+			12	comment	varchar(500)
+			13	notation	int(11)
+			 */
+			String idString = (source.equals("misc")) ? filename : toIdString(names.get(0));
+			int rating = 0;
+			String comment = "";
+			int notation = 1;
+			
+			String query = "insert into irish_tunes values (null,'" + 
+					addSlashes(name) + "','" + 
+					addSlashes(aka) + "','" + 
+					tune_type + "','" + 
+					tune_group + "','" + 
+					tune_key + "','" + 
+					source + "'," + 
+					source_num + ",'" + 
+					source_url + "','" + 
+					idString + "', " +
+					rating + ", '" + 
+					comment + "', " + 
+					notation + ")";
+							
+			return query;
+		}
+	}
+	
+	/**
+	 * Class representing thesession abc tune metadata
+	 */
+	class ThesessionTune {
+		int thesessionId;
+		String name;
+		String tuneGroup;
+		int orderNum;
+		public ThesessionTune(int thesessionId, String name, String tuneGroup, int orderNum) {
+			this.thesessionId = thesessionId;
+			this.name = cleanName(name);
+			this.tuneGroup = tuneGroup;
+			this.orderNum = orderNum;
+		}
+		public String toString() {
+			return tuneGroup + " " + thesessionId + " " + name;
+		}
+	}
+	
 	public static void main(String[] args) {
 		try {
 			DriverManager.registerDriver (new com.mysql.jdbc.Driver());
-			conn = DriverManager.getConnection("jdbc:mysql://localhost/mysite?user=root&password=");
+			conn = DriverManager.getConnection("jdbc:mysql://localhost/mysite?user=root&password=root");
 		    stmt = conn.createStatement();	
 		    
 		    //new AbcData().runMultipleLocal();
 		    //new AbcData().runThesession();
-		    new GetAbcData().runMyTunes();
+		    //new GetAbcData().runMyTunes();
+		    new GetAbcData().runMisc();
 		} catch (Exception e) {
 			System.out.println(e);
 		} finally {
