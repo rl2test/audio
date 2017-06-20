@@ -1,0 +1,13 @@
+@Jazz 1           |4|3
+$
+#                 | |1--2--3--4--
+Acoustic bass drum|8|-  -  - -
+Acoustic snare    |8|    -       
+Closed hi-hat     |8|- - - - - - 
+
+@Jazz 2           |4|3
+#                 | |1--2--3--4--
+Acoustic bass drum|8|-  -  - -
+Acoustic snare    |8|    -       
+Closed hi-hat     |8|- - - - - - 
+

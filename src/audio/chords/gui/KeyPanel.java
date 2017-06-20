@@ -18,9 +18,12 @@ public class KeyPanel extends AudioPanel {
 	private static KeyPanel panel 					= null;
 	/** The drone player. */
 	public DronePlayer dronePlayer 			= null;
+	/** The chord player. */
+	public ChordPlayer chordPlayer 			= null;	
 	private final KeyListener keyListener 	= new KeyListener();
 	public int selectedKeyIndex				= -1;
 	public boolean drone					= false;
+	public boolean chord					= false;
 	
     /**
      * @return singleton instance of this class
@@ -53,8 +56,24 @@ public class KeyPanel extends AudioPanel {
 	    	x += width + 1;
 	    }
 
-	    // drone label
+	    // drone
 	    add(getLabel("Drone", "drone", C[12], C[0], x, y, w, h, keyListener));
+	    x += w + 1;
+	    
+	    // maj
+	    add(getLabel("maj", "ch-maj", C[12], C[0], x, y, w, h, keyListener));
+	    x += w + 1;
+
+	    // maj7
+	    add(getLabel("maj7", "ch-maj7", C[12], C[0], x, y, w, h, keyListener));
+	    x += w + 1;
+
+	    // 7
+	    add(getLabel("7", "ch-7", C[12], C[0], x, y, w, h, keyListener));
+	    x += w + 1;
+	    
+	    //m7
+	    add(getLabel("m7", "ch-m7", C[12], C[0], x, y, w, h, keyListener));
 	    x += w + 1;
 	    
 	    // msg label
@@ -94,6 +113,22 @@ public class KeyPanel extends AudioPanel {
     					dronePlayer.start();        	
             		} else {
             			log.warn("no key selected for drone");
+            		}
+            	}            	 
+            } else if (name.startsWith("ch")) {
+            	if (chord) {
+            		unset(l);
+            		chord = false;
+            		chordPlayer.destroyPlayer();
+            		chordPlayer = null;
+            	} else {
+            		if (selectedKeyIndex != -1) {
+    					set(l);
+    					chord = true;
+    					chordPlayer = new ChordPlayer(l.getName().substring(3), ac);
+    					chordPlayer.start();        	
+            		} else {
+            			log.warn("no key selected for chord");
             		}
             	}            	 
             }
