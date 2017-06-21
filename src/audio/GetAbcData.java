@@ -107,7 +107,8 @@ public class GetAbcData {
 	 * Prepare my-tunes folder for db insert - parse files and copy to tune-type dirs
 	 */	
 	protected void runMisc() {
-		List<File> files = Util.getFiles(new File("/Users/rlowe/rob/aws/htdocs/abc/file/misc"), ABC_FILTER);
+		//List<File> files = Util.getFiles(new File("/Users/rlowe/rob/aws/htdocs/abc/file/misc"), ABC_FILTER);
+		List<File> files = Util.getFiles(new File("/Volumes/IOMEGA-1000/Rob/aws/htdocs/abc/file/misc"), ABC_FILTER);
 		for(File file: files) {
 			String filename = file.getName().replace(".abc", "");
 			String source = "misc";
@@ -580,7 +581,8 @@ public class GetAbcData {
 	public static void main(String[] args) {
 		try {
 			DriverManager.registerDriver (new com.mysql.jdbc.Driver());
-			conn = DriverManager.getConnection("jdbc:mysql://localhost/mysite?user=root&password=root");
+			//conn = DriverManager.getConnection("jdbc:mysql://localhost/mysite?user=root&password=root"); // wk
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:8889/mysite?user=root&password=root"); // hm
 		    stmt = conn.createStatement();	
 		    
 		    //new AbcData().runMultipleLocal();
