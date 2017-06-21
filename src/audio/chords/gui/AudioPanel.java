@@ -40,7 +40,7 @@ public class AudioPanel extends JPanel {
    		unset(labels.get(name));	
     } 
     public void set(JLabel l) {
-    	l.setBackground(C[4]);
+    	l.setBackground(C[6]);
     	l.setForeground(C[16]);
     }
     public void unset(JLabel l) {

@@ -6,6 +6,9 @@ Acoustic bass drum|-       -
 Acoustic snare    |   - -   - -
 Closed hi-hat     |   -     -  
 Open hi-hat       |-  - --  - -
+Chord             |     -     -
+Fifth             |         -  
+Root              |-           
 
 @basic-jazz-pattern 2
 $

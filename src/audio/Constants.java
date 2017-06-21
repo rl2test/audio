@@ -94,6 +94,8 @@ public class Constants {
 	public static final File KEYS_FILE					= new File(DATA_DIR, "keys" + EXT_TXT);
 	/** Rhythms file. */
 	public static final File RHYTHMS_FILE				= new File(DATA_DIR, "rhythms" + EXT_TXT);
+	/** Grooves file. */
+	public static final File GROOVES_FILE				= new File(DATA_DIR, "grooves" + EXT_TXT);
 	
 	/* file filters */
 	public static final AbcFilter ABC_FILTER			= new AbcFilter();
