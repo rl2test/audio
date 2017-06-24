@@ -1,30 +1,28 @@
 package audio.chords.gui;
 
-import static audio.Constants.ACOUSTIC_BASS;
 import static audio.Constants.C;
 import static audio.Constants.FONT;
+import static audio.Constants.GROOVES_FILE;
 import static audio.Constants.NL;
-import static audio.Constants.NYLON_STRING_GUITAR;
 import static audio.Constants.PIPE;
 import static audio.Constants.PIPE_DELIM;
-import static audio.Constants.GROOVES_FILE;
 import static audio.Constants.TRANSPOSE_KEYS;
 import static audio.Constants.TRANSPOSE_KEY_INTERVALS;
-import static audio.Constants.W;
 import static audio.Constants.V;
+import static audio.Constants.W;
 
-
-import java.awt.*;
-import java.awt.event.*;
-
-import javax.swing.*;
-
-import org.apache.log4j.Logger;
-
-import audio.Util;
-
-import javax.sound.midi.*;
-
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -32,22 +30,38 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.sound.midi.MetaEventListener;
+import javax.sound.midi.MetaMessage;
+import javax.sound.midi.MidiEvent;
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.Sequence;
+import javax.sound.midi.Sequencer;
+import javax.sound.midi.ShortMessage;
+import javax.sound.midi.Track;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
+import org.apache.log4j.Logger;
+
+import audio.Util;
+
 @SuppressWarnings({ "serial" })
 public class GroovePanel extends AudioPanel implements MetaEventListener {
-	/** The log. */
-	final Logger log 	= Logger.getLogger(getClass());
-	final int PROGRAM 	= 192;
-	final int NOTEON 	= 144;
-	final int NOTEOFF 	= 128;
-	final int CHANNEL 	= 9;
-	final int BPM 		= 120;
-	int bpm 			= BPM;
-	int bpmInc 			= bpm;
+	final Logger log 								= Logger.getLogger(getClass());
+	final int PROGRAM 								= 192;
+	final int NOTE_ON 								= 144;
+	final int NOTE_OFF 								= 128;
+	final int BPM 									= 120;
+	int bpm 										= BPM;
+	int bpmInc 										= bpm; // init
 	Sequencer sequencer;
 	Sequence sequence;
 	Track track;
-	final JComboBox<String> comboBox	= new JComboBox<String>();
-	final String instrumentNames[]		= { 
+	final JComboBox<String> comboBox				= new JComboBox<String>();
+	final String instrumentNames[]					= { 
     		"Acoustic bass drum", 
     		"_Bass drum 1", // same as Acoustic bass drum
     		"Side stick", 
@@ -75,20 +89,25 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 	List<Rhythm> rhythms 							= new ArrayList<Rhythm>();
 	String[] rhythmNames;
 	Rhythm rhythm;
-	boolean accelerate 								= false;
-	int inc 										= 1;
+	boolean accelerate 								= false; // default
+	int inc 										= 1; // default
 	final int defaultLoopCount 						= 1000;
-	int loopCount = defaultLoopCount;
-	
-	final String[] chordTypes 	= {"maj7", "m7", "7"}; 
-	final int CHANNEL_BASS 		= 0;
-	final int CHANNEL_CHORD	 	= 1;
-	final int BASS_VOL 			= V[8];
-	final int CHORD_VOL 		= V[3];
-	String chord 				= "C";
-	String chordType 			= "7";
-	final int baseNoteValue 	= 36;
-	final Map<String, Integer> noteToValue = new HashMap<String, Integer>(); 
+	int loopCount 									= defaultLoopCount; // default
+	final Map<String, Integer[]> chordMap 			= new HashMap<String, Integer[]>();
+	final Map<String, Integer> noteToValueMap 		= new HashMap<String, Integer>(); 
+	final String[] chordTypes 						= {"maj7", "m7", "7"};
+	final Integer[] CHORD_7 						= {4, 7, 10};
+	final Integer[] CHORD_MINOR_7 					= {3, 7, 10};
+	final Integer[] CHORD_MAJOR_7 					= {4, 7, 11};
+	final int CHANNEL_BASS 							= 0; // TODO set pan
+	final int CHANNEL_CHRD	 						= 1; // TODO set pan
+	final int CHANNEL_PERC 							= 9;
+	final int VOL_BASS 								= V[8];
+	final int VOL_CHRD 								= V[6];
+	final int VOL_PERC 								= V[5];
+	String chord 									= "C"; // default
+	String chordType 								= "7"; // default
+	final int baseNoteValue 						= 36;
 	
 	public GroovePanel(Rectangle r) throws Exception {
     	super(null);
@@ -107,11 +126,18 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 		});
 		frame.setVisible(true);
 		
+		// init keys
 		int i = 0;
 		for (String note: TRANSPOSE_KEYS) {
-			noteToValue.put(note, TRANSPOSE_KEY_INTERVALS[i]);
+			noteToValueMap.put(note, TRANSPOSE_KEY_INTERVALS[i]);
 			i++;
 		}
+		
+		// init chordMap
+		chordMap.put("7", CHORD_7);
+		chordMap.put("m7", CHORD_MINOR_7);
+		chordMap.put("maj7", CHORD_MAJOR_7);
+		
 		
 		loadRhythms();
 		initUi();
@@ -349,81 +375,49 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 	
 	private void startSequencer() {
 		try {
-			bpmInc = bpm;
+			bpmInc = bpm; // reset
             sequence = new Sequence(Sequence.PPQ, rhythm.subBeats);
             track = sequence.createTrack();
             
-            int root = baseNoteValue + noteToValue.get(chord);
+            int root = baseNoteValue + noteToValueMap.get(chord);
             log.debug("root=" + root);
             int fifth = root + 7;
             int octave = root + 12;
             
             log.debug("creating track for " + rhythm.name);
-            createEvent(PROGRAM, CHANNEL, 1, 0, 0);
-            /*
-            //bass
-        	MidiChannel bassChannel = ac.midiChannels[CHANNEL_BASS];
-        	bassChannel.controlChange(10, V[0]); // set pan
-        	bassChannel.programChange(ACOUSTIC_BASS);
-
-        	//chord
-        	MidiChannel chordChannel = ac.midiChannels[CHANNEL_CHORD];
-        	chordChannel.controlChange(10, V[8]); // set pan
-        	chordChannel.programChange(NYLON_STRING_GUITAR);	
-			*/
-            createEvent(PROGRAM, CHANNEL, 1, 0, 0);
+            createEvent(PROGRAM, CHANNEL_PERC, 1, 0, 0);
             
 	        for (Instrument instrument: instruments) {
 	        	if (!instrument.mute) {
      				log.debug(instrument.id + " " + instrument.name);
      				for (int i = 0, n = instrument.pulses.length; i < n; i++) {
 		     			if (instrument.pulses[i]) {
+	     					int len = rhythm.subBeats;
+	     					if (i + len > n) {
+	     						len = n - i;
+	     					}
 		     				if (instrument.name == "Root") {
-		     					createEvent(NOTEON, CHANNEL_BASS, root, V[8], i);
-		     					createEvent(NOTEOFF, CHANNEL_BASS, root, 0, i + rhythm.subBeats);
+		     					createNote(CHANNEL_BASS, root, VOL_BASS, i, len);
 		     				} else if (instrument.name == "Fifth") {
-		     					createEvent(NOTEON, CHANNEL_BASS, fifth, V[8], i);
-		     					createEvent(NOTEOFF, CHANNEL_BASS, fifth, 0, i + rhythm.subBeats);
+		     					createNote(CHANNEL_BASS, fifth, VOL_BASS, i, len);
 		     				} else if (instrument.name == "Chord") {
-		     					// 4,7,10
-		     					int numPulses = rhythm.subBeats;
-		     					if (i + numPulses > n) numPulses = n - i;
-		     					if (chordType.equals("7")) {
-		     						createEvent(NOTEON, CHANNEL_CHORD, octave + 4, V[8], i);
-		     						createEvent(NOTEON, CHANNEL_CHORD, octave + 7, V[8], i);
-		     						createEvent(NOTEON, CHANNEL_CHORD, octave + 10, V[8], i);
-		     						createEvent(NOTEOFF, CHANNEL_CHORD, octave + 4, 0, i + numPulses);
-		     						createEvent(NOTEOFF, CHANNEL_CHORD, octave + 7, 0, i + numPulses);
-		     						createEvent(NOTEOFF, CHANNEL_CHORD, octave + 10, 0, i + numPulses);
-		     					} else if (chordType.equals("m7")) {
-		     						createEvent(NOTEON, CHANNEL_CHORD, octave + 3, V[8], i);
-		     						createEvent(NOTEON, CHANNEL_CHORD, octave + 7, V[8], i);
-		     						createEvent(NOTEON, CHANNEL_CHORD, octave + 10, V[8], i);
-		     						createEvent(NOTEOFF, CHANNEL_CHORD, octave + 3, 0, i + numPulses);
-		     						createEvent(NOTEOFF, CHANNEL_CHORD, octave + 7, 0, i + numPulses);
-		     						createEvent(NOTEOFF, CHANNEL_CHORD, octave + 10, 0, i + numPulses);
-		     					} else if (chordType.equals("maj7")) {
-		     						createEvent(NOTEON, CHANNEL_CHORD, octave + 4, V[8], i);
-		     						createEvent(NOTEON, CHANNEL_CHORD, octave + 7, V[8], i);
-		     						createEvent(NOTEON, CHANNEL_CHORD, octave + 11, V[8], i);
-		     						createEvent(NOTEOFF, CHANNEL_CHORD, octave + 4, 0, i + numPulses);
-		     						createEvent(NOTEOFF, CHANNEL_CHORD, octave + 7, 0, i + numPulses);
-		     						createEvent(NOTEOFF, CHANNEL_CHORD, octave + 11, 0, i + numPulses);
+		     					Integer[] arr = chordMap.get(chordType);
+		     					for(int a: arr) {
+		     						createNote(CHANNEL_CHRD, octave + a, VOL_CHRD, i, len);
 		     					}
-		     				} else {
-			     				createEvent(NOTEON, CHANNEL, instrument.id, V[5], i);
-			     				createEvent(NOTEOFF, CHANNEL, instrument.id, 0, i + 1);
+		     				} else { // perc - len is 1
+		     					createNote(CHANNEL_PERC, instrument.id, VOL_PERC, i, 1);
 		     				} 
 		     			}
 		        	}     
 	        	}	
 	        }
 	        // so we always have a track of numPulses length.
-	        createEvent(PROGRAM, CHANNEL, 1, 0, rhythm.getNumPulses());
+	        createEvent(PROGRAM, CHANNEL_PERC, 1, 0, rhythm.getNumPulses());
 
 	        // set and start the sequencer.
             sequencer.setSequence(sequence);
-            sequencer.setLoopCount(loopCount - 1);
+            sequencer.setLoopCount(loopCount - 1); // note: first time through is not counted as being a loop
             sequencer.setTempoFactor((float) bpm / (float) BPM);
             log.debug("sequencer.getTempoFactor()=" + sequencer.getTempoFactor());
             sequencer.start();
@@ -431,6 +425,13 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 			log.error(e);
 	    }
     }
+	
+	// create note
+    private void createNote(int chan, int note, int vol, long tick, int len) {
+    	createEvent(NOTE_ON, chan, note, vol, tick);
+		createEvent(NOTE_OFF, chan, note, 0, tick + len);
+    }
+	
 	
     private void createEvent(int type, int chan, int id, int vol, long tick) {
         ShortMessage message = new ShortMessage();
@@ -449,6 +450,7 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
         if (message.getType() == 47) {  // 47 is end of track
         	if (accelerate) {
         		bpmInc += inc;
+        		sequencer.setLoopCount(loopCount);
         		sequencer.setTempoFactor((float) bpmInc / (float) BPM);
             	log.debug("sequencer.getTempoFactor()=" + sequencer.getTempoFactor());
             	labels.get("bpmValue").setText("" + bpmInc);
@@ -590,6 +592,7 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
             		startSequencer();
 					playing = true;
 					l.setText("Stop");
+					labels.get("bpmValue").setText("" + bpm); // reset
             	}	
             } else if (name.equals("save")) {
             	setRhythmInstruments();
