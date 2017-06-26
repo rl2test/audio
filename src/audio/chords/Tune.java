@@ -44,11 +44,10 @@ import audio.Util;
 public class Tune {
 	/** The log. */
 	private Logger log 				= Logger.getLogger(getClass());
-	//public String genre				= "";
 	/** The text of this tune. */
 	public String text 				= "";
 	public String errorMsg 			= "";
-	public int time 				= 0;
+	public int time 				= 0; // beats per bar
 	public int type					= 0;
 	public int beginTempo			= 0;
 	public int endTempo				= 0;

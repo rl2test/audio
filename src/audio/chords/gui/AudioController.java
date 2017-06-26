@@ -84,9 +84,6 @@ public class AudioController extends JPanel {
     }
     
     /** Private constructor */
-    /**
-     * 
-     */
     private AudioController(int w, int h) throws Exception {
     	this.setBackground(Color.black);
     	this.w = w;

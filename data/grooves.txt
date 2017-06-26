@@ -4,8 +4,8 @@ $http://www.freedrumlessons.com/drum-lessons/basic-jazz-pattern.php
 #                 |1--2--3--4--
 Acoustic bass drum|-       -   
 Acoustic snare    |   - -   - -
-Closed hi-hat     |   -     -  
-Open hi-hat       |-  - --  - -
+Closed hi-hat     |-  -  -  -  
+Open hi-hat       |     -     -
 Chord             |     -     -
 Fifth             |         -  
 Root              |-           

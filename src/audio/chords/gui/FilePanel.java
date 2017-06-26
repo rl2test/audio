@@ -38,7 +38,7 @@ public class FilePanel extends AudioPanel {
 	private static FilePanel panel 				= null;
 	private final Listener listener 			= new Listener();
 	/** The player. */
-	public TunePlayer player 					= null;
+	public TunePlayer2 player 					= null;
 	/** Genre box. */
 	private final JComboBox<String> genreBox 	= new JComboBox<String>();
 	/** Folder box. */
@@ -318,7 +318,7 @@ public class FilePanel extends AudioPanel {
     				l.setText("Play");
             	} else {
 					String text = ac.textPanel.textArea.getText();
-					player = new TunePlayer(text, ac);
+					player = new TunePlayer2(text, ac);
 					player.start();
 					playing = true;
 					l.setText("Stop");

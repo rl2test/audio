@@ -50,18 +50,17 @@ import audio.Util;
 
 @SuppressWarnings({ "serial" })
 public class GroovePanel extends AudioPanel implements MetaEventListener {
-	final Logger log 								= Logger.getLogger(getClass());
-	final int PROGRAM 								= 192;
-	final int NOTE_ON 								= 144;
-	final int NOTE_OFF 								= 128;
-	final int BPM 									= 120;
-	int bpm 										= BPM;
-	int bpmInc 										= bpm; // init
+	final Logger log 							= Logger.getLogger(getClass());
+	final int CONTROL 							= 176;
+	final int PROGRAM 							= 192;
+	final int BPM 								= 120;
+	int bpm 									= BPM;
+	int bpmInc 									= bpm; // init
 	Sequencer sequencer;
 	Sequence sequence;
 	Track track;
-	final JComboBox<String> comboBox				= new JComboBox<String>();
-	final String instrumentNames[]					= { 
+	final JComboBox<String> comboBox			= new JComboBox<String>();
+	final String voiceNames[]					= { 
     		"Acoustic bass drum", 
     		"_Bass drum 1", // same as Acoustic bass drum
     		"Side stick", 
@@ -80,34 +79,34 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 	        "Fifth",
 	        "Root"
 	};
-	final int maxInstrumentNameLen 					= instrumentNames[0].length();
-	final List<Instrument> instruments 				= new ArrayList<Instrument>();
-	final Map<String, Instrument> instrumentMap 	= new HashMap<String, Instrument>();
-	final Map<Integer, Instrument> instrumentIdMap 	= new HashMap<Integer, Instrument>();
-	boolean playing 								= false;
-	final Listener listener 						= new Listener();
-	List<Rhythm> rhythms 							= new ArrayList<Rhythm>();
+	final int maxVoiveNameLen 					= voiceNames[0].length();
+	final List<Voice> voices 					= new ArrayList<Voice>();
+	final Map<String, Voice> voiceMap 			= new HashMap<String, Voice>();
+	final Map<Integer, Voice> voiceIdMap 		= new HashMap<Integer, Voice>();
+	boolean playing 							= false;
+	final Listener listener 					= new Listener();
+	List<Rhythm> rhythms 						= new ArrayList<Rhythm>();
 	String[] rhythmNames;
 	Rhythm rhythm;
-	boolean accelerate 								= false; // default
-	int inc 										= 1; // default
-	final int defaultLoopCount 						= 1000;
-	int loopCount 									= defaultLoopCount; // default
-	final Map<String, Integer[]> chordMap 			= new HashMap<String, Integer[]>();
-	final Map<String, Integer> noteToValueMap 		= new HashMap<String, Integer>(); 
-	final String[] chordTypes 						= {"maj7", "m7", "7"};
-	final Integer[] CHORD_7 						= {4, 7, 10};
-	final Integer[] CHORD_MINOR_7 					= {3, 7, 10};
-	final Integer[] CHORD_MAJOR_7 					= {4, 7, 11};
-	final int CHANNEL_BASS 							= 0; // TODO set pan
-	final int CHANNEL_CHRD	 						= 1; // TODO set pan
-	final int CHANNEL_PERC 							= 9;
-	final int VOL_BASS 								= V[8];
-	final int VOL_CHRD 								= V[6];
-	final int VOL_PERC 								= V[5];
-	String chord 									= "C"; // default
-	String chordType 								= "7"; // default
-	final int baseNoteValue 						= 36;
+	boolean accelerate 							= false; // default
+	int inc 									= 1; // default
+	final int defaultLoopCount 					= 1000;
+	int loopCount 								= defaultLoopCount; // default
+	final Map<String, Integer[]> chordMap 		= new HashMap<String, Integer[]>();
+	final Map<String, Integer> noteToValueMap	= new HashMap<String, Integer>(); 
+	final String[] chordTypes 					= {"maj7", "m7", "7"};
+	final Integer[] CHORD_7 					= {4, 7, 10};
+	final Integer[] CHORD_MINOR_7 				= {3, 7, 10};
+	final Integer[] CHORD_MAJOR_7 				= {4, 7, 11};
+	final int CHANNEL_BASS 						= 0; // TODO set pan
+	final int CHANNEL_CHRD	 					= 1; // TODO set pan
+	final int CHANNEL_PERC 						= 9;
+	final int VOL_BASS 							= V[8];
+	final int VOL_CHRD 							= V[6];
+	final int VOL_PERC 							= V[5];
+	String chord 								= "C"; // default
+	String chordType 							= "7"; // default
+	final int baseNoteValue						= 36;
 	
 	public GroovePanel(Rectangle r) throws Exception {
     	super(null);
@@ -137,7 +136,6 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 		chordMap.put("7", CHORD_7);
 		chordMap.put("m7", CHORD_MINOR_7);
 		chordMap.put("maj7", CHORD_MAJOR_7);
-		
 		
 		loadRhythms();
 		initUi();
@@ -272,16 +270,16 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 	    add(getLabel("maj7", "t-maj7", C[12], C[0], x, y, w, h, listener)); x += w + 1;
 	    set("t-7");
 
-     	// instrument section ==================================================================
+     	// voice section ==================================================================
      	
-		// create instruments
+		// create voices
         int id = 35;
-     	for (String instrumentName: instrumentNames) {
-     		if (!instrumentName.startsWith("_")) {
-	     		Instrument instrument = new Instrument(instrumentName, id);
-	     		instruments.add(instrument);
-	     		instrumentMap.put(instrumentName, instrument);
-	     		instrumentIdMap.put(id, instrument);
+     	for (String voiceName: voiceNames) {
+     		if (!voiceName.startsWith("_")) {
+	     		Voice voice = new Voice(voiceName, id);
+	     		voices.add(voice);
+	     		voiceMap.put(voiceName, voice);
+	     		voiceIdMap.put(id, voice);
      		}	
 	     	id++;
      	}
@@ -289,12 +287,12 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 		x = 0;
 		y += h + 1;
 
-		// instrument names
+		// voice names
 		w = W[8];
-		add(getLabel("Instrument", "instrument", C[12], C[0], x, y, w, h, null));
+		add(getLabel("Voice", "voice", C[12], C[0], x, y, w, h, null));
 		y += h + 1;
-     	for (Instrument instrument: instruments) {
-			add(getLabel(instrument.id + " " + instrument.name, "i-" + instrument.id, C[12], C[0], x, y, w, h, null));
+     	for (Voice voice: voices) {
+			add(getLabel(voice.id + " " + voice.name, "v-" + voice.id, C[12], C[0], x, y, w, h, null));
 			y += h + 1;
 		}
 
@@ -304,8 +302,8 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
      	w = W[1];
 		add(getLabel("x", "", C[12], C[0], x, y, w, h, null));
 		y += h + 1;
-     	for (Instrument instrument: instruments) {
-			add(getLabel("", "x-" + instrument.id, C[12], C[0], x, y, w, h, listener));
+     	for (Voice voice: voices) {
+			add(getLabel("", "x-" + voice.id, C[12], C[0], x, y, w, h, listener));
 			y += h + 1;
 		}
      	
@@ -342,30 +340,30 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 
         // build pulses and reset x
 		y += h + 1;
-		for (Instrument instrument: instruments) {
-			instrument.pulses = new boolean[rhythm.getNumPulses()];
+		for (Voice voice: voices) {
+			voice.pulses = new boolean[rhythm.getNumPulses()];
 			x = W[8] + W[1] + 2;
 			for (int i = 0, n = rhythm.getNumPulses(); i < n; i++) {
-				add(getLabel("",  "p-" + instrument.id + "-" + i, C[12], C[0], x, y, w, h, listener));
+				add(getLabel("",  "p-" + voice.id + "-" + i, C[12], C[0], x, y, w, h, listener));
 				x += w + 1;
 			}
 			y += h + 1;
 			
-			unset("x-" + instrument.id);
+			unset("x-" + voice.id);
 		}
 		
 		// set pulses
-     	for (String instr: rhythm.instruments) {
-     		String[] arr = instr.split(PIPE_DELIM);
-			String instrName = arr[0].trim();
-     		Instrument instrument = instrumentMap.get(instrName);
+     	for (String voiceStr: rhythm.voiceStrs) {
+     		String[] arr = voiceStr.split(PIPE_DELIM);
+			String voiceName = arr[0].trim();
+     		Voice voice = voiceMap.get(voiceName);
 			String pulseStr = arr[1]; 
 			for (int i = 0, n = pulseStr.length(); i < n; i++) {
 				String s = pulseStr.substring(i, i + 1);
 				if (s.equals("-")) {
-					instrument.pulses[i] = true;
-     				log.debug("p-" + instrument.id + "-" + i);
-     				set("p-" + instrument.id + "-" + i);
+					voice.pulses[i] = true;
+     				log.debug("p-" + voice.id + "-" + i);
+     				set("p-" + voice.id + "-" + i);
 				}
 			}
      	}
@@ -386,34 +384,38 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
             
             log.debug("creating track for " + rhythm.name);
             createEvent(PROGRAM, CHANNEL_PERC, 1, 0, 0);
+	        // so we always have a track of numPulses length.
+	        createEvent(PROGRAM, CHANNEL_PERC, 1, 0, rhythm.getNumPulses());
+	        
+	        createEvent(CONTROL, CHANNEL_BASS, 10, V[0], 0); // set pan
+	        createEvent(CONTROL, CHANNEL_CHRD, 10, V[8], 0); // set pan
+	        createEvent(CONTROL, CHANNEL_PERC, 10, V[4], 0); // set pan
             
-	        for (Instrument instrument: instruments) {
-	        	if (!instrument.mute) {
-     				log.debug(instrument.id + " " + instrument.name);
-     				for (int i = 0, n = instrument.pulses.length; i < n; i++) {
-		     			if (instrument.pulses[i]) {
+	        for (Voice voice: voices) {
+	        	if (!voice.mute) {
+     				log.debug(voice.id + " " + voice.name);
+     				for (int i = 0, n = voice.pulses.length; i < n; i++) {
+		     			if (voice.pulses[i]) {
 	     					int len = rhythm.subBeats;
 	     					if (i + len > n) {
 	     						len = n - i;
 	     					}
-		     				if (instrument.name == "Root") {
+		     				if (voice.name == "Root") {
 		     					createNote(CHANNEL_BASS, root, VOL_BASS, i, len);
-		     				} else if (instrument.name == "Fifth") {
+		     				} else if (voice.name == "Fifth") {
 		     					createNote(CHANNEL_BASS, fifth, VOL_BASS, i, len);
-		     				} else if (instrument.name == "Chord") {
+		     				} else if (voice.name == "Chord") {
 		     					Integer[] arr = chordMap.get(chordType);
 		     					for(int a: arr) {
 		     						createNote(CHANNEL_CHRD, octave + a, VOL_CHRD, i, len);
 		     					}
 		     				} else { // perc - len is 1
-		     					createNote(CHANNEL_PERC, instrument.id, VOL_PERC, i, 1);
+		     					createNote(CHANNEL_PERC, voice.id, VOL_PERC, i, 1);
 		     				} 
 		     			}
 		        	}     
 	        	}	
 	        }
-	        // so we always have a track of numPulses length.
-	        createEvent(PROGRAM, CHANNEL_PERC, 1, 0, rhythm.getNumPulses());
 
 	        // set and start the sequencer.
             sequencer.setSequence(sequence);
@@ -428,8 +430,8 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 	
 	// create note
     private void createNote(int chan, int note, int vol, long tick, int len) {
-    	createEvent(NOTE_ON, chan, note, vol, tick);
-		createEvent(NOTE_OFF, chan, note, 0, tick + len);
+    	createEvent(ShortMessage.NOTE_ON, chan, note, vol, tick);
+		createEvent(ShortMessage.NOTE_OFF, chan, note, 0, tick + len);
     }
 	
 	
@@ -443,7 +445,6 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 			log.error(e);
 	    }
     }
-
 
     public void meta(MetaMessage message) {
     	log.debug(message.getType());
@@ -493,7 +494,7 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 					r.beats = Integer.parseInt(arr[0].substring(1).trim());
 					r.subBeats = Integer.parseInt(arr[1].trim());
 				} else {
-					r.instruments.add(line);
+					r.voiceStrs.add(line);
 				}				
 			}
 		}
@@ -524,29 +525,29 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
     
     public String getSpaces(String name) {
 		String s = "";
-		for (int i = 0, n = maxInstrumentNameLen - name.length(); i < n; i++ ) {
+		for (int i = 0, n = maxVoiveNameLen - name.length(); i < n; i++ ) {
 			s += " ";
 		}
 		return s;
     }
     
-    public void setRhythmInstruments() {
-    	rhythm.instruments.clear();
-    	for (Instrument instrument: instruments) {
+    public void setRhythmVoiceStrs() {
+    	rhythm.voiceStrs.clear();
+    	for (Voice voice: voices) {
     		boolean save = false;
-    		for (boolean pulse: instrument.pulses) {
+    		for (boolean pulse: voice.pulses) {
     			if (pulse) {
     				save = true;
     				break;
     			}
     		}
     		if (save) {
-    			String instr = instrument.name + getSpaces(instrument.name) + PIPE;
-    			for (boolean pulse: instrument.pulses) {
-    				instr += (pulse) ? "-" : " ";
+    			String voiceStr = voice.name + getSpaces(voice.name) + PIPE;
+    			for (boolean pulse: voice.pulses) {
+    				voiceStr += (pulse) ? "-" : " ";
         		}
-    			instr.trim();
-    			rhythm.instruments.add(instr);
+    			voiceStr.trim();
+    			rhythm.voiceStrs.add(voiceStr);
     		}
     	}
     }
@@ -595,7 +596,7 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 					labels.get("bpmValue").setText("" + bpm); // reset
             	}	
             } else if (name.equals("save")) {
-            	setRhythmInstruments();
+            	setRhythmVoiceStrs();
             	saveRhythms(false); // no need to refresh ui
             	labels.get(name).setForeground(Color.white);
             } else if (name.equals("saveAs")) {
@@ -609,7 +610,7 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 						rhythm.name);
 			    if ((s != null) && (s.length() > 0) && !s.equals(rhythm.name)) {
 			    	log.debug(name + ": " + s);
-			    	setRhythmInstruments();
+			    	setRhythmVoiceStrs();
 			    	Rhythm r = rhythm.clone();
 			    	r.name = s;
 			    	rhythms.add(r);
@@ -617,11 +618,11 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 			    	saveRhythms(true); // refresh ui
 			    }
             } else if (name.equals("clear")) {
-            	for (Instrument instrument: instruments) {
-            		int id = instrument.id;
-            		for (int i = 0; i < instrument.pulses.length; i++) {
-            			if (instrument.pulses[i]) {
-                			instrument.pulses[i] = false;
+            	for (Voice voice: voices) {
+            		int id = voice.id;
+            		for (int i = 0; i < voice.pulses.length; i++) {
+            			if (voice.pulses[i]) {
+            				voice.pulses[i] = false;
                 			unset(labels.get("p-" + id + "-" + i));
             			}
             		}
@@ -651,13 +652,13 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
             	if (!playing) {
             		String[] arr = name.split("-");
             		int id = Integer.parseInt(arr[1]);
-            		Instrument instrument = instrumentIdMap.get(id);
-            		if (instrument.mute) {
+            		Voice voice = voiceIdMap.get(id);
+            		if (voice.mute) {
             			l.setText("");
-            			instrument.mute = false;
+            			voice.mute = false;
             		} else {
             			l.setText("x");	
-            			instrument.mute = true;            			
+            			voice.mute = true;            			
             		}
             	}
             } else if (name.startsWith("p-")) { // pulse
@@ -665,13 +666,13 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
             		String[] arr = name.split("-");
             		int id = Integer.parseInt(arr[1]);
             		int pulse = Integer.parseInt(arr[2]);
-            		Instrument instrument = instrumentIdMap.get(id);
-            		if (instrument.pulses[pulse]) {
+            		Voice voice = voiceIdMap.get(id);
+            		if (voice.pulses[pulse]) {
             			unset(l);	
-            			instrument.pulses[pulse] = false;
+            			voice.pulses[pulse] = false;
             		} else {
             			set(l);	
-            			instrument.pulses[pulse] = true;            			
+            			voice.pulses[pulse] = true;            			
             		}
             		labels.get("save").setForeground(Color.red); // flag 'save' btn
             	}
@@ -712,67 +713,16 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 	    }
 	}   
 	
+
     /**
-     * Rhythm data
+     * Voice data
      */
-	class Rhythm {
-    	String name = "";
-    	int beats = 0;
-    	int subBeats = 0;
-    	String src = "";
-    	List<String> instruments = new ArrayList<String>();
-    	
-    	public Rhythm clone() {
-    		Rhythm r = new Rhythm();
-    		r.beats = beats;
-    		r.subBeats = subBeats;
-	    	for (String instrument: rhythm.instruments) {
-	    		r.instruments.add(instrument);
-	    	}
-    		return r;
-    	}
-    	public int getNumPulses() {
-    		return beats * subBeats;
-    	}
-    	
-		/*
-			@ basic-jazz-pattern
-			$ http://www.freedrumlessons.com/drum-lessons/basic-jazz-pattern.php
-			% 4|3
-			#                 |1--2--3--4--
-			Acoustic bass drum|-       -
-			Acoustic snare    |   - -   - -
-			Pedal hi-hat      |   -     -
-			Open hi-hat       |-  - --  - -
-		*/
-    	public String toString() {
-    		String s = "@" + name + NL;
-    		s += "$" + src + NL;
-    		s += "% " + beats + PIPE + subBeats + NL;
-    		s += "#" + getSpaces("#") + PIPE;
-    		for (int i = 0; i < beats; i++) {
-    			s += (i + 1);
-    			for (int j = 1; j < subBeats; j++) {
-    				s += "-";
-    			}
-    		}
-    		s += NL;
-    		for (String instrument: instruments) {
-    			s += instrument + NL;	
-    		}
-    		return s;
-    	}
-    }
- 
-    /**
-     * Instrument data
-     */
-    class Instrument {
+    class Voice {
         String name; 
         int id;
         boolean mute = false;
         boolean[] pulses = null;
-        public Instrument(String name, int id) {
+        public Voice(String name, int id) {
             this.name = name;
             this.id = id;
         }
