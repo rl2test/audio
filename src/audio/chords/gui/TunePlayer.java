@@ -1,33 +1,54 @@
 package audio.chords.gui;
-import static audio.Constants.ACOUSTIC_BASS;
-import static audio.Constants.NYLON_STRING_GUITAR;
 import static audio.Constants.OCTAVE;
-import static audio.Constants.PATTERNS;
-import static audio.Constants.PATTERN_STRS;
 import static audio.Constants.TRANSPOSE_KEYS;
 import static audio.Constants.V;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-import javax.sound.midi.MidiChannel;
+import javax.sound.midi.MetaEventListener;
+import javax.sound.midi.MetaMessage;
+import javax.sound.midi.MidiEvent;
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.Sequence;
+import javax.sound.midi.Sequencer;
+import javax.sound.midi.ShortMessage;
+import javax.sound.midi.Track;
 
 import org.apache.log4j.Logger;
 
-import audio.MidiNote;
 import audio.chords.Bar;
 import audio.chords.Chord;
 import audio.chords.Tune;
 
-public class TunePlayer extends Thread { 
-	/** The log. */
-	protected Logger log 					= Logger.getLogger(this.getClass());
-	protected boolean runFlag 				= true;
-	protected List<MidiNote> midiNotes		= new ArrayList<MidiNote>();
-	protected List<MidiNote> endMidiNotes	= new ArrayList<MidiNote>();
-	/** The tune text. */
-	private String text						= null;
-	private AudioController ac				= null;
+public class TunePlayer implements MetaEventListener { 
+	final Logger log 					= Logger.getLogger(getClass());
+	final int CONTROL 					= 176;
+	final int PROGRAM 					= 192;
+	final int CHANNEL_BASS 				= 0;
+	final int CHANNEL_CHRD	 			= 1;
+	final int CHANNEL_PERC 				= 9;
+	final int VOL_BASS 					= V[8];
+	final int VOL_CHRD 					= V[6];
+	final int VOL_PERC 					= V[5];
+	final int defaultTempo 				= 120; // default beatsPerMinute
+	final int defaultLoopCount 			= 1000;
+	final Map<String, Integer> percMap	= new HashMap<String, Integer>();
+
+	String text							= null; // tune text
+	AudioController ac					= null;
+	Sequencer sequencer;
+	Sequence sequence;
+	Track track;
+	Groove groove;
+	TimePanel timePanel;
+	boolean playing 					= false;
+	int loopCount 						= defaultLoopCount; // default
+	int tempo 							= 0;
+	boolean accelerate 					= false; // default
+	int beginTempo						= 0;
+	int endTempo 						= 0;
+	int increment 						= 1; // default	
 
 	/**
 	 * Called from playButton.
@@ -42,48 +63,34 @@ public class TunePlayer extends Thread {
 	public TunePlayer(String text, AudioController ac) {
 		this.text = text;
 		this.ac = ac;
+		timePanel = ac.timePanel;
+		
+		percMap.put("Acoustic bass drum",	35);
+	    percMap.put("Side stick", 			37);
+	    percMap.put("Acoustic snare", 		38);
+		percMap.put("Low floor tom", 		41);
+		percMap.put("Closed hi-hat", 		42);
+		percMap.put("High floor tom", 		43);
+	    percMap.put("Low tom", 				45);
+	    percMap.put("Open hi-hat", 			46);
+	    percMap.put("Low-mid tom", 			47);
+	    percMap.put("Hi-mid tom", 			48);
+
+		openSequencer();
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Thread#run()
-	 */
-	public void run() {
+	public void start() {
 		try {
-			// channel definitions
-			final int CHANNEL_BASS 	= 0;
-			final int CHANNEL_CHORD = 1;
-
-			final int BASS_VOL 		= V[8];
-			final int CHORD_VOL 	= V[3];
-			
-			//bass
-			MidiChannel bassChannel = ac.midiChannels[CHANNEL_BASS];
-			bassChannel.controlChange(10, V[0]); // set pan
-			bassChannel.programChange(ACOUSTIC_BASS);
-
-			//chord
-			MidiChannel chordChannel = ac.midiChannels[CHANNEL_CHORD];
-			chordChannel.controlChange(10, V[8]); // set pan
-			chordChannel.programChange(NYLON_STRING_GUITAR);	
-
 			String transposeTo = (ac.keyPanel.selectedKeyIndex != -1) ? TRANSPOSE_KEYS[ac.keyPanel.selectedKeyIndex] : "";
 			log.debug("transposeTo=" + transposeTo);
-
-			TimePanel timePanel =  ac.timePanel;
+	
 			log.debug("timePanel: set=" + timePanel.set + ", beginTempo=" + timePanel.beginTempo);
-
+	
 			Tune tune = new Tune(text, transposeTo); 
-			int time		= (timePanel.set) ? timePanel.time : tune.time;
-			int type		= (timePanel.set) ? timePanel.type : tune.type;
-			int beginTempo	= (timePanel.set) ? timePanel.beginTempo : tune.beginTempo;
-			int endTempo 	= (timePanel.set) ? timePanel.endTempo : tune.endTempo;
-			int increment 	= (timePanel.set) ? timePanel.increment : tune.increment;	
-
-			int patternKey = ac.getPatternKey(time, type);
-			Integer[] pattern = PATTERNS.get(patternKey);
-			log.debug("patternStr=" + PATTERN_STRS.get(patternKey));
-			ac.setMsg(PATTERN_STRS.get(patternKey));
-			
+			beginTempo	= (timePanel.set) ? timePanel.beginTempo : tune.beginTempo;
+			endTempo 	= (timePanel.set) ? timePanel.endTempo : tune.endTempo;
+			increment 	= (timePanel.set) ? timePanel.increment : tune.increment;	
+	
 			if (tune.transposed) {
 				log.debug("transposed from " + tune.transposeFrom + " to " + tune.transposeTo);
 			}
@@ -93,144 +100,123 @@ public class TunePlayer extends Thread {
 				ac.displayPanel.repaint();
 			}
 			
-			int tempo = beginTempo;
+			tempo = beginTempo;
 			log.debug(tempo);
 			timePanel.setTempoValue(tempo);
 			
-			// increment feature
-			boolean doIncrement = false;
-
 			if (endTempo > beginTempo) {
-				doIncrement = true;
+				accelerate = true;
+				loopCount = 1;
 			}
 			
-			log.debug("time=" + time);
 			log.debug("beginTempo=" + beginTempo);
 			log.debug("endTempo=" + endTempo);
-			log.debug("increment=" + increment);
-			log.debug("doIncrement=" + doIncrement);
 			log.debug("tempo=" + tempo);
-			
-			// set the initial pulse length
-			int pulseLen = (int) (1000d * 60d / tempo);
-			
-			log.debug("pulseLen=" + pulseLen);
-			
-			Bar bar 		= null;
-			int pulseCount 	= 0; // init using zero as base
-			int barCount 	= 0; // init using zero as base
-			int beatCount 	= 0; // init using zero as base
-			int chordBeatCount 	= 0; // init using zero as base
-			String lastChordName = "";
-			
-			while(runFlag){
-				// handle note off events
-				endMidiNotes.clear(); 
-				for (MidiNote midiNote: midiNotes) {
-					midiNote.len--;
-					if (midiNote.len == 0) {
-						endMidiNote(midiNote);
-						endMidiNotes.add(midiNote);
-					}
-				}
-				for (MidiNote midiNote: endMidiNotes) {
-					midiNotes.remove(midiNote);
-				}
-				
-				// break out of loop
-				if (!runFlag) {
-					break;
-				}
+			log.debug("increment=" + increment);
+			log.debug("accelerate=" + accelerate);
 
-				beatCount = pulseCount % time; 
-				if (beatCount == 0) {
-					// get next bar
-					bar = tune.bars.get(barCount);
-					
-					if (ac.displayPanel != null) {
-						ac.displayPanel.updateBars(barCount);
-					}
-					
-					barCount++;
-					if (barCount == tune.bars.size()) {
-						barCount = 0; // reset to zero
-					}
-				}
+            sequence = new Sequence(Sequence.PPQ, 1); // rhythm.subBeats
+            log.debug("creating track");
+            track = sequence.createTrack();
 
-				Chord chord = bar.chords.get(beatCount);
-				Chord nextChord = (beatCount == time - 1) ? null : bar.chords.get(beatCount + 1);
-				if (!chord.name.equals(lastChordName) || beatCount == 0) {
-					chordBeatCount = 0;
-				}
-				
-				// bass
-				int patternVal = pattern[beatCount];
-				if (patternVal > 0) {
-					int chordInt = (patternVal == 1 || chordBeatCount == 0) ? chord.chordIntegers[0] : chord.chordIntegers[2];
-					int dur = (nextChord != null && chord.name.equals(nextChord.name)) ? 2 : 1;
-					beginMidiNote(new MidiNote(CHANNEL_BASS, chordInt - OCTAVE, dur, BASS_VOL));
-				}
+            createEvent(PROGRAM, CHANNEL_PERC, 0, 0, 0);
+	        createEvent(PROGRAM, CHANNEL_PERC, 0, 0, tune.bars.size() * tune.time);
 
-				// chord
-				for (int i = 1, n = chord.chordIntegers.length; i < n; i++) {
-					beginMidiNote(new MidiNote(CHANNEL_CHORD, chord.chordIntegers[i], 1, CHORD_VOL));	
-				}
+	        createEvent(CONTROL, CHANNEL_BASS, 10, V[0], 0); // set pan
+	        createEvent(CONTROL, CHANNEL_CHRD, 10, V[8], 0); // set pan
+	        createEvent(CONTROL, CHANNEL_PERC, 10, V[4], 0); // set pan
 
-				// sleep till the next pulse
-				sleep(pulseLen);
-
-				pulseCount++;
-				chordBeatCount++;
-				lastChordName = chord.name;
-				if (pulseCount == tune.bars.size() * time) {
-					// reached the end of the bars array, so reset pulseCount to 0
-					pulseCount = 0;
-
-					// check for doIncrement 
-					if (doIncrement) {
-						// increase tempo
-						if (tempo < endTempo && (tempo + increment) <= endTempo) {
-							tempo += increment;
-							timePanel.setTempoValue(tempo);
-							pulseLen = (int) (1000d * 60d / tempo);	
-						}
-					}
+            int i = 0;
+			for (Bar bar: tune.bars) {
+				for(Chord chord: bar.chords) {
+    				if (i % tune.time == 0) {
+    					createNote(CHANNEL_BASS, chord.chordIntegers[0] - OCTAVE, VOL_BASS, i, 1);
+    				} else if (i % tune.time == 2) {
+    					createNote(CHANNEL_BASS, chord.chordIntegers[2] - OCTAVE, VOL_BASS, i, 1);
+    				} else {
+    					for (int j = 1, n = chord.chordIntegers.length; j < n; j++) {
+         					createNote(CHANNEL_CHRD, chord.chordIntegers[j], VOL_CHRD, i, 1);
+         				}
+    				}
+     				//createNote(CHANNEL_PERC, instrument.id, VOL_PERC, i, 1);
+					i++;
 				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			ac.filePanel.stop("Exception thrown in TunePlayer.run(): " + e.toString());
-		}
-	}
-	
-	/**
-	 * @param midiNote
-	 */
-	private void beginMidiNote(MidiNote midiNote) {
-		midiNotes.add(midiNote);
-		ac.midiChannels[midiNote.channel].noteOn(midiNote.pitch, midiNote.vol);
-	}
-	
-	/**
-	 * @param midiNote
-	 */
-	private void endMidiNote(MidiNote midiNote) {
-		ac.midiChannels[midiNote.channel].noteOff(midiNote.pitch);
-	}
+			
+	        // set and start the sequencer.
+            sequencer.setSequence(sequence);
+            sequencer.setLoopCount(loopCount - 1); // note: first time through is not counted as being a loop
+            sequencer.setTempoFactor((float) tempo / (float) defaultTempo);
+            log.debug("sequencer.getTempoFactor()=" + sequencer.getTempoFactor());
+            
+            sequencer.start();
 
-	/**
-	 * 
-	 */
-	public void destroyPlayer() {
-		runFlag = false;
-		for (MidiNote midiNote: midiNotes) {
-			endMidiNote(midiNote);
+		} catch (Exception e) {
+			log.error(e);
+			ac.filePanel.stop("exception thrown in TunePlayer2.start(): " + e.toString());
 		}
-		midiNotes.clear();
-		endMidiNotes.clear();
+	}
 		
-		midiNotes		= null;
-		endMidiNotes	= null;
-		log 			= null;
+	// create note
+    private void createNote(int chan, int note, int vol, long tick, int len) {
+    	createEvent(ShortMessage.NOTE_ON, chan, note, vol, tick);
+		createEvent(ShortMessage.NOTE_OFF, chan, note, 0, tick + len);
+    }
+	
+	// create event
+    private void createEvent(int type, int chan, int id, int vol, long tick) {
+        ShortMessage message = new ShortMessage();
+        try {
+            message.setMessage(type, chan, id, vol);
+            MidiEvent event = new MidiEvent(message, tick);
+            track.add(event);
+		} catch (Exception e) { 
+			log.error(e);
+	    }
+    }
+
+    // required because this class implements MetaEventListener
+    public void meta(MetaMessage message) {
+    	log.debug(message.getType());
+        if (message.getType() == 47) {  // 47 is end of track
+        	if (accelerate) {
+        		tempo += increment;
+        		sequencer.setLoopCount(loopCount);
+        		sequencer.setTempoFactor((float) tempo / (float) defaultTempo);
+            	log.debug("sequencer.getTempoFactor()=" + sequencer.getTempoFactor());
+            	timePanel.setTempoValue(tempo);
+                sequencer.start();
+        	} else {
+                sequencer.stop();
+                playing = false;
+                //JLabel l = labels.get("playStop");
+                //l.setText("Play");
+                //set(l);
+        	}
+        }
+    }
+    
+    // init sequencer
+	public void openSequencer() {
+        try {
+            sequencer = MidiSystem.getSequencer();
+            sequencer.open();
+            sequencer.addMetaEventListener(this);
+        } catch (Exception e) { 
+        	log.debug(e);
+        }
+        
+    }
+
+	// close sequencer
+    public void closeSequencer() {
+        if (sequencer != null) {
+            sequencer.close();
+        }
+        sequencer = null;
+    }
+    	
+	public void destroyPlayer() {
+		closeSequencer();
 	}	
 }

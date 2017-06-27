@@ -1,7 +1,7 @@
 package audio.chords.gui;
 
-import static audio.Constants.PATTERNS;
-import static audio.Constants.PATTERN_STRS;
+//import static audio.Constants.PATTERNS;
+//import static audio.Constants.PATTERN_STRS;
 import static audio.Constants.V;
 
 import javax.sound.midi.MidiChannel;
@@ -27,19 +27,20 @@ public class MetronomePlayer extends Thread {
 	public void run() {
 		log.debug("run()");
  		
-		int time = timePanel.time,
-			type = timePanel.type,
-			beginTempo = timePanel.beginTempo,
+		//int time = timePanel.time,
+		//	type = timePanel.type,
+			int beginTempo = timePanel.beginTempo,
 			endTempo = timePanel.endTempo,
-			increment = timePanel.increment,
-			numBars = timePanel.numBars;
-		log.debug("numBars=" + numBars);
+			increment = timePanel.increment;
+			//numBars = timePanel.numBars;
+		//log.debug("numBars=" + numBars);
 
+		/*
 		// get pattern
 		int patternKey = ac.getPatternKey(time, type);
 		Integer[] pattern = PATTERNS.get(patternKey);
 		ac.setMsg(PATTERN_STRS.get(patternKey));
-		
+		*/
 		
 		// set channel
 		MidiChannel channel = ac.midiChannels[CHANNEL];
@@ -61,7 +62,7 @@ public class MetronomePlayer extends Thread {
 		long expectedWakeUpTime = 0;		
 		
 		// the pattern count, used to track the pattern
-		int patternCount = 0;
+		//int patternCount = 0;
 		// the bar count, used to track when the tempo should be incremented
 		int barCount = 1;
 		log.debug("barCount=" + barCount);
@@ -74,7 +75,8 @@ public class MetronomePlayer extends Thread {
 		MidiNote midiNote2 = new MidiNote(CHANNEL, PITCH, 1, V[8]);
 		MidiNote midiNote = null;
 		while(runFlag){
-			midiNote = (pattern[patternCount] == 0) ? midiNote1 : midiNote2;
+			//midiNote = (pattern[patternCount] == 0) ? midiNote1 : midiNote2;
+			midiNote = midiNote2;
 			
 			beginMidiNote(midiNote);
 			
@@ -89,12 +91,12 @@ public class MetronomePlayer extends Thread {
 			
 			endMidiNote(midiNote);
 
-			patternCount++;
-			if (patternCount == pattern.length) {
-				patternCount = 0;	
+			//patternCount++;
+			//if (patternCount == pattern.length) {
+			//	patternCount = 0;	
 				barCount++;
 				log.debug("barCount=" + barCount);				
-				if (barCount > numBars) {
+				//if (barCount > numBars) {
 					barCount = 1;
 					log.debug("barCount=" + barCount);
 					if (tempo < endTempo) {
@@ -103,8 +105,8 @@ public class MetronomePlayer extends Thread {
 						log.debug(tempo);	
 						timePanel.setTempoValue(tempo);
 					}
-				}
-			}
+				//}
+			//}
 
 			
 			oversleptInterval = System.currentTimeMillis() - expectedWakeUpTime;
