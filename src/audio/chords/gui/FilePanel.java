@@ -168,6 +168,7 @@ public class FilePanel extends AudioPanel {
 	 */
 	private void save(String text) {
 		Util.writeToFile(getTuneFile(), text);
+		clearUpdated();
 	} 
 
 	/**
@@ -177,6 +178,7 @@ public class FilePanel extends AudioPanel {
 	 */
 	private void saveAs(String s, String text) {
 		Util.writeToFile(getTuneFile(s), text);
+		clearUpdated();
 	} 
 
 	/**

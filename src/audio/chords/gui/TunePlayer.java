@@ -3,9 +3,6 @@ import static audio.Constants.OCTAVE;
 import static audio.Constants.TRANSPOSE_KEYS;
 import static audio.Constants.V;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.sound.midi.MetaEventListener;
 import javax.sound.midi.MetaMessage;
 import javax.sound.midi.MidiEvent;
@@ -32,8 +29,7 @@ public class TunePlayer implements MetaEventListener {
 	final int VOL_CHRD 					= V[6];
 	final int VOL_PERC 					= V[5];
 	final int defaultTempo 				= 120; // default beatsPerMinute
-	final int defaultLoopCount 			= 1000;
-	final Map<String, Integer> percMap	= new HashMap<String, Integer>();
+	final int defaultLoopCount 			= 4; // 1000
 
 	String text							= null; // tune text
 	AudioController ac					= null;
@@ -43,39 +39,18 @@ public class TunePlayer implements MetaEventListener {
 	Groove groove;
 	TimePanel timePanel;
 	boolean playing 					= false;
-	int loopCount 						= defaultLoopCount; // default
-	int tempo 							= 0;
-	boolean accelerate 					= false; // default
 	int beginTempo						= 0;
 	int endTempo 						= 0;
-	int increment 						= 1; // default	
+	int increment 						= 0; // default	
+	int tempo 							= 0;
+	int loopCount 						= defaultLoopCount; // default
 
-	/**
-	 * Called from playButton.
-	 * 
-	 * @param beginTempo
-	 * @param endTempo
-	 * @param increment
-	 * @param genre
-	 * @param tuneFile
-	 * @param filePanel
-	 */
+	 // called from play btn
 	public TunePlayer(String text, AudioController ac) {
 		this.text = text;
 		this.ac = ac;
 		timePanel = ac.timePanel;
 		
-		percMap.put("Acoustic bass drum",	35);
-	    percMap.put("Side stick", 			37);
-	    percMap.put("Acoustic snare", 		38);
-		percMap.put("Low floor tom", 		41);
-		percMap.put("Closed hi-hat", 		42);
-		percMap.put("High floor tom", 		43);
-	    percMap.put("Low tom", 				45);
-	    percMap.put("Open hi-hat", 			46);
-	    percMap.put("Low-mid tom", 			47);
-	    percMap.put("Hi-mid tom", 			48);
-
 		openSequencer();
 	}
 
@@ -101,19 +76,23 @@ public class TunePlayer implements MetaEventListener {
 			}
 			
 			tempo = beginTempo;
-			log.debug(tempo);
 			timePanel.setTempoValue(tempo);
 			
 			if (endTempo > beginTempo) {
-				accelerate = true;
 				loopCount = 1;
+				if (increment == 0) {
+					increment = 1; // set a default
+				}
+			} else {
+				increment = 0;
+				loopCount = defaultLoopCount;
 			}
 			
 			log.debug("beginTempo=" + beginTempo);
 			log.debug("endTempo=" + endTempo);
 			log.debug("tempo=" + tempo);
 			log.debug("increment=" + increment);
-			log.debug("accelerate=" + accelerate);
+			log.debug("loopCount=" + loopCount);
 
             sequence = new Sequence(Sequence.PPQ, 1); // rhythm.subBeats
             log.debug("creating track");
@@ -153,7 +132,7 @@ public class TunePlayer implements MetaEventListener {
 
 		} catch (Exception e) {
 			log.error(e);
-			ac.filePanel.stop("exception thrown in TunePlayer2.start(): " + e.toString());
+			ac.filePanel.stop("exception thrown in TunePlayer.start(): " + e);
 		}
 	}
 		
@@ -179,19 +158,23 @@ public class TunePlayer implements MetaEventListener {
     public void meta(MetaMessage message) {
     	log.debug(message.getType());
         if (message.getType() == 47) {  // 47 is end of track
-        	if (accelerate) {
-        		tempo += increment;
-        		sequencer.setLoopCount(loopCount);
-        		sequencer.setTempoFactor((float) tempo / (float) defaultTempo);
-            	log.debug("sequencer.getTempoFactor()=" + sequencer.getTempoFactor());
-            	timePanel.setTempoValue(tempo);
+        	if (increment > 0) {
+        		if ((tempo + increment > endTempo)) {
+        			increment = 0;
+        			loopCount = defaultLoopCount;
+            		sequencer.setLoopCount(loopCount);
+        		} else {
+            		tempo += increment;
+            		sequencer.setLoopCount(loopCount);
+            		sequencer.setTempoFactor((float) tempo / (float) defaultTempo);
+                	log.debug("sequencer.getTempoFactor()=" + sequencer.getTempoFactor());
+                	timePanel.setTempoValue(tempo);
+        		}
                 sequencer.start();
         	} else {
                 sequencer.stop();
                 playing = false;
-                //JLabel l = labels.get("playStop");
-                //l.setText("Play");
-                //set(l);
+                ac.filePanel.labels.get("playStop").setText("Play");
         	}
         }
     }

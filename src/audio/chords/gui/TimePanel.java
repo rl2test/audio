@@ -3,6 +3,7 @@ package audio.chords.gui;
 import static audio.Constants.C;
 import static audio.Constants.W;
 
+import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -105,6 +106,11 @@ public class TimePanel extends AudioPanel {
 	    add(getLabel("", "tempoValue", C[16], C[0], x, y, w, h, null));
 	    x += w + 1;	    
 	    
+	    // groove label
+	    w = W[3];
+	    add(getLabel("Groove", "groove", C[12], C[0], x, y, w, h, listener));
+	    x += w + 1;	   
+	    
 		set("begin" + beginTempo);
 		set("end" + endTempo);
 		set("inc" + increment);
@@ -130,9 +136,17 @@ public class TimePanel extends AudioPanel {
         		if (set) {
         			unset(l);
            	 	} else {
-           	 		set(l);
+           	 		//set(l);
+           	 		l.setBackground(Color.blue);
+           	 		l.setForeground(Color.white);
            	 	}
     			set = !set;
+         	} else if (name.equals("groove")) {
+         		try {
+					new GroovePanel(AudioController.grooveRectangle);
+				} catch (Exception e1) {
+					log.debug(e);
+				}
          	} else {
          		// time
          		if (name.startsWith("begin")) {
