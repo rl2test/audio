@@ -1,9 +1,12 @@
 package audio.chords.gui;
 
 import static audio.Constants.GROOVES_FILE;
+import static audio.Constants.NL;
 import static audio.Constants.PIPE_DELIM;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,13 +14,13 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import audio.Util;
-import audio.chords.gui.GroovePanel.Voice;
 
-public class RhythmUtil {
-	final Logger log 							= Logger.getLogger(getClass());
+
+public class GrooveUtil {
+	final Logger log 						= Logger.getLogger(getClass());
 	/** The singleton instance of this class. */    
-	private static RhythmUtil rhythmUtil 		= null;
-	final String voiceNames[]					= { 
+	private static GrooveUtil rhythmUtil 	= null;
+	private final String voiceNames[]				= { 
     		"Acoustic bass drum", 
     		"_Bass drum 1", // same as Acoustic bass drum
     		"Side stick", 
@@ -36,32 +39,44 @@ public class RhythmUtil {
 	        "Fifth",
 	        "Root"
 	};
-	final int maxVoiveNameLen 					= voiceNames[0].length();
-	//final List<Voice> voices 					= new ArrayList<Voice>();
-	//final Map<String, Voice> voiceMap 			= new HashMap<String, Voice>();
-	//final Map<Integer, Voice> voiceIdMap 		= new HashMap<Integer, Voice>();
-	List<Rhythm> rhythms 						= new ArrayList<Rhythm>();
+	static int maxVoiceNameLen 				= 0;
+	final Map<String, Integer> voiceMap 	= new HashMap<String, Integer>();
+	final List<String> voiceKeys 			= new ArrayList<String>();
+	List<Groove> rhythms 					= new ArrayList<Groove>();
 	String[] rhythmNames;
 
 	
     /**
      * @return singleton instance of this class
      */
-    public static RhythmUtil getInstance() throws Exception {
+    public static GrooveUtil getInstance() throws Exception {
         if (rhythmUtil == null) {
-        	rhythmUtil = new RhythmUtil();
+        	rhythmUtil = new GrooveUtil();
     	}
     	return rhythmUtil;
     }
     
-    private RhythmUtil() throws Exception {
-    	loadRhythms();
+    private GrooveUtil() throws Exception {
+		// create voices
+        int id = 35;
+     	for (String voiceName: voiceNames) {
+     		if (!voiceName.startsWith("_")) {
+     			voiceMap.put(voiceName, id);
+     			voiceKeys.add(voiceName);
+     		}	
+	     	id++;
+     	}
+
+     	maxVoiceNameLen = voiceNames[0].length();
+
+     	loadRhythms();
     }
     
-    private void loadRhythms() {
+    // populate rhythms list from file
+    public void loadRhythms() {
     	rhythms.clear();
     	
-    	Rhythm r = null;
+    	Groove r = null;
 		List<String> lines 	= Util.getLines(GROOVES_FILE);
 		for (String line: lines) {
 			/*
@@ -77,7 +92,7 @@ public class RhythmUtil {
 			if (!line.startsWith("#")) {
 				String[] arr = line.split(PIPE_DELIM);
 				if (line.startsWith("@")) {
-					r = new Rhythm();
+					r = new Groove();
 					r.name = arr[0].substring(1).trim();
 					rhythms.add(r);
 				} else if (line.startsWith("$")) {
@@ -96,5 +111,36 @@ public class RhythmUtil {
         	log.debug(rhythms.get(i).name);
         	rhythmNames[i] = rhythms.get(i).name;
         }
+    }
+    
+    // save rhythms list to file
+    public void saveRhythms(boolean refresh) {
+    	if (refresh) { // save as - resort 
+    		Collections.sort(rhythms, new Comparator<Groove>() {
+    	        @Override
+    	        public int compare(Groove r2, Groove r1) {
+    	            return  r2.name.compareTo(r1.name);
+    	        }
+    	    });
+    	}
+    	for (Groove r: rhythms) {
+    		log.debug(r.name);
+    	}
+    	String s = "";
+    	for (Groove rhythm: rhythms) {
+    		s += rhythm.toString() + NL;
+    	}
+    	Util.writeToFile(GROOVES_FILE, s);
+    	if (refresh) {
+    		loadRhythms();
+    	}
+    }
+    
+    public static String getSpaces(String name) {
+		String s = "";
+		for (int i = 0, n = GrooveUtil.maxVoiceNameLen - name.length(); i < n; i++ ) {
+			s += " ";
+		}
+		return s;
     }
 }

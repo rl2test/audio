@@ -40,7 +40,7 @@ public class TunePlayer2 implements MetaEventListener {
 	Sequencer sequencer;
 	Sequence sequence;
 	Track track;
-	Rhythm rhythm;
+	Groove rhythm;
 	boolean playing 								= false;
 	int loopCount 									= defaultLoopCount; // default
 	int bpm 										= BPM;
@@ -86,7 +86,7 @@ public class TunePlayer2 implements MetaEventListener {
 	
 			Tune tune = new Tune(text, transposeTo); 
 			int time		= (timePanel.set) ? timePanel.time : tune.time;
-			int type		= (timePanel.set) ? timePanel.type : tune.type;
+			//int type		= (timePanel.set) ? timePanel.type : tune.type;
 			int beginTempo	= (timePanel.set) ? timePanel.beginTempo : tune.beginTempo;
 			int endTempo 	= (timePanel.set) ? timePanel.endTempo : tune.endTempo;
 			int increment 	= (timePanel.set) ? timePanel.increment : tune.increment;	

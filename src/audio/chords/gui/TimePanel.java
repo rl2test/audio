@@ -176,9 +176,9 @@ public class TimePanel extends AudioPanel {
 	    add(getLabel("Metronome", "metronome", C[12], C[0], x, y, w, h, listener));
 	    x += w + 1;	    
 
-	    // rhythm label
+	    // groove label
 	    w = W[3];
-	    add(getLabel("Rhythm", "rhythm", C[12], C[0], x, y, w, h, listener));
+	    add(getLabel("Groove", "groove", C[12], C[0], x, y, w, h, listener));
 	    x += w + 1;	    
 	    
 	    // set to defaults
@@ -230,9 +230,9 @@ public class TimePanel extends AudioPanel {
            	    	set(l);
          		}
          		metronome = !metronome;
-         	} else if (name.equals("rhythm")) {
+         	} else if (name.equals("groove")) {
          		try {
-					new RhythmPanel(AudioController.rhythmRectangle);
+					new GroovePanel(AudioController.grooveRectangle);
 				} catch (Exception e1) {
 					log.debug(e);
 				}

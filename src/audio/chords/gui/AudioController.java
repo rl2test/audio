@@ -44,27 +44,27 @@ import org.apache.log4j.Logger;
  */
 public class AudioController extends JPanel {
 	/** The generated serialVersionUID. */
-	private static final long serialVersionUID	= 1L;
+	private static final long serialVersionUID				= 1L;
 	/** The singleton instance of this class. */    
-	private static AudioController controller 	= null;
+	private static AudioController controller 				= null;
 	/** The log. */
-	private Logger log 							= Logger.getLogger(this.getClass());
+	private Logger log 										= Logger.getLogger(this.getClass());
 	/** The synthesizer. */
-	private Synthesizer synthesizer 			= null;
+	private Synthesizer synthesizer 						= null;
 	/** The midiChannels. */
-	public MidiChannel[] midiChannels 	= null;
+	public MidiChannel[] midiChannels 						= null;
 	/** The width of the gui, not including the frame objects. */
-	public int w								= 0;
+	public int w											= 0;
 	/** The height of the gui, not including the frame objects. */
-	public int h								= 0;
-	public KeyPanel keyPanel 					= null;
-	public TimePanel timePanel 					= null;
-	public FilePanel filePanel 					= null;
-	public TextPanel textPanel 					= null;
-	public DisplayPanel displayPanel 			= null;
-	public boolean init							= false;
-	public int barWidth							= 0;
-	public static Rectangle rhythmRectangle		= null;
+	public int h											= 0;
+	public KeyPanel keyPanel 								= null;
+	public TimePanel timePanel 								= null;
+	public FilePanel filePanel 								= null;
+	public TextPanel textPanel 								= null;
+	public DisplayPanel displayPanel 						= null;
+	public boolean init										= false;
+	public int barWidth										= 0;
+	public static Rectangle grooveRectangle					= null;
 	
     /**
      * @return singleton instance of this class
@@ -225,7 +225,7 @@ public class AudioController extends JPanel {
         	 }
         	 screenNum++;
         }
-        rhythmRectangle = new Rectangle(screenX + screenW / 4, screenY + screenH / 4, screenW / 2, screenH / 2);
+        grooveRectangle = new Rectangle(screenX + screenW / 4, screenY + screenH / 4, screenW / 2, screenH / 2 + GroovePanel.heightExtension);
         
         JFrame frame = new JFrame("AudioController");
 

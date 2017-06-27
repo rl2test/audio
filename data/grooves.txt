@@ -10,6 +10,18 @@ Chord             |     -     -
 Fifth             |         -  
 Root              |-           
 
+@basic-jazz-pattern 1
+$
+% 4|3
+#                 |1--2--3--4--
+Acoustic bass drum|-       -   
+Acoustic snare    |     -     -
+Closed hi-hat     |-  -  -  -  
+Open hi-hat       |     -     -
+Chord             |     -     -
+Fifth             |         -  
+Root              |-           
+
 @basic-jazz-pattern 2
 $
 % 4|3

@@ -2,7 +2,6 @@ package audio.chords.gui;
 
 import static audio.Constants.C;
 import static audio.Constants.FONT;
-import static audio.Constants.GROOVES_FILE;
 import static audio.Constants.NL;
 import static audio.Constants.PIPE;
 import static audio.Constants.PIPE_DELIM;
@@ -24,8 +23,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +43,7 @@ import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
 
-import audio.Util;
+
 
 @SuppressWarnings({ "serial" })
 public class GroovePanel extends AudioPanel implements MetaEventListener {
@@ -60,34 +57,13 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 	Sequence sequence;
 	Track track;
 	final JComboBox<String> comboBox			= new JComboBox<String>();
-	final String voiceNames[]					= { 
-    		"Acoustic bass drum", 
-    		"_Bass drum 1", // same as Acoustic bass drum
-    		"Side stick", 
-    		"Acoustic snare",
-	        "_Hand clap", // same as Side stick
-	        "_Electric snare", // same as Acoustic snare 
-	        "Low floor tom", 
-	        "Closed hi-hat",
-	        "High floor tom", 
-	        "_Pedal hi-hat", // same as Closed hi-hat
-	        "Low tom", 
-	        "Open hi-hat", 
-	        "Low-mid tom", 
-	        "Hi-mid tom",
-	        "Chord",
-	        "Fifth",
-	        "Root"
-	};
-	final int maxVoiveNameLen 					= voiceNames[0].length();
 	final List<Voice> voices 					= new ArrayList<Voice>();
 	final Map<String, Voice> voiceMap 			= new HashMap<String, Voice>();
 	final Map<Integer, Voice> voiceIdMap 		= new HashMap<Integer, Voice>();
 	boolean playing 							= false;
 	final Listener listener 					= new Listener();
-	List<Rhythm> rhythms 						= new ArrayList<Rhythm>();
-	String[] rhythmNames;
-	Rhythm rhythm;
+	GrooveUtil gu 								= GrooveUtil.getInstance();
+	Groove rhythm;
 	boolean accelerate 							= false; // default
 	int inc 									= 1; // default
 	final int defaultLoopCount 					= 1000;
@@ -107,6 +83,7 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 	String chord 								= "C"; // default
 	String chordType 							= "7"; // default
 	final int baseNoteValue						= 36;
+	static final int heightExtension			= 38;
 	
 	public GroovePanel(Rectangle r) throws Exception {
     	super(null);
@@ -137,7 +114,14 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 		chordMap.put("m7", CHORD_MINOR_7);
 		chordMap.put("maj7", CHORD_MAJOR_7);
 		
-		loadRhythms();
+		// init voices with cloned voices from ru
+		for (String voiceKey: gu.voiceKeys) {
+			Voice voice = new Voice(voiceKey, gu.voiceMap.get(voiceKey));
+			voices.add(voice);
+			voiceMap.put(voice.name, voice);
+			voiceIdMap.put(voice.id, voice);
+		}
+
 		initUi();
 		
 		frame.getContentPane().add("Center", this);
@@ -145,7 +129,7 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 		frame.repaint();
 		
      	openSequencer();
-     	openRhythm(0);	// load the first one
+     	openRhythm(0);	// load the first
 	}	
 
 	// init ui
@@ -163,13 +147,13 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 	    
 	    // grooves combo box
 	    w = W[12];
-	    comboBox.setModel(new DefaultComboBoxModel<String>(rhythmNames));
+	    comboBox.setModel(new DefaultComboBoxModel<String>(gu.rhythmNames));
 	    comboBox.setName("comboBox");
 	    comboBox.addItemListener(new ComboListener());
 	    comboBox.setBounds(x, y, w, h);
 	    comboBox.setFont(FONT);
 		add(comboBox);
-		comboBox.setSelectedItem(rhythmNames[0]);
+		comboBox.setSelectedItem(gu.rhythmNames[0]);
 		x += w + 1;
 
 		// buttons
@@ -271,18 +255,6 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 	    set("t-7");
 
      	// voice section ==================================================================
-     	
-		// create voices
-        int id = 35;
-     	for (String voiceName: voiceNames) {
-     		if (!voiceName.startsWith("_")) {
-	     		Voice voice = new Voice(voiceName, id);
-	     		voices.add(voice);
-	     		voiceMap.put(voiceName, voice);
-	     		voiceIdMap.put(id, voice);
-     		}	
-	     	id++;
-     	}
 		
 		x = 0;
 		y += h + 1;
@@ -311,7 +283,7 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 	
 	// open rhythm
 	private void openRhythm(int num) throws Exception {
-        rhythm = rhythms.get(num);
+        rhythm = gu.rhythms.get(num);
         log.debug("rhythm=" + NL + rhythm);
 
         // remove existing rhythm components
@@ -465,47 +437,28 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
         	}
         }
     }
-
-    private void loadRhythms() {
-    	rhythms.clear();
-    	
-    	Rhythm r = null;
-		List<String> lines 	= Util.getLines(GROOVES_FILE);
-		for (String line: lines) {
-			/*
-				@ basic-jazz-pattern
-				$ http://www.freedrumlessons.com/drum-lessons/basic-jazz-pattern.php
-				% 4|3
-				#                 |1--2--3--4--
-				Acoustic bass drum|-       -
-				Acoustic snare    |   - -   - -
-				Pedal hi-hat      |   -     -
-				Open hi-hat       |-  - --  - -
-			*/
-			if (!line.startsWith("#")) {
-				String[] arr = line.split(PIPE_DELIM);
-				if (line.startsWith("@")) {
-					r = new Rhythm();
-					r.name = arr[0].substring(1).trim();
-					rhythms.add(r);
-				} else if (line.startsWith("$")) {
-					r.src = arr[0].substring(1).trim();
-				} else if (line.startsWith("%")) {
-					r.beats = Integer.parseInt(arr[0].substring(1).trim());
-					r.subBeats = Integer.parseInt(arr[1].trim());
-				} else {
-					r.voiceStrs.add(line);
-				}				
-			}
-		}
-		log.debug(rhythms.size());
-        rhythmNames = new String[rhythms.size()];
-        for (int i = 0, n = rhythms.size(); i < n; i++) {
-        	log.debug(rhythms.get(i).name);
-        	rhythmNames[i] = rhythms.get(i).name;
-        }
-    }
     
+    public void setRhythmVoiceStrs() {
+    	rhythm.voiceStrs.clear();
+    	for (Voice voice: voices) {
+    		boolean save = false;
+    		for (boolean pulse: voice.pulses) {
+    			if (pulse) {
+    				save = true;
+    				break;
+    			}
+    		}
+    		if (save) {
+    			String voiceStr = voice.name + GrooveUtil.getSpaces(voice.name) + PIPE;
+    			for (boolean pulse: voice.pulses) {
+    				voiceStr += (pulse) ? "-" : " ";
+        		}
+    			voiceStr.trim();
+    			rhythm.voiceStrs.add(voiceStr);
+    		}
+    	}
+    }
+
     public void openSequencer() {
         try {
             sequencer = MidiSystem.getSequencer();
@@ -521,58 +474,6 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
             sequencer.close();
         }
         sequencer = null;
-    }
-    
-    public String getSpaces(String name) {
-		String s = "";
-		for (int i = 0, n = maxVoiveNameLen - name.length(); i < n; i++ ) {
-			s += " ";
-		}
-		return s;
-    }
-    
-    public void setRhythmVoiceStrs() {
-    	rhythm.voiceStrs.clear();
-    	for (Voice voice: voices) {
-    		boolean save = false;
-    		for (boolean pulse: voice.pulses) {
-    			if (pulse) {
-    				save = true;
-    				break;
-    			}
-    		}
-    		if (save) {
-    			String voiceStr = voice.name + getSpaces(voice.name) + PIPE;
-    			for (boolean pulse: voice.pulses) {
-    				voiceStr += (pulse) ? "-" : " ";
-        		}
-    			voiceStr.trim();
-    			rhythm.voiceStrs.add(voiceStr);
-    		}
-    	}
-    }
-    
-    public void saveRhythms(boolean refresh) {
-    	if (refresh) {
-    		Collections.sort(rhythms, new Comparator<Rhythm>() {
-    	        @Override
-    	        public int compare(Rhythm r2, Rhythm r1) {
-    	            return  r2.name.compareTo(r1.name);
-    	        }
-    	    });
-    	}
-    	for (Rhythm r: rhythms) {
-    		log.debug(r.name);
-    	}
-    	String s = "";
-    	for (Rhythm rhythm: rhythms) {
-    		s += rhythm.toString() + NL;
-    	}
-    	Util.writeToFile(GROOVES_FILE, s);
-    	if (refresh) {
-    		loadRhythms();
-    		comboBox.setModel(new DefaultComboBoxModel<String>(rhythmNames));
-    	}
     }
     
     // classes =========================================================================================
@@ -597,7 +498,7 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
             	}	
             } else if (name.equals("save")) {
             	setRhythmVoiceStrs();
-            	saveRhythms(false); // no need to refresh ui
+            	gu.saveRhythms(false); // no need to refresh ui
             	labels.get(name).setForeground(Color.white);
             } else if (name.equals("saveAs")) {
 			    String s = (String) JOptionPane.showInputDialog(
@@ -611,11 +512,12 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 			    if ((s != null) && (s.length() > 0) && !s.equals(rhythm.name)) {
 			    	log.debug(name + ": " + s);
 			    	setRhythmVoiceStrs();
-			    	Rhythm r = rhythm.clone();
+			    	Groove r = rhythm.clone();
 			    	r.name = s;
-			    	rhythms.add(r);
+			    	gu.rhythms.add(r);
 			    	log.debug(r.toString());
-			    	saveRhythms(true); // refresh ui
+			    	gu.saveRhythms(true); // refresh ui
+			    	comboBox.setModel(new DefaultComboBoxModel<String>(gu.rhythmNames));
 			    }
             } else if (name.equals("clear")) {
             	for (Voice voice: voices) {
@@ -715,20 +617,6 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 	
 
     /**
-     * Voice data
-     */
-    class Voice {
-        String name; 
-        int id;
-        boolean mute = false;
-        boolean[] pulses = null;
-        public Voice(String name, int id) {
-            this.name = name;
-            this.id = id;
-        }
-    }
-
-    /**
      * @param args
      */
     public static void main(String args[]) {
@@ -755,7 +643,7 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 	     }
 	    
 		try {
-			new GroovePanel(new Rectangle(rx, ry, rw, rh + 12 + 25 + 1));
+			new GroovePanel(new Rectangle(rx, ry, rw, rh + heightExtension));  // 12 + 25 + 1
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

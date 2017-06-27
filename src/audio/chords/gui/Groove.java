@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Rhythm data
+ * A representation of a single set of groove data in GROOVES_FILE
  */
-class Rhythm {
+class Groove {
 	String name = "";
 	int beats = 0;
 	int subBeats = 0;
@@ -17,8 +17,8 @@ class Rhythm {
 	List<String> voiceStrs = new ArrayList<String>();
 	final int maxVoiceNameLen = "Acoustic bass drum".length();
 	
-	public Rhythm clone() {
-		Rhythm r = new Rhythm();
+	public Groove clone() {
+		Groove r = new Groove();
 		r.beats = beats;
 		r.subBeats = subBeats;
     	for (String voiceStr: voiceStrs) {
@@ -26,6 +26,7 @@ class Rhythm {
     	}
 		return r;
 	}
+	
 	public int getNumPulses() {
 		return beats * subBeats;
 	}
@@ -44,7 +45,7 @@ class Rhythm {
 		String s = "@" + name + NL;
 		s += "$" + src + NL;
 		s += "% " + beats + PIPE + subBeats + NL;
-		s += "#" + getSpaces("#") + PIPE;
+		s += "#" + GrooveUtil.getSpaces("#") + PIPE;
 		for (int i = 0; i < beats; i++) {
 			s += (i + 1);
 			for (int j = 1; j < subBeats; j++) {
@@ -58,13 +59,4 @@ class Rhythm {
 		return s;
 	}
 	
-    public String getSpaces(String name) {
-		String s = "";
-		for (int i = 0, n = maxVoiceNameLen - name.length(); i < n; i++ ) {
-			s += " ";
-		}
-		return s;
-    }
-    
-
 }
