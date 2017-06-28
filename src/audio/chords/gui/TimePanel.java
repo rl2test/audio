@@ -1,14 +1,18 @@
 package audio.chords.gui;
 
 import static audio.Constants.C;
+import static audio.Constants.FONT;
 import static audio.Constants.W;
 
 import java.awt.Color;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
-
 
 @SuppressWarnings("serial")
 public class TimePanel extends AudioPanel { 
@@ -20,8 +24,11 @@ public class TimePanel extends AudioPanel {
 	public int endTempo							= 180;
     public int increment 						= 1;
 	public boolean set							= false; // if true this will override the tune settings
-
-    /**
+	/** Groove box. */
+	private final JComboBox<String> grooveBox 	= new JComboBox<String>();
+	public GrooveUtil gu						= GrooveUtil.getInstance();
+	public String grooveName					= gu.grooveNames[0];
+	/**
      * @return singleton instance of this class
      */
     public static TimePanel getInstance(AudioController ac) throws Exception {
@@ -111,6 +118,23 @@ public class TimePanel extends AudioPanel {
 	    add(getLabel("Groove", "groove", C[12], C[0], x, y, w, h, listener));
 	    x += w + 1;	   
 	    
+		// groove box label
+        w = W[2];
+        add(getLabel("Groove", null, C[6], C[16], x, y, w, h, null));
+	    x += w + 1;
+
+	    // groove combo box
+	    w = W[12];
+	    grooveBox.setModel(new DefaultComboBoxModel<String>(gu.grooveNames));
+		grooveBox.addItemListener(new GrooveBoxListener());
+		grooveBox.setBounds(x, y, w, h);
+		grooveBox.setFont(FONT);
+		add(grooveBox);
+		grooveBox.setSelectedItem(grooveName);
+		// groove combo box bg label - note: paints BEFORE preceding element
+		add(getLabel(null, null, C[6], null, x, y, w, h, null));
+	    
+	    
 		set("begin" + beginTempo);
 		set("end" + endTempo);
 		set("inc" + increment);
@@ -120,11 +144,24 @@ public class TimePanel extends AudioPanel {
 
     }
     
+    // set tempo value
     public void setTempoValue(int tempo) {
     	labels.get("tempoValue").setText("" + tempo);
     }
-    
-    private class Listener extends MouseAdapter {
+
+	// listener for the groove box
+	class GrooveBoxListener implements ItemListener {
+	    public void itemStateChanged(ItemEvent event) {
+	    	log.debug("GrooveBoxListener");	
+	        if (event.getStateChange() == ItemEvent.SELECTED) {
+	        	grooveName = event.getItem().toString();
+	        	log.debug("GrooveBoxListener: groove " + grooveName + " selected");
+	        }
+	    }
+	}
+	
+	// mouse listener
+	private class Listener extends MouseAdapter {
         @Override
         public void mouseClicked(MouseEvent e) {
             JLabel l = (JLabel) e.getSource();
@@ -148,7 +185,7 @@ public class TimePanel extends AudioPanel {
 					log.debug(e);
 				}
          	} else {
-         		// time
+         		// tempos
          		if (name.startsWith("begin")) {
              		if (beginTempo > 0) unset("begin" + beginTempo);
             		beginTempo = Integer.parseInt(name.replace("begin", ""));

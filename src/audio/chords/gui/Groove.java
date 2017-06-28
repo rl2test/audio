@@ -13,6 +13,7 @@ class Groove {
 	String name = "";
 	int beats = 0;
 	int subBeats = 0;
+	int numPulses = 0;
 	String src = "";
 	List<String> voiceStrs = new ArrayList<String>();
 	final int maxVoiceNameLen = "Acoustic bass drum".length();
@@ -21,14 +22,11 @@ class Groove {
 		Groove r = new Groove();
 		r.beats = beats;
 		r.subBeats = subBeats;
+		r.numPulses = numPulses; 
     	for (String voiceStr: voiceStrs) {
     		r.voiceStrs.add(voiceStr);
     	}
 		return r;
-	}
-	
-	public int getNumPulses() {
-		return beats * subBeats;
 	}
 	
 	/*

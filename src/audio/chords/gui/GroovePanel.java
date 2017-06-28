@@ -63,7 +63,7 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 	boolean playing 							= false;
 	final Listener listener 					= new Listener();
 	GrooveUtil gu 								= GrooveUtil.getInstance();
-	Groove rhythm;
+	Groove groove;
 	boolean accelerate 							= false; // default
 	int inc 									= 1; // default
 	final int defaultLoopCount 					= 1000;
@@ -89,7 +89,7 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
     	super(null);
         setBackground(C[4]);
         
-		final JFrame frame = new JFrame("Rhythm");
+		final JFrame frame = new JFrame("Groove");
 		frame.setSize(r.width, r.height);
 		frame.setLocation(r.x, r.y);
 		frame.addWindowListener(new WindowAdapter() {
@@ -129,7 +129,7 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 		frame.repaint();
 		
      	openSequencer();
-     	openRhythm(0);	// load the first
+     	openGroove(0);	// load the first
 	}	
 
 	// init ui
@@ -147,13 +147,13 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 	    
 	    // grooves combo box
 	    w = W[12];
-	    comboBox.setModel(new DefaultComboBoxModel<String>(gu.rhythmNames));
+	    comboBox.setModel(new DefaultComboBoxModel<String>(gu.grooveNames));
 	    comboBox.setName("comboBox");
 	    comboBox.addItemListener(new ComboListener());
 	    comboBox.setBounds(x, y, w, h);
 	    comboBox.setFont(FONT);
 		add(comboBox);
-		comboBox.setSelectedItem(gu.rhythmNames[0]);
+		comboBox.setSelectedItem(gu.grooveNames[0]);
 		x += w + 1;
 
 		// buttons
@@ -281,12 +281,12 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
      	
 	}
 	
-	// open rhythm
-	private void openRhythm(int num) throws Exception {
-        rhythm = gu.rhythms.get(num);
-        log.debug("rhythm=" + NL + rhythm);
+	// open groove
+	private void openGroove(int num) throws Exception {
+        groove = gu.grooves.get(num);
+        log.debug("groove=" + NL + groove);
 
-        // remove existing rhythm components
+        // remove existing groove components
  		Component[] componentList = this.getComponents();
  		log.debug(componentList.length);
  		for(Component c: componentList){
@@ -301,10 +301,10 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 		x = W[8] + W[1] + 2;
 		y = (h + 1) * 4; 
 		w = W[1];
-        for (int i = 0; i < rhythm.beats; i++) {
+        for (int i = 0; i < groove.beats; i++) {
         	add(getLabel("" + (i + 1), "h-" + i, C[12], C[0], x, y, w, h, null));
         	x += W[1] + 1;
-        	for (int j = 1; j < rhythm.subBeats; j++) {
+        	for (int j = 1; j < groove.subBeats; j++) {
         		add(getLabel("-", "h-" + i + "-" + j, C[12], C[0], x, y, w, h, null));
         		x += W[1] + 1;
             }
@@ -313,9 +313,9 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
         // build pulses and reset x
 		y += h + 1;
 		for (Voice voice: voices) {
-			voice.pulses = new boolean[rhythm.getNumPulses()];
+			voice.pulses = new boolean[groove.numPulses];
 			x = W[8] + W[1] + 2;
-			for (int i = 0, n = rhythm.getNumPulses(); i < n; i++) {
+			for (int i = 0, n = groove.numPulses; i < n; i++) {
 				add(getLabel("",  "p-" + voice.id + "-" + i, C[12], C[0], x, y, w, h, listener));
 				x += w + 1;
 			}
@@ -325,7 +325,7 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 		}
 		
 		// set pulses
-     	for (String voiceStr: rhythm.voiceStrs) {
+     	for (String voiceStr: groove.voiceStrs) {
      		String[] arr = voiceStr.split(PIPE_DELIM);
 			String voiceName = arr[0].trim();
      		Voice voice = voiceMap.get(voiceName);
@@ -346,7 +346,7 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 	private void startSequencer() {
 		try {
 			bpmInc = bpm; // reset
-            sequence = new Sequence(Sequence.PPQ, rhythm.subBeats);
+            sequence = new Sequence(Sequence.PPQ, groove.subBeats);
             track = sequence.createTrack();
             
             int root = baseNoteValue + noteToValueMap.get(chord);
@@ -354,10 +354,10 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
             int fifth = root + 7;
             int octave = root + 12;
             
-            log.debug("creating track for " + rhythm.name);
+            log.debug("creating track for " + groove.name);
             createEvent(PROGRAM, CHANNEL_PERC, 1, 0, 0);
 	        // so we always have a track of numPulses length.
-	        createEvent(PROGRAM, CHANNEL_PERC, 1, 0, rhythm.getNumPulses());
+	        createEvent(PROGRAM, CHANNEL_PERC, 1, 0, groove.numPulses);
 	        
 	        createEvent(CONTROL, CHANNEL_BASS, 10, V[0], 0); // set pan
 	        createEvent(CONTROL, CHANNEL_CHRD, 10, V[8], 0); // set pan
@@ -368,7 +368,7 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
      				log.debug(voice.id + " " + voice.name);
      				for (int i = 0, n = voice.pulses.length; i < n; i++) {
 		     			if (voice.pulses[i]) {
-	     					int len = rhythm.subBeats;
+	     					int len = groove.subBeats;
 	     					if (i + len > n) {
 	     						len = n - i;
 	     					}
@@ -438,8 +438,8 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
         }
     }
     
-    public void setRhythmVoiceStrs() {
-    	rhythm.voiceStrs.clear();
+    public void setGrooveVoiceStrs() {
+    	groove.voiceStrs.clear();
     	for (Voice voice: voices) {
     		boolean save = false;
     		for (boolean pulse: voice.pulses) {
@@ -454,7 +454,7 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
     				voiceStr += (pulse) ? "-" : " ";
         		}
     			voiceStr.trim();
-    			rhythm.voiceStrs.add(voiceStr);
+    			groove.voiceStrs.add(voiceStr);
     		}
     	}
     }
@@ -497,8 +497,8 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 					labels.get("bpmValue").setText("" + bpm); // reset
             	}	
             } else if (name.equals("save")) {
-            	setRhythmVoiceStrs();
-            	gu.saveRhythms(false); // no need to refresh ui
+            	setGrooveVoiceStrs();
+            	gu.saveGrooves(false); // no need to refresh ui
             	labels.get(name).setForeground(Color.white);
             } else if (name.equals("saveAs")) {
 			    String s = (String) JOptionPane.showInputDialog(
@@ -508,16 +508,16 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 						JOptionPane.PLAIN_MESSAGE,
 						null,
 						null,
-						rhythm.name);
-			    if ((s != null) && (s.length() > 0) && !s.equals(rhythm.name)) {
+						groove.name);
+			    if ((s != null) && (s.length() > 0) && !s.equals(groove.name)) {
 			    	log.debug(name + ": " + s);
-			    	setRhythmVoiceStrs();
-			    	Groove r = rhythm.clone();
+			    	setGrooveVoiceStrs();
+			    	Groove r = groove.clone();
 			    	r.name = s;
-			    	gu.rhythms.add(r);
+			    	gu.grooves.add(r);
 			    	log.debug(r.toString());
-			    	gu.saveRhythms(true); // refresh ui
-			    	comboBox.setModel(new DefaultComboBoxModel<String>(gu.rhythmNames));
+			    	gu.saveGrooves(true); // refresh ui
+			    	comboBox.setModel(new DefaultComboBoxModel<String>(gu.grooveNames));
 			    }
             } else if (name.equals("clear")) {
             	for (Voice voice: voices) {
@@ -607,7 +607,7 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 	        	int index = comboBox.getSelectedIndex();
 	        	log.debug("ComboListener: name=" + name + ", index=" + index);
 	        	try {
-					openRhythm(index);
+					openGroove(index);
 				} catch (Exception e) {
 					log.error(e);
 				}

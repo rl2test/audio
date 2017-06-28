@@ -19,7 +19,7 @@ import audio.Util;
 public class GrooveUtil {
 	final Logger log 						= Logger.getLogger(getClass());
 	/** The singleton instance of this class. */    
-	private static GrooveUtil rhythmUtil 	= null;
+	private static GrooveUtil grooveUtil 	= null;
 	private final String voiceNames[]				= { 
     		"Acoustic bass drum", 
     		"_Bass drum 1", // same as Acoustic bass drum
@@ -42,21 +42,21 @@ public class GrooveUtil {
 	static int maxVoiceNameLen 				= 0;
 	final Map<String, Integer> voiceMap 	= new HashMap<String, Integer>();
 	final List<String> voiceKeys 			= new ArrayList<String>();
-	List<Groove> rhythms 					= new ArrayList<Groove>();
-	String[] rhythmNames;
-
+	List<Groove> grooves 					= new ArrayList<Groove>();
+	String[] grooveNames;
+	Map<String, Groove>grooveMap			= new HashMap<String, Groove>();
 	
     /**
      * @return singleton instance of this class
      */
-    public static GrooveUtil getInstance() throws Exception {
-        if (rhythmUtil == null) {
-        	rhythmUtil = new GrooveUtil();
+    public static GrooveUtil getInstance() {
+        if (grooveUtil == null) {
+        	grooveUtil = new GrooveUtil();
     	}
-    	return rhythmUtil;
+    	return grooveUtil;
     }
     
-    private GrooveUtil() throws Exception {
+    private GrooveUtil() {
 		// create voices
         int id = 35;
      	for (String voiceName: voiceNames) {
@@ -69,14 +69,15 @@ public class GrooveUtil {
 
      	maxVoiceNameLen = voiceNames[0].length();
 
-     	loadRhythms();
+     	loadGrooves();
     }
     
-    // populate rhythms list from file
-    public void loadRhythms() {
-    	rhythms.clear();
+    // populate grooves list from file
+    public void loadGrooves() {
+    	grooves.clear();
     	
-    	Groove r = null;
+    	Groove groove = null;
+    	
 		List<String> lines 	= Util.getLines(GROOVES_FILE);
 		for (String line: lines) {
 			/*
@@ -92,47 +93,49 @@ public class GrooveUtil {
 			if (!line.startsWith("#")) {
 				String[] arr = line.split(PIPE_DELIM);
 				if (line.startsWith("@")) {
-					r = new Groove();
-					r.name = arr[0].substring(1).trim();
-					rhythms.add(r);
+					groove = new Groove();
+					groove.name = arr[0].substring(1).trim();
+					grooves.add(groove);
+					grooveMap.put(groove.name, groove);
 				} else if (line.startsWith("$")) {
-					r.src = arr[0].substring(1).trim();
+					groove.src = arr[0].substring(1).trim();
 				} else if (line.startsWith("%")) {
-					r.beats = Integer.parseInt(arr[0].substring(1).trim());
-					r.subBeats = Integer.parseInt(arr[1].trim());
+					groove.beats = Integer.parseInt(arr[0].substring(1).trim());
+					groove.subBeats = Integer.parseInt(arr[1].trim());
+					groove.numPulses = groove.beats * groove.subBeats;  
 				} else {
-					r.voiceStrs.add(line);
+					groove.voiceStrs.add(line);
 				}				
 			}
 		}
-		log.debug(rhythms.size());
-        rhythmNames = new String[rhythms.size()];
-        for (int i = 0, n = rhythms.size(); i < n; i++) {
-        	log.debug(rhythms.get(i).name);
-        	rhythmNames[i] = rhythms.get(i).name;
+		log.debug(grooves.size());
+        grooveNames = new String[grooves.size()];
+        for (int i = 0, n = grooves.size(); i < n; i++) {
+        	log.debug(grooves.get(i).name);
+        	grooveNames[i] = grooves.get(i).name;
         }
     }
     
-    // save rhythms list to file
-    public void saveRhythms(boolean refresh) {
+    // save grooves list to file
+    public void saveGrooves(boolean refresh) {
     	if (refresh) { // save as - resort 
-    		Collections.sort(rhythms, new Comparator<Groove>() {
+    		Collections.sort(grooves, new Comparator<Groove>() {
     	        @Override
     	        public int compare(Groove r2, Groove r1) {
     	            return  r2.name.compareTo(r1.name);
     	        }
     	    });
     	}
-    	for (Groove r: rhythms) {
+    	for (Groove r: grooves) {
     		log.debug(r.name);
     	}
     	String s = "";
-    	for (Groove rhythm: rhythms) {
-    		s += rhythm.toString() + NL;
+    	for (Groove groove: grooves) {
+    		s += groove.toString() + NL;
     	}
     	Util.writeToFile(GROOVES_FILE, s);
     	if (refresh) {
-    		loadRhythms();
+    		loadGrooves();
     	}
     }
     

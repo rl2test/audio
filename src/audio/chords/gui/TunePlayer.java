@@ -36,6 +36,7 @@ public class TunePlayer implements MetaEventListener {
 	Sequencer sequencer;
 	Sequence sequence;
 	Track track;
+	GrooveUtil gu						= GrooveUtil.getInstance();
 	Groove groove;
 	TimePanel timePanel;
 	boolean playing 					= false;
@@ -50,6 +51,8 @@ public class TunePlayer implements MetaEventListener {
 		this.text = text;
 		this.ac = ac;
 		timePanel = ac.timePanel;
+		groove = gu.grooveMap.get(timePanel.grooveName);
+		log.debug("groove.name=" + groove.name);
 		
 		openSequencer();
 	}
@@ -94,12 +97,12 @@ public class TunePlayer implements MetaEventListener {
 			log.debug("increment=" + increment);
 			log.debug("loopCount=" + loopCount);
 
-            sequence = new Sequence(Sequence.PPQ, 1); // rhythm.subBeats
+            sequence = new Sequence(Sequence.PPQ, 1); // groove.subBeats
             log.debug("creating track");
             track = sequence.createTrack();
 
             createEvent(PROGRAM, CHANNEL_PERC, 0, 0, 0);
-	        createEvent(PROGRAM, CHANNEL_PERC, 0, 0, tune.bars.size() * tune.time);
+	        createEvent(PROGRAM, CHANNEL_PERC, 0, 0, tune.bars.size() * tune.beatsPerBar);
 
 	        createEvent(CONTROL, CHANNEL_BASS, 10, V[0], 0); // set pan
 	        createEvent(CONTROL, CHANNEL_CHRD, 10, V[8], 0); // set pan
@@ -108,9 +111,9 @@ public class TunePlayer implements MetaEventListener {
             int i = 0;
 			for (Bar bar: tune.bars) {
 				for(Chord chord: bar.chords) {
-    				if (i % tune.time == 0) {
+    				if (i % tune.beatsPerBar == 0) {
     					createNote(CHANNEL_BASS, chord.chordIntegers[0] - OCTAVE, VOL_BASS, i, 1);
-    				} else if (i % tune.time == 2) {
+    				} else if (i % tune.beatsPerBar == 2) {
     					createNote(CHANNEL_BASS, chord.chordIntegers[2] - OCTAVE, VOL_BASS, i, 1);
     				} else {
     					for (int j = 1, n = chord.chordIntegers.length; j < n; j++) {
