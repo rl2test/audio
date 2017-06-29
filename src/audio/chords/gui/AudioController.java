@@ -209,7 +209,7 @@ public class AudioController extends JPanel {
 
         System.out.println("RUNTIME_VERSION=" + RUNTIME_VERSION);
         System.out.println("ENV=" + ENV);
-        int scale = (ENV.equals(WK)) ? 1 : 1;
+        int vScale = (ENV.equals(WK)) ? 2 : 1;
 
         System.out.println(len + " screens detected: isDual=" + isDual + ", useScreen=" + useScreen);
         int screenNum = 1;
@@ -217,8 +217,8 @@ public class AudioController extends JPanel {
         	 GraphicsConfiguration	graphicsConfiguration = gd.getDefaultConfiguration();
         	 Rectangle r = graphicsConfiguration.getBounds();
         	 if (useScreen == screenNum) {
-        		screenW = r.width / scale;
-        		screenH = r.height / scale;
+        		screenW = r.width;
+        		screenH = r.height / vScale;
         		screenX = r.x;
         		screenY = r.y;
        		 	System.out.println("screenNum" + screenNum + ":" + screenW + ", " + screenH + ", " + screenX + ", " + screenY);

@@ -20,31 +20,35 @@ public class GrooveUtil {
 	final Logger log 						= Logger.getLogger(getClass());
 	/** The singleton instance of this class. */    
 	private static GrooveUtil grooveUtil 	= null;
-	private final String voiceNames[]				= { 
-    		"Acoustic bass drum", 
+	private final String voiceNames[]		= { 
+    		"Acoustic bass drum", // 35
     		"_Bass drum 1", // same as Acoustic bass drum
     		"Side stick", 
     		"Acoustic snare",
 	        "_Hand clap", // same as Side stick
-	        "_Electric snare", // same as Acoustic snare 
+	        "_Electric snare", // 40 same as Acoustic snare 
 	        "Low floor tom", 
 	        "Closed hi-hat",
 	        "High floor tom", 
 	        "_Pedal hi-hat", // same as Closed hi-hat
-	        "Low tom", 
+	        "Low tom", // 45
 	        "Open hi-hat", 
 	        "Low-mid tom", 
 	        "Hi-mid tom",
-	        "Chord",
-	        "Fifth",
-	        "Root"
+	        "Chord", // 49
+	        "Fifth", // 50
+	        "Root" // 51
 	};
+	public final List<String> chordVoiceNames	= new ArrayList<String>(); 
 	static int maxVoiceNameLen 				= 0;
 	final Map<String, Integer> voiceMap 	= new HashMap<String, Integer>();
 	final List<String> voiceKeys 			= new ArrayList<String>();
 	List<Groove> grooves 					= new ArrayList<Groove>();
 	String[] grooveNames;
 	Map<String, Groove>grooveMap			= new HashMap<String, Groove>();
+	int CHORD								= 49;
+	int FIFTH								= 50;	
+	int ROOT								= 51;
 	
     /**
      * @return singleton instance of this class
@@ -69,6 +73,10 @@ public class GrooveUtil {
 
      	maxVoiceNameLen = voiceNames[0].length();
 
+     	chordVoiceNames.add("Chord");
+     	chordVoiceNames.add("Fifth");
+     	chordVoiceNames.add("Root");
+     	
      	loadGrooves();
     }
     

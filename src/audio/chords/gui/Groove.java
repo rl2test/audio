@@ -19,14 +19,14 @@ class Groove {
 	final int maxVoiceNameLen = "Acoustic bass drum".length();
 	
 	public Groove clone() {
-		Groove r = new Groove();
-		r.beats = beats;
-		r.subBeats = subBeats;
-		r.numPulses = numPulses; 
+		Groove g = new Groove();
+		g.beats = beats;
+		g.subBeats = subBeats;
+		g.numPulses = numPulses; 
     	for (String voiceStr: voiceStrs) {
-    		r.voiceStrs.add(voiceStr);
+    		g.voiceStrs.add(voiceStr);
     	}
-		return r;
+		return g;
 	}
 	
 	/*

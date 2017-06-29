@@ -372,11 +372,11 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 	     					if (i + len > n) {
 	     						len = n - i;
 	     					}
-		     				if (voice.name == "Root") {
+		     				if (voice.id == gu.ROOT) {
 		     					createNote(CHANNEL_BASS, root, VOL_BASS, i, len);
-		     				} else if (voice.name == "Fifth") {
+		     				} else if (voice.id == gu.FIFTH) {
 		     					createNote(CHANNEL_BASS, fifth, VOL_BASS, i, len);
-		     				} else if (voice.name == "Chord") {
+		     				} else if (voice.id == gu.CHORD) {
 		     					Integer[] arr = chordMap.get(chordType);
 		     					for(int a: arr) {
 		     						createNote(CHANNEL_CHRD, octave + a, VOL_CHRD, i, len);

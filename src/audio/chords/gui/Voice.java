@@ -9,8 +9,4 @@ public class Voice {
         this.name = name;
         this.id = id;
     }
-    
-    public Voice clone() {
-    	return new Voice(name, id);	
-    }
 }

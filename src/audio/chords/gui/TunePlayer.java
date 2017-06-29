@@ -1,7 +1,11 @@
 package audio.chords.gui;
 import static audio.Constants.OCTAVE;
+import static audio.Constants.PIPE_DELIM;
 import static audio.Constants.TRANSPOSE_KEYS;
 import static audio.Constants.V;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.sound.midi.MetaEventListener;
 import javax.sound.midi.MetaMessage;
@@ -45,6 +49,8 @@ public class TunePlayer implements MetaEventListener {
 	int increment 						= 0; // default	
 	int tempo 							= 0;
 	int loopCount 						= defaultLoopCount; // default
+	List<Voice> percVoices				= new ArrayList<Voice>();
+	List<Voice> chrdVoices				= new ArrayList<Voice>();
 
 	 // called from play btn
 	public TunePlayer(String text, AudioController ac) {
@@ -53,6 +59,32 @@ public class TunePlayer implements MetaEventListener {
 		timePanel = ac.timePanel;
 		groove = gu.grooveMap.get(timePanel.grooveName);
 		log.debug("groove.name=" + groove.name);
+		
+		// set pulses
+     	for (String voiceStr: groove.voiceStrs) {
+     		String[] arr = voiceStr.split(PIPE_DELIM);
+			String name = arr[0].trim();
+			String pulseStr = arr[1];
+			int id = gu.voiceMap.get(name);
+			Voice voice = new Voice(name, id);
+			if (gu.chordVoiceNames.contains(name)) {
+				chrdVoices.add(voice);
+			} else {
+				percVoices.add(voice);
+			}
+			
+			voice.pulses = new boolean[groove.numPulses];
+			if (pulseStr.length() > groove.numPulses) {
+				log.warn("pulseStr.length() > groove.numPulses: " + pulseStr.length() + " " + groove.numPulses);
+				pulseStr = pulseStr.substring(0, groove.numPulses);
+			}
+			for (int i = 0, n = pulseStr.length(); i < n; i++) {
+				String s = pulseStr.substring(i, i + 1);
+				if (s.equals("-")) {
+					voice.pulses[i] = true;
+				}
+			}
+     	}
 		
 		openSequencer();
 	}
@@ -69,6 +101,10 @@ public class TunePlayer implements MetaEventListener {
 			endTempo 	= (timePanel.set) ? timePanel.endTempo : tune.endTempo;
 			increment 	= (timePanel.set) ? timePanel.increment : tune.increment;	
 	
+			if (tune.beatsPerBar != groove.beats) {
+				throw new Exception("tune.beatsPerBar != groove.beats");
+			}
+			
 			if (tune.transposed) {
 				log.debug("transposed from " + tune.transposeFrom + " to " + tune.transposeTo);
 			}
@@ -97,17 +133,73 @@ public class TunePlayer implements MetaEventListener {
 			log.debug("increment=" + increment);
 			log.debug("loopCount=" + loopCount);
 
-            sequence = new Sequence(Sequence.PPQ, 1); // groove.subBeats
+            sequence = new Sequence(Sequence.PPQ, groove.subBeats); 
             log.debug("creating track");
             track = sequence.createTrack();
 
             createEvent(PROGRAM, CHANNEL_PERC, 0, 0, 0);
-	        createEvent(PROGRAM, CHANNEL_PERC, 0, 0, tune.bars.size() * tune.beatsPerBar);
+	        createEvent(PROGRAM, CHANNEL_PERC, 0, 0, tune.bars.size() * tune.beatsPerBar * groove.subBeats);
 
 	        createEvent(CONTROL, CHANNEL_BASS, 10, V[0], 0); // set pan
 	        createEvent(CONTROL, CHANNEL_CHRD, 10, V[8], 0); // set pan
 	        createEvent(CONTROL, CHANNEL_PERC, 10, V[4], 0); // set pan
 
+	        if (chrdVoices.size() == 0) {
+	        	/*
+	        	TODO 
+	            int i = 0;
+				for (Bar bar: tune.bars) {
+					for(Chord chord: bar.chords) {
+	    				if (i % tune.beatsPerBar == 0) {
+	    					createNote(CHANNEL_BASS, chord.chordIntegers[0] - OCTAVE, VOL_BASS, i, 1);
+	    				} else if (i % tune.beatsPerBar == 2) {
+	    					createNote(CHANNEL_BASS, chord.chordIntegers[2] - OCTAVE, VOL_BASS, i, 1);
+	    				} else {
+	    					for (int j = 1, n = chord.chordIntegers.length; j < n; j++) {
+	         					createNote(CHANNEL_CHRD, chord.chordIntegers[j], VOL_CHRD, i, 1);
+	         				}
+	    				}
+	     				//createNote(CHANNEL_PERC, instrument.id, VOL_PERC, i, 1);
+						i++;
+					}
+				}
+				*/	        
+	        } else {
+	        	int bCount = 0; // bar count
+				for (Bar bar: tune.bars) {
+					int cCount = 0; // chordCount
+					for (Chord chord: bar.chords) {
+						// assumes 1 bar per chord
+			        	for (Voice voice: chrdVoices) {
+			        		for (int i = 0, n = groove.subBeats; i < n; i++) {
+			        			int pulse = (cCount * groove.subBeats) + i;
+			        			int tick = (bCount * groove.numPulses) + pulse;
+			        			if (voice.pulses[pulse]) {
+			     					int len = groove.subBeats;
+			     					if (pulse + len > groove.numPulses) {
+			     						len = groove.numPulses - pulse;
+			     					}
+				     				if (voice.id == gu.ROOT) {
+				     					createNote(CHANNEL_BASS, chord.chordIntegers[0] - OCTAVE, VOL_BASS, tick, len);
+				     				} else if (voice.id == gu.FIFTH) {
+				     					createNote(CHANNEL_BASS, chord.chordIntegers[2] - OCTAVE, VOL_BASS, tick, len);
+				     				} else if (voice.id == gu.CHORD) {
+				     					for (int j = 1, m = chord.chordIntegers.length; j < m; j++) {
+				         					createNote(CHANNEL_CHRD, chord.chordIntegers[j], VOL_CHRD, tick, len);
+				         				}
+				     				} 
+				     			}			        			
+			        		}
+  
+				        }
+			        	cCount++;
+					}	
+					bCount++;
+				}	
+	        }
+	        
+	        /*
+	        // no perc
             int i = 0;
 			for (Bar bar: tune.bars) {
 				for(Chord chord: bar.chords) {
@@ -124,6 +216,7 @@ public class TunePlayer implements MetaEventListener {
 					i++;
 				}
 			}
+			*/
 			
 	        // set and start the sequencer.
             sequencer.setSequence(sequence);
