@@ -165,10 +165,10 @@ public class TunePlayer implements MetaEventListener {
 				}
 				*/	        
 	        } else {
-	        	int bCount = 0; // bar count
-				for (Bar bar: tune.bars) {
-					int cCount = 0; // chordCount
-					for (Chord chord: bar.chords) {
+	        	for (int bCount = 0, bNum = tune.bars.size(); bCount < bNum; bCount++) {
+	        		Bar bar = tune.bars.get(bCount);
+		        	for (int cCount = 0, cNum = bar.chords.size(); cCount < cNum; cCount++) {
+		        		Chord chord = bar.chords.get(cCount);
 						// assumes 1 bar per chord
 			        	for (Voice voice: chrdVoices) {
 			        		for (int i = 0, n = groove.subBeats; i < n; i++) {
@@ -192,10 +192,23 @@ public class TunePlayer implements MetaEventListener {
 			        		}
   
 				        }
-			        	cCount++;
 					}	
-					bCount++;
 				}	
+	        }
+	        
+	        for (Voice voice: percVoices) {
+ 				for (int i = 0, n = voice.pulses.length; i < n; i++) {
+	     			if (voice.pulses[i]) {
+     					int len = groove.subBeats;
+     					if (i + len > n) {
+     						len = n - i;
+     					}
+     					for (int bCount = 0, bNum = tune.bars.size(); bCount < bNum; bCount++) {
+     						int tick = bCount * n + i;
+     						createNote(CHANNEL_PERC, voice.id, VOL_PERC, tick, 1);
+     					}	
+	     			}
+	        	}     
 	        }
 	        
 	        /*
