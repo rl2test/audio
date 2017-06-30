@@ -30,11 +30,10 @@ public class TunePlayer implements MetaEventListener {
 	final int CHANNEL_CHRD	 			= 1;
 	final int CHANNEL_PERC 				= 9;
 	final int VOL_BASS 					= V[8];
-	final int VOL_CHRD 					= V[6];
-	final int VOL_PERC 					= V[5];
+	final int VOL_CHRD 					= V[5];
+	final int VOL_PERC 					= V[4];
 	final int defaultTempo 				= 120; // default beatsPerMinute
 	final int defaultLoopCount 			= 4; // 1000
-
 	String text							= null; // tune text
 	AudioController ac					= null;
 	Sequencer sequencer;
@@ -145,31 +144,56 @@ public class TunePlayer implements MetaEventListener {
 	        createEvent(CONTROL, CHANNEL_PERC, 10, V[4], 0); // set pan
 
 	        if (chrdVoices.size() == 0) {
-	        	/*
-	        	TODO 
-	            int i = 0;
-				for (Bar bar: tune.bars) {
-					for(Chord chord: bar.chords) {
-	    				if (i % tune.beatsPerBar == 0) {
-	    					createNote(CHANNEL_BASS, chord.chordIntegers[0] - OCTAVE, VOL_BASS, i, 1);
-	    				} else if (i % tune.beatsPerBar == 2) {
-	    					createNote(CHANNEL_BASS, chord.chordIntegers[2] - OCTAVE, VOL_BASS, i, 1);
-	    				} else {
-	    					for (int j = 1, n = chord.chordIntegers.length; j < n; j++) {
-	         					createNote(CHANNEL_CHRD, chord.chordIntegers[j], VOL_CHRD, i, 1);
-	         				}
-	    				}
-	     				//createNote(CHANNEL_PERC, instrument.id, VOL_PERC, i, 1);
-						i++;
-					}
-				}
-				*/	        
+	        	// assume simple chord per beat pattern 
+				int len = groove.subBeats;
+	        	for (int bCount = 0, bNum = tune.bars.size(); bCount < bNum; bCount++) {
+	        		Bar bar = tune.bars.get(bCount);
+	        		String lastName = "";
+	        		int lastBassNote = 0;
+	        		for (int cCount = 0, cNum = bar.chords.size(); cCount < cNum; cCount++) {
+		        		Chord chord = bar.chords.get(cCount);
+		        		String name = chord.name;
+		        		String nextName = (cCount == cNum - 1) ? "" : bar.chords.get(cCount + 1).name; 
+	        			int tick = bCount * groove.numPulses + cCount * groove.subBeats;
+	    	        	/*
+						AAAA
+						AAAB
+						AABA
+						AABB
+						ABAA
+						ABAB
+						ABBA
+						ABBB
+	    	        	*/
+		        		if (cCount == 0 || !name.equals(lastName)) {
+		        			// bass plays root
+		        			createNote(CHANNEL_BASS, chord.chordIntegers[0] - OCTAVE, VOL_BASS, tick, len);
+		        			lastBassNote = 1;
+		        		} else if (cCount % 2 == 0) {
+		        			// play 5th if above condition not met
+		        			createNote(CHANNEL_BASS, chord.chordIntegers[2] - OCTAVE, VOL_BASS, tick, len);
+		        			lastBassNote = 5;
+		        		} else if (name.equals(lastName) && !name.equals(nextName) && lastBassNote == 1) {
+		        			// play 5th if above conditions not met
+		        			createNote(CHANNEL_BASS, chord.chordIntegers[2] - OCTAVE, VOL_BASS, tick, len);
+		        		} 
+     					for (int j = 1, m = chord.chordIntegers.length; j < m; j++) {
+         					createNote(CHANNEL_CHRD, chord.chordIntegers[j], VOL_CHRD, tick, len);
+         				}
+	     				lastName = chord.name;
+					}	
+				}	
 	        } else {
 	        	for (int bCount = 0, bNum = tune.bars.size(); bCount < bNum; bCount++) {
 	        		Bar bar = tune.bars.get(bCount);
-		        	for (int cCount = 0, cNum = bar.chords.size(); cCount < cNum; cCount++) {
+	        		String lastName = "";
+	        		boolean rootPlayedOnBeat = false;
+	        		for (int cCount = 0, cNum = bar.chords.size(); cCount < cNum; cCount++) {
 		        		Chord chord = bar.chords.get(cCount);
-						// assumes 1 bar per chord
+		        		if (!chord.name.equals(lastName)) {
+		        			rootPlayedOnBeat = false;
+		        		}
+						// groove assumes 1 bar per chord
 			        	for (Voice voice: chrdVoices) {
 			        		for (int i = 0, n = groove.subBeats; i < n; i++) {
 			        			int pulse = (cCount * groove.subBeats) + i;
@@ -181,8 +205,17 @@ public class TunePlayer implements MetaEventListener {
 			     					}
 				     				if (voice.id == gu.ROOT) {
 				     					createNote(CHANNEL_BASS, chord.chordIntegers[0] - OCTAVE, VOL_BASS, tick, len);
+				     					if (i == 0) {
+				     						rootPlayedOnBeat = true;
+				     					}
 				     				} else if (voice.id == gu.FIFTH) {
-				     					createNote(CHANNEL_BASS, chord.chordIntegers[2] - OCTAVE, VOL_BASS, tick, len);
+				     					if (!chord.name.equals(lastName)) {
+				     						// if there has been a chord change, play root instead of fifth
+				     						createNote(CHANNEL_BASS, chord.chordIntegers[0] - OCTAVE, VOL_BASS, tick, len);
+						        			rootPlayedOnBeat = true;
+						        		} else {
+						        			createNote(CHANNEL_BASS, chord.chordIntegers[2] - OCTAVE, VOL_BASS, tick, len);	
+						        		}
 				     				} else if (voice.id == gu.CHORD) {
 				     					for (int j = 1, m = chord.chordIntegers.length; j < m; j++) {
 				         					createNote(CHANNEL_CHRD, chord.chordIntegers[j], VOL_CHRD, tick, len);
@@ -192,6 +225,11 @@ public class TunePlayer implements MetaEventListener {
 			        		}
   
 				        }
+		        		if (!chord.name.equals(lastName) && rootPlayedOnBeat == false) {
+		        			int tick = bCount * groove.numPulses + cCount * groove.subBeats;
+		        			createNote(CHANNEL_BASS, chord.chordIntegers[0] - OCTAVE, VOL_BASS, tick, groove.subBeats);
+		        		}
+			        	lastName = chord.name;
 					}	
 				}	
 	        }
@@ -210,26 +248,6 @@ public class TunePlayer implements MetaEventListener {
 	     			}
 	        	}     
 	        }
-	        
-	        /*
-	        // no perc
-            int i = 0;
-			for (Bar bar: tune.bars) {
-				for(Chord chord: bar.chords) {
-    				if (i % tune.beatsPerBar == 0) {
-    					createNote(CHANNEL_BASS, chord.chordIntegers[0] - OCTAVE, VOL_BASS, i, 1);
-    				} else if (i % tune.beatsPerBar == 2) {
-    					createNote(CHANNEL_BASS, chord.chordIntegers[2] - OCTAVE, VOL_BASS, i, 1);
-    				} else {
-    					for (int j = 1, n = chord.chordIntegers.length; j < n; j++) {
-         					createNote(CHANNEL_CHRD, chord.chordIntegers[j], VOL_CHRD, i, 1);
-         				}
-    				}
-     				//createNote(CHANNEL_PERC, instrument.id, VOL_PERC, i, 1);
-					i++;
-				}
-			}
-			*/
 			
 	        // set and start the sequencer.
             sequencer.setSequence(sequence);
