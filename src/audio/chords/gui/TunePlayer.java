@@ -33,7 +33,7 @@ public class TunePlayer implements MetaEventListener {
 	final int VOL_CHRD 					= V[5];
 	final int VOL_PERC 					= V[4];
 	final int defaultTempo 				= 120; // default beatsPerMinute
-	final int defaultLoopCount 			= 4; // 1000
+	final int defaultLoopCount 			= 10; // 1000
 	String text							= null; // tune text
 	AudioController ac					= null;
 	Sequencer sequencer;
@@ -50,6 +50,7 @@ public class TunePlayer implements MetaEventListener {
 	int loopCount 						= defaultLoopCount; // default
 	List<Voice> percVoices				= new ArrayList<Voice>();
 	List<Voice> chrdVoices				= new ArrayList<Voice>();
+	Monitor monitor 					= null;
 
 	 // called from play btn
 	public TunePlayer(String text, AudioController ac) {
@@ -255,7 +256,9 @@ public class TunePlayer implements MetaEventListener {
             sequencer.setTempoFactor((float) tempo / (float) defaultTempo);
             log.debug("sequencer.getTempoFactor()=" + sequencer.getTempoFactor());
             
+            initMonitor();
             sequencer.start();
+            monitor.start();
 
 		} catch (Exception e) {
 			log.error(e);
@@ -297,13 +300,23 @@ public class TunePlayer implements MetaEventListener {
                 	log.debug("sequencer.getTempoFactor()=" + sequencer.getTempoFactor());
                 	timePanel.setTempoValue(tempo);
         		}
-                sequencer.start();
+        		initMonitor();
+        		sequencer.start();
+                monitor.start();
         	} else {
+        		monitor.destroy();
                 sequencer.stop();
                 playing = false;
                 ac.filePanel.labels.get("playStop").setText("Play");
         	}
         }
+    }
+    
+    void initMonitor() {
+		if (monitor != null) monitor.destroy();
+		int barLen = (int) ((float) (60 * 1000 * groove.beats) / (float) (tempo));
+		log.debug("barLen=" + barLen);
+		monitor = new Monitor(barLen, ac);
     }
     
     // init sequencer
@@ -327,6 +340,7 @@ public class TunePlayer implements MetaEventListener {
     }
     	
 	public void destroyPlayer() {
+		if (monitor != null) monitor.destroy();
 		closeSequencer();
 	}	
 }
