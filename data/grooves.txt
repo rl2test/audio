@@ -46,4 +46,13 @@ Acoustic bass drum|-       -
 Acoustic snare    |     -   - -
 Closed hi-hat     |-  -  -  -
 Open hi-hat       |     -     -
-
+@reggae 1
+$
+% 4|2
+#                 |1-2-3-4-
+Acoustic bass drum|  -   - 
+Acoustic snare    | - -   -  
+Closed hi-hat     | - - - -
+Chord             | - - - -  
+Fifth             |       -  
+Root              |- - - -          
