@@ -33,22 +33,22 @@ import audio.Util;
 
 public class FilePanel extends AudioPanel { 
 	/** Default serialVersionUID. */
-	private static final long serialVersionUID 	= 1L;
+	static final long serialVersionUID 	= 1L;
 	/** The singleton instance of this class. */    
-	private static FilePanel panel 				= null;
-	private final Listener listener 			= new Listener();
+	static FilePanel panel 				= null;
+	final Listener listener 			= new Listener();
 	/** The player. */
-	public TunePlayer player 					= null;
+	TunePlayer player 					= null;
 	/** Genre box. */
-	private final JComboBox<String> genreBox 	= new JComboBox<String>();
+	final JComboBox<String> genreBox 	= new JComboBox<String>();
 	/** Folder box. */
-	private final JComboBox<String> folderBox 	= new JComboBox<String>();
+	final JComboBox<String> folderBox 	= new JComboBox<String>();
 	/** Tune box. */
-	private final JComboBox<String> tuneBox 	= new JComboBox<String>();
-	public String genreName						= GENRE_NAME;
-	public String folderName					= FOLDER_NAME;
-	public String tuneName						= TUNE_NAME;	
-	public boolean playing						= false;
+	final JComboBox<String> tuneBox 	= new JComboBox<String>();
+	String genreName						= GENRE_NAME;
+	String folderName					= FOLDER_NAME;
+	String tuneName						= TUNE_NAME;	
+	boolean playing						= false;
 
 	
 	/**
@@ -154,11 +154,13 @@ public class FilePanel extends AudioPanel {
      * 
      * @param msg
      */
-    public void stop(String msg) {
-		player.destroyPlayer();
-		player = null;
-
-		log.debug("msg=" + msg);
+    public void stop() {
+    	if (player != null) {
+    		player.destroyPlayer();
+    		player = null;
+    		playing = false;
+    		labels.get("playStop").setText("Play");
+    	}
     }
     
 	/**
@@ -307,23 +309,25 @@ public class FilePanel extends AudioPanel {
 	
     private class Listener extends MouseAdapter {
         @Override
-        public void mouseClicked(MouseEvent e) {
+        public void mousePressed(MouseEvent e) {
             JLabel l = (JLabel) e.getSource();
             String name = l.getName();
             log.debug("name=" + name);
             
             if (name.equals("playStop")) {
             	if (playing) {
-    				player.destroyPlayer();
-    				player = null;
-    				playing = false;
-    				l.setText("Play");
+    				stop();
             	} else {
 					String text = ac.textPanel.textArea.getText();
-					player = new TunePlayer(text, ac);
-					player.start();
-					playing = true;
-					l.setText("Stop");
+					try {
+						player = new TunePlayer(text, ac);
+						player.start();
+						playing = true;
+						l.setText("Stop");
+					} catch (Exception ex) {
+						log.error(ex);
+						stop();
+					}
             	}	
             } else if (name.equals("refresh")) {
             	updateTuneBox();

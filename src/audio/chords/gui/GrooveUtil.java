@@ -19,8 +19,8 @@ import audio.Util;
 public class GrooveUtil {
 	final Logger log 						= Logger.getLogger(getClass());
 	/** The singleton instance of this class. */    
-	private static GrooveUtil grooveUtil 	= null;
-	private final String voiceNames[]		= { 
+	static GrooveUtil grooveUtil 	= null;
+	final String voiceNames[]		= { 
     		"Acoustic bass drum", // 35
     		"_Bass drum 1", // same as Acoustic bass drum
     		"Side stick", 
@@ -39,7 +39,7 @@ public class GrooveUtil {
 	        "Fifth", // 50
 	        "Root" // 51
 	};
-	public final List<String> chordVoiceNames	= new ArrayList<String>(); 
+	final List<String> chordVoiceNames	= new ArrayList<String>(); 
 	static int maxVoiceNameLen 				= 0;
 	final Map<String, Integer> voiceMap 	= new HashMap<String, Integer>();
 	final List<String> voiceKeys 			= new ArrayList<String>();

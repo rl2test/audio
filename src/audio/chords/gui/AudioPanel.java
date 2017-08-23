@@ -15,16 +15,16 @@ import javax.swing.JPanel;
 import org.apache.log4j.Logger;
 
 public class AudioPanel extends JPanel {
-	private static final long serialVersionUID = 1L;
+	static final long serialVersionUID = 1L;
 	// log
-	public Logger log = Logger.getLogger(getClass());	
+	Logger log = Logger.getLogger(getClass());	
 	// labels with listeners
-    public Map<String, JLabel> labels = new HashMap<String, JLabel>();	
-    public int x = 0;
-    public int y = 0;
-    public int w = 0;
-    public int h = 0;
-    public AudioController ac;
+    Map<String, JLabel> labels = new HashMap<String, JLabel>();	
+    int x = 0;
+    int y = 0;
+    int w = 0;
+    int h = 0;
+    AudioController ac;
     
     public AudioPanel(AudioController ac) {
     	this.ac = ac;

@@ -13,15 +13,15 @@ import javax.swing.JLabel;
 
 public class KeyPanel extends AudioPanel { 
 	/** Default serialVersionUID. */
-	private static final long serialVersionUID 		= 1L;
+	static final long serialVersionUID 		= 1L;
 	/** The singleton instance of this class. */    
-	private static KeyPanel panel 					= null;
+	static KeyPanel panel 					= null;
 	/** The drone player. */
-	public DronePlayer dronePlayer 			= null;
-	private final KeyListener keyListener 	= new KeyListener();
-	public int selectedKeyIndex				= -1;
-	public boolean drone					= false;
-	public boolean chord					= false;
+	DronePlayer dronePlayer 			= null;
+	final KeyListener keyListener 	= new KeyListener();
+	int selectedKeyIndex				= -1;
+	boolean drone					= false;
+	boolean chord					= false;
 	
     /**
      * @return singleton instance of this class

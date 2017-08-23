@@ -8,10 +8,10 @@ import javax.swing.JTextArea;
 
 public class TextPanel extends AudioPanel { 
 	/** Default serialVersionUID. */
-	private static final long serialVersionUID 	= 1L;
+	static final long serialVersionUID 	= 1L;
 	/** The singleton instance of this class. */    
-	private static TextPanel textPanel 			= null;
-	public JTextArea textArea 					= null;
+	static TextPanel textPanel 			= null;
+	JTextArea textArea 					= null;
 	
 	/**
      * @return singleton instance of this class

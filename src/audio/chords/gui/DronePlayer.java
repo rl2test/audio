@@ -17,10 +17,10 @@ import audio.MidiNote;
 
 public class DronePlayer extends Thread {
 	/** The log. */
-	private Logger log 					= Logger.getLogger(this.getClass());
-	private List<MidiNote> midiNotes	= new ArrayList<MidiNote>();
-	private int interval 				= 0;
-	private AudioController ac			= null;
+	Logger log 					= Logger.getLogger(this.getClass());
+	List<MidiNote> midiNotes	= new ArrayList<MidiNote>();
+	int interval 				= 0;
+	AudioController ac			= null;
 	
 	public DronePlayer(int keyIndex, AudioController ac) {
 		interval = TRANSPOSE_KEY_INTERVALS[keyIndex];

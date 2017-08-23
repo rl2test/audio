@@ -44,27 +44,27 @@ import org.apache.log4j.Logger;
  */
 public class AudioController extends JPanel {
 	/** The generated serialVersionUID. */
-	private static final long serialVersionUID				= 1L;
+	static final long serialVersionUID				= 1L;
 	/** The singleton instance of this class. */    
-	private static AudioController controller 				= null;
+	static AudioController controller 				= null;
 	/** The log. */
-	private Logger log 										= Logger.getLogger(this.getClass());
+	Logger log 										= Logger.getLogger(this.getClass());
 	/** The synthesizer. */
-	private Synthesizer synthesizer 						= null;
+	Synthesizer synthesizer 						= null;
 	/** The midiChannels. */
-	public MidiChannel[] midiChannels 						= null;
+	MidiChannel[] midiChannels 						= null;
 	/** The width of the gui, not including the frame objects. */
-	public int w											= 0;
+	int w											= 0;
 	/** The height of the gui, not including the frame objects. */
-	public int h											= 0;
-	public KeyPanel keyPanel 								= null;
-	public TimePanel timePanel 								= null;
-	public FilePanel filePanel 								= null;
-	public TextPanel textPanel 								= null;
-	public DisplayPanel displayPanel 						= null;
-	public boolean init										= false;
-	public int barWidth										= 0;
-	public static Rectangle grooveRectangle					= null;
+	int h											= 0;
+	KeyPanel keyPanel 								= null;
+	TimePanel timePanel 								= null;
+	FilePanel filePanel 								= null;
+	TextPanel textPanel 								= null;
+	DisplayPanel displayPanel 						= null;
+	boolean init										= false;
+	int barWidth										= 0;
+	static Rectangle grooveRectangle					= null;
 	
     /**
      * @return singleton instance of this class
@@ -83,7 +83,7 @@ public class AudioController extends JPanel {
     	return controller;
     }
     
-    /** Private constructor */
+    /** constructor */
     private AudioController(int w, int h) throws Exception {
     	this.setBackground(Color.black);
     	this.w = w;

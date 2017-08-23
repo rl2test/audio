@@ -19,10 +19,9 @@ import audio.chords.Bar;
  */
 public class DisplayPanel extends AudioPanel { 
 	/** Default serialVersionUID. */
-	private static final long serialVersionUID 	= 1L;
+	static final long serialVersionUID = 1L;
 	/** The singleton instance of this class. */    
-	private static DisplayPanel displayPanel 	= null;	
-	//List<JLabel> myLabels = new ArrayList<JLabel>();
+	static DisplayPanel displayPanel = null;	
 	
 	/**
      * @return singleton instance of this class

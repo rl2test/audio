@@ -7,6 +7,7 @@ import static audio.Constants.V;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MetaEventListener;
 import javax.sound.midi.MetaMessage;
 import javax.sound.midi.MidiEvent;
@@ -89,8 +90,7 @@ public class TunePlayer implements MetaEventListener {
 		openSequencer();
 	}
 
-	public void start() {
-		try {
+	public void start() throws Exception {
 			String transposeTo = (ac.keyPanel.selectedKeyIndex != -1) ? TRANSPOSE_KEYS[ac.keyPanel.selectedKeyIndex] : "";
 			log.debug("transposeTo=" + transposeTo);
 	
@@ -251,7 +251,7 @@ public class TunePlayer implements MetaEventListener {
 	        }
 			
 	        // set and start the sequencer.
-            sequencer.setSequence(sequence);
+			sequencer.setSequence(sequence);
             sequencer.setLoopCount(loopCount - 1); // note: first time through is not counted as being a loop
             sequencer.setTempoFactor((float) tempo / (float) defaultTempo);
             log.debug("sequencer.getTempoFactor()=" + sequencer.getTempoFactor());
@@ -260,10 +260,7 @@ public class TunePlayer implements MetaEventListener {
             sequencer.start();
             monitor.start();
 
-		} catch (Exception e) {
-			log.error(e);
-			ac.filePanel.stop("exception thrown in TunePlayer.start(): " + e);
-		}
+
 	}
 		
 	// create note

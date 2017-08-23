@@ -17,17 +17,17 @@ import javax.swing.JLabel;
 @SuppressWarnings("serial")
 public class TimePanel extends AudioPanel { 
 	/** The singleton instance of this class. */    
-	private static TimePanel panel 				= null;
-	private final Listener listener 			= new Listener();
+	static TimePanel panel 				= null;
+	final Listener listener 			= new Listener();
     // set property defaults
-    public int beginTempo						= 90;
-	public int endTempo							= 180;
-    public int increment 						= 1;
-	public boolean set							= false; // if true this will override the tune settings
+    int beginTempo						= 90;
+	int endTempo							= 180;
+    int increment 						= 1;
+	boolean set							= false; // if true this will override the tune settings
 	/** Groove box. */
-	private final JComboBox<String> grooveBox 	= new JComboBox<String>();
-	public GrooveUtil gu						= GrooveUtil.getInstance();
-	public String grooveName					= gu.grooveNames[0];
+	final JComboBox<String> grooveBox 	= new JComboBox<String>();
+	GrooveUtil gu						= GrooveUtil.getInstance();
+	String grooveName					= gu.grooveNames[0];
 	/**
      * @return singleton instance of this class
      */
