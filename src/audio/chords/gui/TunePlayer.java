@@ -144,9 +144,10 @@ public class TunePlayer implements MetaEventListener {
 	        createEvent(CONTROL, CHANNEL_CHRD, 10, V[8], 0); // set pan
 	        createEvent(CONTROL, CHANNEL_PERC, 10, V[4], 0); // set pan
 
+			int len = 1; //groove.subBeats;
+			int bassLen = groove.subBeats;
 	        if (chrdVoices.size() == 0) {
 	        	// assume simple chord per beat pattern 
-				int len = groove.subBeats;
 	        	for (int bCount = 0, bNum = tune.bars.size(); bCount < bNum; bCount++) {
 	        		Bar bar = tune.bars.get(bCount);
 	        		String lastName = "";
@@ -168,15 +169,15 @@ public class TunePlayer implements MetaEventListener {
 	    	        	*/
 		        		if (cCount == 0 || !name.equals(lastName)) {
 		        			// bass plays root
-		        			createNote(CHANNEL_BASS, chord.chordIntegers[0] - OCTAVE, VOL_BASS, tick, len);
+		        			createNote(CHANNEL_BASS, chord.chordIntegers[0] - OCTAVE, VOL_BASS, tick, bassLen);
 		        			lastBassNote = 1;
 		        		} else if (cCount % 2 == 0) {
 		        			// play 5th if above condition not met
-		        			createNote(CHANNEL_BASS, chord.chordIntegers[2] - OCTAVE, VOL_BASS, tick, len);
+		        			createNote(CHANNEL_BASS, chord.chordIntegers[2] - OCTAVE, VOL_BASS, tick, bassLen);
 		        			lastBassNote = 5;
 		        		} else if (name.equals(lastName) && !name.equals(nextName) && lastBassNote == 1) {
 		        			// play 5th if above conditions not met
-		        			createNote(CHANNEL_BASS, chord.chordIntegers[2] - OCTAVE, VOL_BASS, tick, len);
+		        			createNote(CHANNEL_BASS, chord.chordIntegers[2] - OCTAVE, VOL_BASS, tick, bassLen);
 		        		} 
      					for (int j = 1, m = chord.chordIntegers.length; j < m; j++) {
          					createNote(CHANNEL_CHRD, chord.chordIntegers[j], VOL_CHRD, tick, len);
@@ -200,22 +201,21 @@ public class TunePlayer implements MetaEventListener {
 			        			int pulse = (cCount * groove.subBeats) + i;
 			        			int tick = (bCount * groove.numPulses) + pulse;
 			        			if (voice.pulses[pulse]) {
-			     					int len = groove.subBeats;
 			     					if (pulse + len > groove.numPulses) {
 			     						len = groove.numPulses - pulse;
 			     					}
 				     				if (voice.id == gu.ROOT) {
-				     					createNote(CHANNEL_BASS, chord.chordIntegers[0] - OCTAVE, VOL_BASS, tick, len);
+				     					createNote(CHANNEL_BASS, chord.chordIntegers[0] - OCTAVE, VOL_BASS, tick, bassLen);
 				     					if (i == 0) {
 				     						rootPlayedOnBeat = true;
 				     					}
 				     				} else if (voice.id == gu.FIFTH) {
 				     					if (!chord.name.equals(lastName)) {
 				     						// if there has been a chord change, play root instead of fifth
-				     						createNote(CHANNEL_BASS, chord.chordIntegers[0] - OCTAVE, VOL_BASS, tick, len);
+				     						createNote(CHANNEL_BASS, chord.chordIntegers[0] - OCTAVE, VOL_BASS, tick, bassLen);
 						        			rootPlayedOnBeat = true;
 						        		} else {
-						        			createNote(CHANNEL_BASS, chord.chordIntegers[2] - OCTAVE, VOL_BASS, tick, len);	
+						        			createNote(CHANNEL_BASS, chord.chordIntegers[2] - OCTAVE, VOL_BASS, tick, bassLen);	
 						        		}
 				     				} else if (voice.id == gu.CHORD) {
 				     					for (int j = 1, m = chord.chordIntegers.length; j < m; j++) {
@@ -238,7 +238,6 @@ public class TunePlayer implements MetaEventListener {
 	        for (Voice voice: percVoices) {
  				for (int i = 0, n = voice.pulses.length; i < n; i++) {
 	     			if (voice.pulses[i]) {
-     					int len = groove.subBeats;
      					if (i + len > n) {
      						len = n - i;
      					}
