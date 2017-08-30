@@ -297,6 +297,7 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
  		    }
  		}
         
+ 		
  		// build beats header
 		x = W[8] + W[1] + 2;
 		y = (h + 1) * 4; 
@@ -329,6 +330,7 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
      		String[] arr = voiceStr.split(PIPE_DELIM);
 			String voiceName = arr[0].trim();
      		Voice voice = voiceMap.get(voiceName);
+     		
 			String pulseStr = arr[1]; 
 			for (int i = 0, n = pulseStr.length(); i < n; i++) {
 				String s = pulseStr.substring(i, i + 1);
@@ -339,7 +341,6 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
 				}
 			}
      	}
-
      	repaint();
 	}
 	
@@ -480,7 +481,7 @@ public class GroovePanel extends AudioPanel implements MetaEventListener {
     
     class Listener extends MouseAdapter {
         @Override
-        public void mouseClicked(MouseEvent e) {
+        public void mousePressed(MouseEvent e) {
             JLabel l = (JLabel) e.getSource();
             String name = l.getName();
             log.debug("name=" + name);

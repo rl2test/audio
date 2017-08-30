@@ -1,26 +1,37 @@
+@basic-jazz-in-3
+$
+% 3|3
+#                 |1--2--3--
+Acoustic bass drum|-    -
+Closed hi-hat     |-  - -
+Open hi-hat       |      -
+Chord             |   -  -
+Fifth             |     -
+Root              |-
+
 @basic-jazz-pattern
 $http://www.freedrumlessons.com/drum-lessons/basic-jazz-pattern.php
 % 4|3
 #                 |1--2--3--4--
-Acoustic bass drum|-       -   
+Acoustic bass drum|-       -
 Acoustic snare    |   - -   - -
-Closed hi-hat     |-  -  -  -  
+Closed hi-hat     |-  -  -  -
 Open hi-hat       |     -     -
 Chord             |     -     -
-Fifth             |         -  
-Root              |-           
+Fifth             |         -
+Root              |-
 
 @basic-jazz-pattern 1
 $
 % 4|3
 #                 |1--2--3--4--
-Acoustic bass drum|-       -   
+Acoustic bass drum|-       -
 Acoustic snare    |     -     -
-Closed hi-hat     |-  -  -  -  
+Closed hi-hat     |-  -  -  -
 Open hi-hat       |     -     -
 Chord             |     -     -
-Fifth             |         -  
-Root              |-           
+Fifth             |         -
+Root              |-
 
 @basic-jazz-pattern 2
 $
@@ -31,13 +42,6 @@ Acoustic snare    |     -   - -
 Closed hi-hat     |-  -  -  -
 Open hi-hat       |-    -     -
 
-@basic-jazz-pattern 3
-$
-% 4|3
-#                 |1--2--3--4--
-Acoustic bass drum|   -     -
-Closed hi-hat     |-     -
-
 @basic-jazz-pattern 4
 $
 % 4|3
@@ -46,13 +50,29 @@ Acoustic bass drum|-       -
 Acoustic snare    |     -   - -
 Closed hi-hat     |-  -  -  -
 Open hi-hat       |     -     -
+
+@latin-jazz son clave
+$http://www.drumstyles.com/Genres/Jazz/Latin-Jazz/
+% 4|2
+#                 |1-2-3-4-
+Acoustic bass drum|--------
+Closed hi-hat     |-  -  - 
+
 @reggae 1
 $
 % 4|2
 #                 |1-2-3-4-
-Acoustic bass drum|  -   - 
-Acoustic snare    | - -   -  
+Acoustic bass drum|  -   -
+Acoustic snare    | - -   -
 Closed hi-hat     | - - - -
-Chord             | - - - -  
-Fifth             |       -  
-Root              |- - - -          
+Chord             | - - - -
+Fifth             |       -
+Root              |- - - -
+
+@test 1
+$
+% 4|3
+#                 |1--2--3--4--
+Acoustic bass drum|   -     -
+Closed hi-hat     |-     -
+
