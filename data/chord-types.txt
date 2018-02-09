@@ -28,6 +28,7 @@ Minor 7th                   | m7      | C-Eb-G-Bb         |
 Augmented-Major 7th         | maj7+5  | C-E-G#-B          |  major seven sharp five
 Augmented 7th               | 7+5     | C-E-G#-Bb         |  dominant seven sharp five
 Half-Diminished 7th         | m7-5    | C-Eb-Gb-Bb        |  minor seven flat five
+Half-Diminished 7th         | m7b5    | C-Eb-Gb-Bb        |  minor seven flat five
 Diminished 7th              | dim7    | C-Eb-Gb-A         | 
 7th flat five               | 7-5     | C-E-Gb-Bb         |  dominant seven flat five
 %%------------------------------------------------------------------------------

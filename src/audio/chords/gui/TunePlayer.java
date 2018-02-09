@@ -145,7 +145,7 @@ public class TunePlayer implements MetaEventListener {
 	        createEvent(CONTROL, CHANNEL_PERC, 10, V[4], 0); // set pan
 
 			int len = 1; //groove.subBeats;
-			int bassLen = groove.subBeats;
+			int bassLen = 1; //groove.subBeats;
 	        if (chrdVoices.size() == 0) {
 	        	// assume simple chord per beat pattern 
 	        	for (int bCount = 0, bNum = tune.bars.size(); bCount < bNum; bCount++) {

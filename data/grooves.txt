@@ -1,3 +1,24 @@
+@basic-7-223
+$
+% 7|1
+#                 |1-3-5--
+Acoustic bass drum|-
+Acoustic snare    |  - -
+Closed hi-hat     |-------
+Chord             | - -  -
+Fifth             |    -
+Root              |- -    
+
+@basic-jazz-in-2
+$
+% 2|3
+#                 |1--2--
+Acoustic bass drum|-    -
+Closed hi-hat     |-  - -
+Chord             |   -  
+Fifth             |     -
+Root              |-     
+
 @basic-jazz-in-3
 $
 % 3|3
@@ -55,19 +76,36 @@ Open hi-hat       |     -     -
 $http://www.drumstyles.com/Genres/Jazz/Latin-Jazz/
 % 4|2
 #                 |1-2-3-4-
-Acoustic bass drum|--------
-Closed hi-hat     |-  -  - 
+Side stick        |-  -  -
+Closed hi-hat     |-------
+Open hi-hat       |       -
+Chord             |   -
+Fifth             |      -
+Root              |-
 
 @reggae 1
 $
 % 4|2
 #                 |1-2-3-4-
-Acoustic bass drum|  -   -
-Acoustic snare    | - -   -
-Closed hi-hat     | - - - -
-Chord             | - - - -
-Fifth             |       -
-Root              |- - - -
+Acoustic bass drum|- - - -
+Closed hi-hat     | - - -
+Open hi-hat       |       -
+Chord             |   -   -
+Fifth             |     -
+Root              |-
+
+@reggae 2
+$
+% 4|4
+#                 |1---2---3---4---
+Side stick        |   -  -  -  -  -
+Closed hi-hat     |- - - - - - - -
+High floor tom    |             -
+Low-mid tom       |              -
+Hi-mid tom        |               -
+Chord             |      -       -
+Fifth             |        -   -
+Root              |-
 
 @test 1
 $
