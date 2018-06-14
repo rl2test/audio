@@ -52,6 +52,7 @@ public class TunePlayer implements MetaEventListener {
 	List<Voice> percVoices				= new ArrayList<Voice>();
 	List<Voice> chrdVoices				= new ArrayList<Voice>();
 	Monitor monitor 					= null;
+	boolean mono						= true;
 
 	 // called from play btn
 	public TunePlayer(String text, AudioController ac) {
@@ -140,8 +141,13 @@ public class TunePlayer implements MetaEventListener {
             createEvent(PROGRAM, CHANNEL_PERC, 0, 0, 0);
 	        createEvent(PROGRAM, CHANNEL_PERC, 0, 0, tune.bars.size() * tune.beatsPerBar * groove.subBeats);
 
-	        createEvent(CONTROL, CHANNEL_BASS, 10, V[0], 0); // set pan
-	        createEvent(CONTROL, CHANNEL_CHRD, 10, V[8], 0); // set pan
+	        if (mono) {
+		        createEvent(CONTROL, CHANNEL_BASS, 10, V[4], 0); // set pan
+		        createEvent(CONTROL, CHANNEL_CHRD, 10, V[4], 0); // set pan
+	        } else {
+		        createEvent(CONTROL, CHANNEL_BASS, 10, V[0], 0); // set pan
+		        createEvent(CONTROL, CHANNEL_CHRD, 10, V[8], 0); // set pan
+	        }
 	        createEvent(CONTROL, CHANNEL_PERC, 10, V[4], 0); // set pan
 
 			int len = 1; //groove.subBeats;
