@@ -17,7 +17,8 @@ public class Constants {
 	public static final String RUNTIME_VERSION			= System.getProperty("java.runtime.version");
 	public static final String ENV						= (RUNTIME_VERSION.equals("1.7.0_79-b15")) ? WK : HM;
 
-	public static final File APP_DIR					= new File("/Users/rlowe/rob/apps/audio");
+	//public static final File APP_DIR					= new File("/Users/rlowe/rob/apps/audio");
+	public static final File APP_DIR					= new File("/Users/rlowe/projects/audio");
 	public static final File BARS_FILE					= new File(APP_DIR, "bars.txt");
 
 	/* dir definitions */
@@ -27,7 +28,7 @@ public class Constants {
 	/** The top-level music dir. */
 	public static final File MUSIC_DIR					= (ENV.equals(WK))
 			? new File("/Users/rlowe/rob/apps/audio/data/music") //"/Users/rlowe/rob/music"
-			: new File("/Volumes/IOMEGA-1000/Rob/music");
+			: new File("/Users/rlowe/rob/apps/audio/data/music"); //new File("/Volumes/IOMEGA-1000/Rob/music");
 
 	/** The abc output dir. */
 	public static final File ABC_DIR					= new File(MUSIC_DIR, "rlp-abc/files");

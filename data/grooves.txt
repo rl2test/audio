@@ -1,13 +1,13 @@
 @basic-7-223
 $
 % 7|1
-#                 |1-3-5--
+#                 |1234567
 Acoustic bass drum|-
 Acoustic snare    |  - -
 Closed hi-hat     |-------
 Chord             | - -  -
 Fifth             |    -
-Root              |- -    
+Root              |- -
 
 @basic-jazz-in-2
 $
@@ -15,9 +15,9 @@ $
 #                 |1--2--
 Acoustic bass drum|-    -
 Closed hi-hat     |-  - -
-Chord             |   -  
+Chord             |   -
 Fifth             |     -
-Root              |-     
+Root              |-
 
 @basic-jazz-in-3
 $
@@ -99,13 +99,13 @@ $
 % 4|4
 #                 |1---2---3---4---
 Side stick        |   -  -  -  -  -
-Closed hi-hat     |- - - - - - - -
-High floor tom    |             -
-Low-mid tom       |              -
+Closed hi-hat     |- - - - - - - - 
+High floor tom    |             -  
+Low-mid tom       |              - 
 Hi-mid tom        |               -
-Chord             |      -       -
-Fifth             |        -   -
-Root              |-
+Chord             |      -       - 
+Fifth             |        -   -   
+Root              |-               
 
 @test 1
 $

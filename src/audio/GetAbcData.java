@@ -580,7 +580,7 @@ public class GetAbcData {
 	
 	public static void main(String[] args) {
 		try {
-			DriverManager.registerDriver (new com.mysql.jdbc.Driver());
+			////DriverManager.registerDriver (new com.mysql.jdbc.Driver());
 			//conn = DriverManager.getConnection("jdbc:mysql://localhost/mysite?user=root&password=root"); // wk
 			conn = DriverManager.getConnection("jdbc:mysql://localhost:8889/mysite?user=root&password=root"); // hm
 		    stmt = conn.createStatement();	
